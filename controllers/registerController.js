@@ -127,8 +127,8 @@ exports.createClientDriver = async (req, res, next) => {
                                 description: 'Criar um cliente/condutor'
                             }
                         }
-                        //status 200 because was inserted in both of the tables
-                        res.status(200).send(response)
+                        //status 201 because was inserted in both of the tables
+                        res.status(201).send(response)
                     }
                 }
             ) 
@@ -144,8 +144,8 @@ exports.createClientDriver = async (req, res, next) => {
                     description: 'Criar um cliente/condutor'
                 }
             }
-            //status 200 because was inserted in both of the tables
-            res.status(200).send(response)
+            //status 201 because was inserted in both of the tables
+            res.status(201).send(response)
         }
     }
 
@@ -183,7 +183,7 @@ exports.createClientDriver = async (req, res, next) => {
                                     description: 'Criar um cliente/condutor'
                                 }
                             };
-                            //error inserting on table admin
+                            //error inserting on table client
                             res.status(500).send(response)
                         }
                     }
@@ -203,12 +203,110 @@ exports.createClientDriver = async (req, res, next) => {
         
     )
 
+    db.close();
+
     return;
 }
 
-exports.createMerchant = (req, res, next) => {
+exports.createMerchant = async (req, res, next) => {
     
-    
+    var db = require('../sql').db();
+
+    var email = req.body.email;
+    var password = req.body.password;
+    var address = req.body.address;
+    var zipCode = req.body.zipCode;
+    var location = req.body.location;
+    var name = req.body.name;
+    var category = req.body.category;
+    var nif = req.body.nif;
+    var description = req.body.description;
+    var logo = req.file;
+    var contactNumber = req.body.contactNumber;
+    //typeUser Client=0, Driver=1, Merchant=2, Admin=3
+    var typeUser = 2;
+    //default on canWork and isChecked when is created
+    var canWork = 0;
+    var isChecked = 0;
+    var logoPath;
+
+    var errFields = false;
+
+    //check if upload has a error
+    if (!logo) {
+        errFields = true;
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar uma empresa'
+            }
+        }
+        res.status(400).send(response);
+    } else {
+        logoPath = req.file.path;
+    }
+
+    //if doesnt have any errors on fields, program continues
+    if (!errFields) {
+        const hash = await bcrypt.hashSync(password, 10);
+        
+        let sql = `INSERT INTO user(email, password, address, zipCode, location, typeUser)
+        VALUES (?, ?, ?, ?, ?, ?)`;
+
+        //execute sql command
+        db.run(sql, [email, hash, address, zipCode, location, typeUser],
+            function (err) {
+                if (!err) {
+                    var id = this.lastID;
+                    sql = `INSERT INTO merchant(idUser, name, category, nif, description, logo, contactNumber, canWork, isChecked)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+                    db.run(sql, [id, name, category, nif, description, logoPath, contactNumber, canWork, isChecked],
+                        function (err) {
+                            if (err) {
+                                //error inserting on table merchant
+                                let response = {
+                                    message: "failed",
+                                    request: {
+                                        type: 'POST',
+                                        description: 'Criar uma empresa'
+                                    }
+                                }
+                                res.status(500).send(response)
+                            } else {
+                                let response = {
+                                    message: "success",
+                                    userCreated: {
+                                        email: email,
+                                        name: name
+                                    },
+                                    request: {
+                                        type: 'POST',
+                                        description: 'Criar uma empresa'
+                                    }
+                                }
+                                //status 201 because was inserted in both of the tables
+                                res.status(201).send(response)
+                            }
+                        }    
+                    )
+                } else {
+                    //error inserting on table user
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'POST',
+                            description: 'Criar uma empresa'
+                        }
+                    }
+                    res.status(500).send(response)
+                }
+            }    
+        )
+    }
+
+    db.close();
 
     return;
 }

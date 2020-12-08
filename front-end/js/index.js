@@ -37,7 +37,8 @@ $(document).ready(function(){
         event.preventDefault();
 
     
-        var email = $("#registerClientName").val();
+        var email = $("#registerClientEmail").val();
+        var name =$("#registerClientName").val();
         var password = $("#registerClientPassword").val();
         var repeatPassword = $("#registerClientRepeatPassword").val();
         var address = $("#registerClientAddress").val();
@@ -49,6 +50,15 @@ $(document).ready(function(){
         if ($("#isDriver").is(":checked")) {
             var typeVehicle = $("#registerClientTypeVehicle").val();
         }
+        var valueIsDriver;
+        if (isDriver) {
+            //change to 1 because of API
+            valueIsDriver = 1;
+        } else {
+            //change to 0 because of API
+            valueIsDriver = 0;
+        }
+
         console.log({
             email: email,
             password: password,
@@ -57,7 +67,7 @@ $(document).ready(function(){
             zipCode: zipCode,
             location: location,
             nif: nif,
-            isDriver: isDriver,
+            isDriver: valueIsDriver,
             contactNumber: contactNumber,
             typeVehicle: typeVehicle
         });
@@ -65,7 +75,7 @@ $(document).ready(function(){
         var errFields = false;
 
         //check email
-        if (validateEmail(email)) {
+        if (!validateEmail(email)) {
             errFields = true;
             M.toast({html: 'Email inválido!'})
         }
@@ -93,8 +103,6 @@ $(document).ready(function(){
 
         if (!errFields) {
             if (isDriver) {
-                //change to 1 because of API
-                isDriver=1;
                 $.ajax({
                     url: 'http://localhost:3000/api/register/signupClientDriver',
                     type: 'POST',
@@ -108,22 +116,25 @@ $(document).ready(function(){
                         name: name,
                         nif: nif,
                         contactNumber: contactNumber,
-                        isDriver:  isDriver,
-                        typeVehicle: typeVehicle
+                        isDriver: auxIsDriver,
+                        typeVehicle: typeVehicle,
+                        isDriver: valueIsDriver
                     },
                     success: function (data) {
                         console.log(data);
                         M.toast({html: 'Registado com sucesso!'});
     
-                    }
-                    , error: function (jqXHR, textStatus, err) {
+                    }, 
+                    error: function (jqXHR, textStatus, err) {
+                        console.log(jqXHR);
                         console.log(err,textStatus);
                         M.toast({html: 'Erro ao registar!'});
                     }
                 })
             } else {
                 //change to 0 because of API
-                isDriver = 0;
+                var auxIsDriver = "0";
+                console.log(isDriver);
                 $.ajax({
                     url: 'http://localhost:3000/api/register/signupClientDriver',
                     type: 'POST',
@@ -137,7 +148,7 @@ $(document).ready(function(){
                         name: name,
                         nif: nif,
                         contactNumber: contactNumber,
-                        isDriver:  isDriver
+                        isDriver: valueIsDriver
                     },
                     success: function (data) {
                         console.log(data);

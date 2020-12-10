@@ -61,7 +61,7 @@
                                         </div>
                                     </div>
                                     <!--Criar Cliente/Condutor-->
-                                    <div class="col s12 mt2" id="formRegisterClient">
+                                    <div class="col s12 mt2" id="divFormRegisterClient">
                                         <h6 class="left-align">Criar Cliente/Condutor</h6>
                                         <form method="POST">
                                             <div class="input-field col s12 l6">
@@ -131,43 +131,43 @@
                                     </div>
                                     <!--/Criar Cliente/Condutor-->
                                     <!--Criar Empresa-->
-                                    <div class="col s12 mt2" id="formRegisterMerchant">
+                                    <div class="col s12 mt2" id="divFormRegisterMerchant">
                                         <h6 class="left-align">Criar uma Empresa</h6>
-                                        <form action="" method="POST">
+                                        <form id="formRegisterMerchant" method="POST" enctype="multipart/form-data">
                                             <div class="input-field col s12 l6">
-                                                <input id="registerMerchantName" type="text" name="name" class="validate">
+                                                <input id="registerMerchantName" type="text" name="name" class="validate" required>
                                                 <label for="registerMerchantName">Nome da Empresa</label>
                                             </div>
                                             <div class="input-field col s12 l6">
-                                                <input id="registerMerchantEmail" type="text" name="email" class="validate">
+                                                <input id="registerMerchantEmail" type="text" name="email" class="validate" required>
                                                 <label for="registerClientEmail">E-mail</label>
                                             </div>
                                             <div class="input-field col s12 l6">
-                                                <input id="registerMerchantPassword" type="text" name="password" class="validate">
+                                                <input id="registerMerchantPassword" type="password" name="password" class="validate" required>
                                                 <label for="registerMerchantPassword">Palavra-passe</label>
                                             </div>
                                             <div class="input-field col s12 l6">
-                                                <input id="registerMerchantRepeatPassword" type="text" name="repetPassword" class="validate">
+                                                <input id="registerMerchantRepeatPassword" type="password" name="repetPassword" class="validate" required>
                                                 <label for="registerMerchantRepeatPassword">Repetir Palavra-passe</label>
                                             </div>
                                             <div class="input-field col s12 l6">
-                                                <input id="registerMerchantAddress" type="text" name="address" class="validate">
+                                                <input id="registerMerchantAddress" type="text" name="address" class="validate" required>
                                                 <label for="registerMerchantAddress">Morada</label>
                                             </div>
                                             <div class="input-field col s12 l6">
-                                                <input id="registerMerchantZipCode" type="text" name="zipCode" class="validate">
+                                                <input id="registerMerchantZipCode" type="text" name="zipCode" class="validate" required>
                                                 <label for="registerMerchantZipCode">Código Postal</label>
                                             </div>
                                             <div class="input-field col s12 l6">
-                                                <input id="registerMerchantLocation" type="text" name="location" class="validate">
+                                                <input id="registerMerchantLocation" type="text" name="location" class="validate" required>
                                                 <label for="registerMerchantLocation">Localidade</label>
                                             </div>
                                             <div class="input-field col s12 l6">
-                                                <input id="registerMerchantNIF" type="text" name="nif" class="validate">
-                                                <label for="registerMerchantNIF">NIF</label>
+                                                <input id="registerMerchantNIPC" type="number" name="nipc" class="validate" required>
+                                                <label for="registerMerchantNIPC">NIPC</label>
                                             </div>
                                             <div class="input-field col s12 l6">
-                                                <select>
+                                                <select id="registerMerchantCategory" required>
                                                     <option value="" disabled selected>Escolher a opção</option>
                                                     <option value="1">Carro</option>
                                                     <option value="2">Mota</option>
@@ -176,27 +176,28 @@
                                                 <label>Categoria</label>
                                             </div>
                                             <div class="input-field col s12 l6">
-                                                <textarea id="registerMerchantDescription" class="materialize-textarea" data-length="120"></textarea>
+                                                <textarea id="registerMerchantDescription" class="materialize-textarea" data-length="120" required></textarea>
                                                 <label for="registerMerchantDescription">Descrição</label>
                                             </div>
                                             <div class="input-field col s12 l6">
-                                                <input id="registerMerchantContactNumber" type="text" name="contactNumber" class="validate">
+                                                <input id="registerMerchantContactNumber" type="text" name="contactNumber" class="validate" required>
                                                 <label for="registerMerchantContactNumber">Número de Contacto</label>
                                             </div>
                                             <div class="file-field input-field col s12 l6">
                                                 <div class="btn grey darken-3">
                                                   <span>Logótipo</span>
-                                                  <input type="file">
+                                                  <input type="file" id="registerMerchantFile" name="registerMerchantFile" required>
                                                 </div>
                                                 <div class="file-path-wrapper">
                                                   <input class="file-path validate" type="text">
                                                 </div>
+                                                <small>Só é aceite ficheiros tipo PNG, JPEG e JPG</small>
                                             </div>
                                             <div class="col s12 l6">
                                                 <p class="left-align"><small>Para poder ter todas as funcionalidades, tem que aguardar que um administrador o aceite</small></p>
                                             </div>
                                             <div class="col s12 left-align">
-                                                <button type="submit" class="waves-effect waves-light btn grey darken-3">Criar Conta</button>
+                                                <button type="submit" id="submitFormCreateMerchant" class="waves-effect waves-light btn grey darken-3">Criar Conta</button>
                                             </div>
                                         </form>
                                     </div>

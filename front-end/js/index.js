@@ -3,13 +3,13 @@ $(document).ready(function(){
     $('.modal').modal();
     $('select').formSelect();
 
-    $('input#registerClientNIF, input#registerClientContactNumber').characterCounter();
+    $('input#registerClientNIF, input#registerClientContactNumber, #registerMerchantDescription').characterCounter();
 
     $("#openFormRegisterMerchant").click(function(){
-        if ($("#formRegisterClient").css('display') !== 'none') {
-            $("#formRegisterClient").slideToggle(700);
+        if ($("#divFormRegisterClient").css('display') !== 'none') {
+            $("#divFormRegisterClient").slideToggle(700);
         }
-        $("#formRegisterMerchant").slideToggle(700);
+        $("#divFormRegisterMerchant").slideToggle(700);
     });
 
     $("#isDriver").click(function () {
@@ -21,10 +21,10 @@ $(document).ready(function(){
     });
 
     $("#openFormRegisterClient").click(function(){
-        if ($("#formRegisterMerchant").css('display') !== 'none') {
-            $("#formRegisterMerchant").slideToggle(700);
+        if ($("#divFormRegisterMerchant").css('display') !== 'none') {
+            $("#divFormRegisterMerchant").slideToggle(700);
         }
-        $("#formRegisterClient").slideToggle(700);
+        $("#divFormRegisterClient").slideToggle(700);
     });
 
     function validateEmail(email) {
@@ -37,7 +37,8 @@ $(document).ready(function(){
         event.preventDefault();
 
     
-        var email = $("#registerClientName").val();
+        var email = $("#registerClientEmail").val();
+        var name =$("#registerClientName").val();
         var password = $("#registerClientPassword").val();
         var repeatPassword = $("#registerClientRepeatPassword").val();
         var address = $("#registerClientAddress").val();
@@ -49,6 +50,15 @@ $(document).ready(function(){
         if ($("#isDriver").is(":checked")) {
             var typeVehicle = $("#registerClientTypeVehicle").val();
         }
+        var valueIsDriver;
+        if (isDriver) {
+            //change to 1 because of API
+            valueIsDriver = 1;
+        } else {
+            //change to 0 because of API
+            valueIsDriver = 0;
+        }
+
         console.log({
             email: email,
             password: password,
@@ -57,7 +67,7 @@ $(document).ready(function(){
             zipCode: zipCode,
             location: location,
             nif: nif,
-            isDriver: isDriver,
+            isDriver: valueIsDriver,
             contactNumber: contactNumber,
             typeVehicle: typeVehicle
         });
@@ -65,7 +75,7 @@ $(document).ready(function(){
         var errFields = false;
 
         //check email
-        if (validateEmail(email)) {
+        if (!validateEmail(email)) {
             errFields = true;
             M.toast({html: 'Email inválido!'})
         }
@@ -93,8 +103,6 @@ $(document).ready(function(){
 
         if (!errFields) {
             if (isDriver) {
-                //change to 1 because of API
-                isDriver=1;
                 $.ajax({
                     url: 'http://localhost:3000/api/register/signupClientDriver',
                     type: 'POST',
@@ -108,22 +116,21 @@ $(document).ready(function(){
                         name: name,
                         nif: nif,
                         contactNumber: contactNumber,
-                        isDriver:  isDriver,
-                        typeVehicle: typeVehicle
+                        typeVehicle: typeVehicle,
+                        isDriver: valueIsDriver
                     },
                     success: function (data) {
                         console.log(data);
                         M.toast({html: 'Registado com sucesso!'});
     
-                    }
-                    , error: function (jqXHR, textStatus, err) {
+                    }, 
+                    error: function (jqXHR, textStatus, err) {
+                        console.log(jqXHR);
                         console.log(err,textStatus);
                         M.toast({html: 'Erro ao registar!'});
                     }
                 })
             } else {
-                //change to 0 because of API
-                isDriver = 0;
                 $.ajax({
                     url: 'http://localhost:3000/api/register/signupClientDriver',
                     type: 'POST',
@@ -137,7 +144,7 @@ $(document).ready(function(){
                         name: name,
                         nif: nif,
                         contactNumber: contactNumber,
-                        isDriver:  isDriver
+                        isDriver: valueIsDriver
                     },
                     success: function (data) {
                         console.log(data);
@@ -150,6 +157,111 @@ $(document).ready(function(){
                     }
                 })
             }
+        }
+    });
+
+    //submit form create merchant
+    $("#formRegisterMerchant").submit(function (event) {
+        event.preventDefault();
+
+        var name =$("#registerMerchantName").val();
+        var email = $("#registerMerchantEmail").val();
+        var password = $("#registerMerchantPassword").val();
+        var repeatPassword = $("#registerMerchantRepeatPassword").val();
+        var address = $("#registerMerchantAddress").val();
+        var zipCode = $("#registerMerchantZipCode").val();
+        var location = $("#registerMerchantLocation").val();
+        var nipc = $("#registerMerchantNIPC").val();
+        var category = $("#registerMerchantCategory").val();
+        var description = $("#registerMerchantDescription").val();
+        var contactNumber = $("#registerMerchantContactNumber").val();
+        
+        console.log("submit working");
+
+        var errFields = false;
+
+        //handling file
+        var fd = new FormData();
+        var file = $('#registerMerchantFile')[0].files[0];
+        fd.append('logo', file);
+
+
+        //check email
+        if (!validateEmail(email)) {
+            errFields = true;
+            M.toast({html: 'Email inválido!'})
+        }
+
+        //check if passwords are equal
+        if (password !== repeatPassword) {
+            errFields = true;
+            M.toast({html: 'Palavras passe não coincidem!'})
+        }
+
+        //check if its empty fields
+        if (name === '' || email === '' || password === '' || repeatPassword === '' ||
+        address === '' || zipCode === '' || location === '' || nipc === '' || category === '' ||
+        description === '' || contactNumber === '') {
+            errFields = true;
+            M.toast({html: 'Campos vazios!'})
+        }
+
+        //check if type files is correct
+        if (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png') {
+            console.log("type file correct");
+        } else {
+            errFields = true;
+            M.toast({html: 'Tipo de ficheiro não suportado!'})
+        }
+
+        console.log ( {
+            email: email,
+            password: password,
+            repeatPassword: repeatPassword,
+            address: address,
+            zipCode: zipCode,
+            location: location,
+            nipc: nipc,
+            category: category,
+            description: description,
+            contactNumber: contactNumber,
+            file: file,
+            typeFile: file.type
+        })
+
+        fd.append('email', email);
+        fd.append('password', password);
+        fd.append('address', address);
+        fd.append('zipCode', zipCode);
+        fd.append('location', location);
+        fd.append('name', name);
+        fd.append('nipc', nipc);
+        fd.append('category', category);
+        fd.append('description', description);
+        
+
+        //check if not have errors
+        if (!errFields) {
+            console.log(true);
+            
+            $.ajax({
+                url: 'http://localhost:3000/api/register/signupMerchant',
+                type: 'POST',
+                cache: false,
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    console.log(data);
+                    M.toast({html: 'Registado com sucesso!'});
+
+                }
+                , error: function (jqXHR, textStatus, err) {
+                    console.log(err,textStatus);
+                    M.toast({html: 'Erro ao registar!'});
+                }
+            })
+            
         }
     });
 });

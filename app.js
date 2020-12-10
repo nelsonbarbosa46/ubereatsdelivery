@@ -7,6 +7,9 @@ const routeRegister = require('./routes/register');
 app.use(bodyParser.urlencoded({extended: false})); 
 app.use(bodyParser.json()); 
 
+
+
+//to solve CORS
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
@@ -20,6 +23,7 @@ app.use((req, res, next) => {
     }
 
     next();
+
 })
 
 app.use('/api/register', routeRegister);

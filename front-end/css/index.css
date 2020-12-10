@@ -33,11 +33,11 @@
     cursor: pointer;
 }
 
-#formRegisterMerchant {
+#divFormRegisterMerchant {
     display: none;
 }
 
-#formRegisterClient {
+#divFormRegisterClient {
     display: none;
 }
 

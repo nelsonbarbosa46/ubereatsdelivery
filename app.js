@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const routeRegister = require('./routes/register');
+const routeLogin = require('./routes/login');
 
 app.use(bodyParser.urlencoded({extended: false})); 
 app.use(bodyParser.json()); 
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 
 
 app.use('/api/register', routeRegister);
+app.use('/api/login', routeLogin);
 
 //dont find the page
 app.use((req, res, next) => {

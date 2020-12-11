@@ -32,6 +32,57 @@ $(document).ready(function(){
         return re.test(String(email).toLowerCase());
     }
 
+    $("#formLoginSubmit").click(function (event) {
+        event.preventDefault();
+        
+        var email = $("#formLoginEmail").val();
+        var password = $("#formLoginPassword").val();
+
+        console.log({
+            email: email,
+            password: password
+        })
+
+        var errFields = false;
+
+        //check if email is valid
+        if (!validateEmail(email)) {
+            errFields = true;
+            M.toast({html: 'Email inválido!'})
+        }
+
+        //check if fields are empty
+        if (email === '' || password === '') {
+            errFields = true;
+            M.toast({html: 'Campos vazios!'})
+        }
+
+        if (!errFields) {
+            /*
+            $.ajax({
+                url: 'http://localhost:3000/api/login/',
+                type: 'POST',
+                cache: false,
+                data: { 
+                    email: email,
+                    password: password
+                },
+                success: function (data) {
+                    console.log(data);
+                    M.toast({html: 'Registado com sucesso!'});
+
+                }, 
+                error: function (jqXHR, textStatus, err) {
+                    console.log(jqXHR);
+                    console.log(err,textStatus);
+                    M.toast({html: 'Erro ao registar!'});
+                }
+            })
+            */
+           console.log("Sucesso");
+        }
+    });
+
     //submit form create client/driver
     $("#submitFormCreateClient").click(function (event) {
         event.preventDefault();

@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+<<<<<<< Updated upstream
 const { db } = require('../sql');
 =======
 >>>>>>> Stashed changes

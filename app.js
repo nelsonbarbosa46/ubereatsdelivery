@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
 const routeRegister = require('./routes/register');
+<<<<<<< Updated upstream
 const routeLogin = require('./routes/login');
 
 =======

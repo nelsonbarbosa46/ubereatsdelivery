@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { db } = require('../sql');
+=======
+>>>>>>> Stashed changes
 
 exports.login = (req, res, next) => {
     
@@ -82,7 +84,11 @@ exports.login = (req, res, next) => {
     return;
 }
 
+<<<<<<< Updated upstream
 exports.checkToken = (req, res, next) => {
+=======
+exports.checkTokenRequired = (req, res, next) => {
+>>>>>>> Stashed changes
 
     var db = require('../sql').db();
 
@@ -107,4 +113,32 @@ exports.checkToken = (req, res, next) => {
     db.close();
 
     return;
+<<<<<<< Updated upstream
+=======
+}
+
+exports.checkTokenOptional = (req, res, next) => {
+
+    var db = require('../sql').db();
+
+    var token = req.body.token;
+
+    try{
+        const decode = jwt.verify(token, process.env.PRIVATE_KEY);
+        console.log(decode);
+        next();
+    }catch(err){
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Iniciar Sessão'
+            }
+        }
+        next();
+    }
+
+    db.close();
+
+>>>>>>> Stashed changes
 }

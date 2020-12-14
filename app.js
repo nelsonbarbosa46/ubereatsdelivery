@@ -1,9 +1,11 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
 const routeRegister = require('./routes/register');
 const routeLogin = require('./routes/login');
+
 
 app.use(bodyParser.urlencoded({extended: false})); 
 app.use(bodyParser.json()); 
@@ -24,6 +26,8 @@ app.use((req, res, next) => {
     next();
 });
 
+//show which http code when having one request (show on terminal)
+app.use(morgan('dev'));
 
 app.use('/api/register', routeRegister);
 app.use('/api/login', routeLogin);

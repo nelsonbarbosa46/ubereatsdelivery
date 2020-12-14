@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { db } = require('../sql');
 
 exports.login = (req, res, next) => {
     
@@ -25,14 +26,17 @@ exports.login = (req, res, next) => {
                 if (row) {
                     //check if password is correct
                     if (await bcrypt.compareSync(password, row.password)) {
-                        
+                        console.log(process.env.JWT_KEY)
                         var typeUser = row.typeUser;
-                        
+
                         var token = jwt.sign({
                             typeUser: typeUser,
                             email: email,
                             password: password
-                        }, 'privateKey', {
+                        }, 
+                        process.env.PRIVATE_KEY, 
+                        {
+                            algorithm:'HS256',
                             expiresIn:'5h'
                         })
 
@@ -48,7 +52,7 @@ exports.login = (req, res, next) => {
                             }
                         }
                         
-                        res.status(201).send(response);
+                        res.status(200).send(response);
                     } else {
                         let response = {
                             message: "failed",
@@ -72,6 +76,33 @@ exports.login = (req, res, next) => {
             }
         }
     )
+
+    db.close();
+
+    return;
+}
+
+exports.checkToken = (req, res, next) => {
+
+    var db = require('../sql').db();
+
+    var token = req.body.token;
+
+    try{
+        const decode = jwt.verify(token, process.env.PRIVATE_KEY);
+        console.log(decode);
+        next();
+    }catch(err){
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Iniciar Sessão'
+            }
+        }
+        return res.status(401).send(response)
+    }
+
 
     db.close();
 

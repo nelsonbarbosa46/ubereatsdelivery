@@ -4,12 +4,8 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
 const routeRegister = require('./routes/register');
-<<<<<<< Updated upstream
 const routeLogin = require('./routes/login');
-
-=======
 const routeUser = require('./routes/user');
->>>>>>> Stashed changes
 
 app.use(bodyParser.urlencoded({extended: false})); 
 app.use(bodyParser.json()); 
@@ -34,11 +30,8 @@ app.use((req, res, next) => {
 app.use(morgan('dev'));
 
 app.use('/api/register', routeRegister);
-<<<<<<< Updated upstream
 app.use('/api/login', routeLogin);
-=======
 app.use('/api/user', routeUser);
->>>>>>> Stashed changes
 
 //dont find the page
 app.use((req, res, next) => {

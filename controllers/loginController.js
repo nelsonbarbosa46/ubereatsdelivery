@@ -1,9 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-<<<<<<< Updated upstream
 const { db } = require('../sql');
-=======
->>>>>>> Stashed changes
+
 
 exports.login = (req, res, next) => {
     
@@ -85,11 +83,8 @@ exports.login = (req, res, next) => {
     return;
 }
 
-<<<<<<< Updated upstream
-exports.checkToken = (req, res, next) => {
-=======
 exports.checkTokenRequired = (req, res, next) => {
->>>>>>> Stashed changes
+
 
     var db = require('../sql').db();
 
@@ -114,8 +109,6 @@ exports.checkTokenRequired = (req, res, next) => {
     db.close();
 
     return;
-<<<<<<< Updated upstream
-=======
 }
 
 exports.checkTokenOptional = (req, res, next) => {
@@ -141,5 +134,4 @@ exports.checkTokenOptional = (req, res, next) => {
 
     db.close();
 
->>>>>>> Stashed changes
 }

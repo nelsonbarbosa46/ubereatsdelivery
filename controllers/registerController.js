@@ -263,6 +263,11 @@ exports.createMerchant = async (req, res, next) => {
         logoPath = req.file.path;
     }
 
+    //check if its equal
+    if (password !== repeatPassword) {
+        errFields = true;
+    }
+
     //check password if has one uppercase, one lowercase, one number and at least 8 characters
     if (password.match(/[a-z]/g) === null || 
     password.match( /[A-Z]/g) === null || 

@@ -9,9 +9,18 @@ exports.login = (req, res, next) => {
     var email = req.body.email;
     var password = req.body.password;
 
+    var errFields = false;
+
+    //check if fields are empty
+    if (email === '' || password === '') {
+        errFields = true;
+    }
+
     var sql = `SELECT email, password, typeUser FROM user WHERE email = ?`;
 
-    db.get(sql, [email], async function (err, row) {
+    //if dont have errors, continue and going to insert on db
+    if (!errFields) {
+        db.get(sql, [email], async function (err, row) {
             if (err) {
                 let response = {
                     message: "failed",
@@ -73,10 +82,20 @@ exports.login = (req, res, next) => {
                     res.status(500).send(response);
                 }
             }
-        }
-    )
+        })
 
-    db.close();
+        db.close();
+
+    } else {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Iniciar Sessão'
+            }
+        }
+        res.status(400).send(response);
+    }
 
     return;
 }

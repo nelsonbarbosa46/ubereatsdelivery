@@ -282,6 +282,7 @@ $(document).ready(function(){
 
         fd.append('email', email);
         fd.append('password', password);
+        fd.append('repeatPassword', repeatPassword);
         fd.append('address', address);
         fd.append('zipCode', zipCode);
         fd.append('location', location);

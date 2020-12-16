@@ -73,8 +73,10 @@ $(document).ready(function(){
                 },
                 success: function (data) {
                     console.log(data);
-                    sessionStorage.setItem("tokenSession", "123");
-                    console.log(sessionStorage.getItem("tokenSession") + "1");
+                    let token = data.login.typeUser;
+                    console.log(token);
+                    sessionStorage.setItem("tokenSession", data.login.token);
+                    console.log(sessionStorage.getItem("tokenSession"));
                     M.toast({html: 'Registado com sucesso!'});
 
                 }, 

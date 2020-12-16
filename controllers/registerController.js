@@ -18,6 +18,7 @@ exports.createAdmin = async (req, res, next) => {
     //create hash
     const hash = await bcrypt.hashSync(password, 10);
 
+
     let sql = `INSERT INTO user(email, password, address, zipCode, location, typeUser)
     VALUES (?, ?, ?, ?, ?, ?)`;
 
@@ -236,6 +237,7 @@ exports.createMerchant = async (req, res, next) => {
 
     var email = req.body.email;
     var password = req.body.password;
+    var repeatPassword = req.body.repeatPassword;
     var address = req.body.address;
     var zipCode = req.body.zipCode;
     var location = req.body.location;
@@ -261,7 +263,14 @@ exports.createMerchant = async (req, res, next) => {
         logoPath = req.file.path;
     }
 
-    //check 
+    //check password if has one uppercase, one lowercase, one number and at least 8 characters
+    if (password.match(/[a-z]/g) === null || 
+    password.match( /[A-Z]/g) === null || 
+    null === password.match( /[0-9]/g) || password.length < 8
+    ) 
+    {
+        errFields = true;
+    };
 
     //if doesnt have any errors on fields, program continues
     if (!errFields) {

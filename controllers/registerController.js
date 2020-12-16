@@ -99,6 +99,8 @@ exports.createClientDriver = async (req, res, next) => {
     //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
     var typeUser;
 
+    var errFields = false;
+
     function checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name) {
         if (isDriver == 1) {
             sql = `INSERT INTO driver(idClient, typeVehicle, canWork, isChecked) VALUES (?,?,?,?)`;
@@ -158,53 +160,74 @@ exports.createClientDriver = async (req, res, next) => {
         typeUser = 0;
     }
 
+    //check if value typeVehicle is correct
+    if (typeVehicle < 0 || typeVehicle > 3) {
+        errFields = true;
+    }
+
     var sql = `INSERT INTO user(email, password, address, zipCode, location, typeUser)
     VALUES (?, ?, ?, ?, ?, ?)`;
 
-    //execute sql command
-    db.run(sql, [email, hash, address, zipCode, location, typeUser],
-        function (err) {
-            if (!err) {
-                let id = this.lastID;
-                sql = `INSERT INTO client(idUser, name, nif, contactNumber, isDriver)
-                VALUES (?, ?, ?, ?, ?)`;
-                db.run(sql, [id, name, nif, contactNumber, isDriver],
-                    function (err) {
-                        if (!err) {
-                            let id = this.lastID;
-                            //function to check if client want to be a driver
-                            checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name);
-                        } else {
-                            let response = {
-                                message: "failed",
-                                request: {
-                                    type: 'POST',
-                                    description: 'Criar um cliente/condutor'
-                                }
-                            };
-                            //error inserting on table client
-                            res.status(500).send(response)
+    //if dont have errors, continue and going to insert on db
+    if (!errFields) {
+        //execute sql command
+        db.run(sql, [email, hash, address, zipCode, location, typeUser],
+            function (err) {
+                if (!err) {
+                    let id = this.lastID;
+                    sql = `INSERT INTO client(idUser, name, nif, contactNumber, isDriver)
+                    VALUES (?, ?, ?, ?, ?)`;
+                    db.run(sql, [id, name, nif, contactNumber, isDriver],
+                        function (err) {
+                            if (!err) {
+                                let id = this.lastID;
+                                //function to check if client want to be a driver
+                                checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name);
+                            } else {
+                                let response = {
+                                    message: "failed",
+                                    request: {
+                                        type: 'POST',
+                                        description: 'Criar um cliente/condutor'
+                                    }
+                                };
+                                //error inserting on table client
+                                res.status(500).send(response)
+                            }
                         }
-                    }
-                )
-            } else {
-                //error inserting on table user
-                let response = {
-                    message: "failed",
-                    request: {
-                        type: 'POST',
-                        description: 'Criar um cliente/condutor'
-                    }
-                };
-                res.status(500).send(response)
+                    )
+                } else {
+                    //error inserting on table user
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'POST',
+                            description: 'Criar um cliente/condutor'
+                        }
+                    };
+                    res.status(500).send(response)
+                }
             }
-        }
-        
-    )
+            
+        )
 
-    db.close();
+        db.close();
 
+    } else {
+        //error inserting on table user
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar um cliente/condutor'
+            }
+        };
+        res.status(400).send(response)
+    }
+
+    
     return;
+    
 }
 
 exports.createMerchant = async (req, res, next) => {

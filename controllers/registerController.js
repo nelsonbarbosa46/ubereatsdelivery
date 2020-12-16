@@ -257,17 +257,11 @@ exports.createMerchant = async (req, res, next) => {
     //check if upload has a error
     if (!logo) {
         errFields = true;
-        let response = {
-            message: "failed",
-            request: {
-                type: 'POST',
-                description: 'Criar uma empresa'
-            }
-        }
-        res.status(400).send(response);
     } else {
         logoPath = req.file.path;
     }
+
+    //check 
 
     //if doesnt have any errors on fields, program continues
     if (!errFields) {
@@ -326,6 +320,15 @@ exports.createMerchant = async (req, res, next) => {
                 }
             }    
         )
+    } else {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar uma empresa'
+            }
+        }
+        res.status(400).send(response)
     }
 
     db.close();

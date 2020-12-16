@@ -100,6 +100,8 @@ exports.createClientDriver = async (req, res, next) => {
     var typeUser;
 
     function checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name) {
+        //convert to Number
+        isDriver = Number(isDriver);
         if (isDriver === 1) {
             sql = `INSERT INTO driver(idClient, typeVehicle, canWork, isChecked) VALUES (?,?,?,?)`;
             db.run(sql, [id, typeVehicle, canWork, isChecked], 

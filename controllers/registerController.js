@@ -100,9 +100,7 @@ exports.createClientDriver = async (req, res, next) => {
     var typeUser;
 
     function checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name) {
-        //convert to Number
-        isDriver = Number(isDriver);
-        if (isDriver === 1) {
+        if (isDriver == 1) {
             sql = `INSERT INTO driver(idClient, typeVehicle, canWork, isChecked) VALUES (?,?,?,?)`;
             db.run(sql, [id, typeVehicle, canWork, isChecked], 
                 function (err) {
@@ -115,7 +113,7 @@ exports.createClientDriver = async (req, res, next) => {
                             }
                         };
                         //error inserting on table driver
-                        res.status(500).json(response)
+                        res.status(500).send(response)
                     } else {
                         let response = {
                             message: "success",
@@ -154,7 +152,7 @@ exports.createClientDriver = async (req, res, next) => {
 
     //check if value is right on isDriver; 
     //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
-    if (isDriver === 1) {
+    if (isDriver == 1) {
         typeUser = 1;
     } else {
         typeUser = 0;

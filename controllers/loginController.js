@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { db } = require('../sql');
 
 
 exports.login = (req, res, next) => {
@@ -10,7 +9,7 @@ exports.login = (req, res, next) => {
     var email = req.body.email;
     var password = req.body.password;
 
-    var sql = `SELECT * FROM user WHERE email = ?`;
+    var sql = `SELECT email, password, typeUser FROM user WHERE email = ?`;
 
     db.get(sql, [email], async function (err, row) {
             if (err) {
@@ -27,18 +26,16 @@ exports.login = (req, res, next) => {
                 if (row) {
                     //check if password is correct
                     if (await bcrypt.compareSync(password, row.password)) {
-                        console.log(process.env.JWT_KEY)
                         var typeUser = row.typeUser;
 
                         var token = jwt.sign({
                             typeUser: typeUser,
-                            email: email,
-                            password: password
+                            email: email
                         }, 
                         process.env.PRIVATE_KEY, 
                         {
                             algorithm:'HS256',
-                            expiresIn:'5h'
+                            expiresIn:'1d'
                         })
 
                         let response = {

@@ -10,6 +10,8 @@ const routeUser = require('./routes/user');
 app.use(bodyParser.urlencoded({extended: false})); 
 app.use(bodyParser.json()); 
 
+
+
 //to solve CORS
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -24,7 +26,8 @@ app.use((req, res, next) => {
     }
 
     next();
-});
+
+})
 
 //show which http code when having one request (show on terminal)
 app.use(morgan('dev'));

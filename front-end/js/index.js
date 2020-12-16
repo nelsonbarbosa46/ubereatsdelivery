@@ -234,8 +234,6 @@ $(document).ready(function(){
         var category = $("#registerMerchantCategory").val();
         var description = $("#registerMerchantDescription").val();
         var contactNumber = $("#registerMerchantContactNumber").val();
-        
-        console.log("submit working");
 
         var errFields = false;
 
@@ -243,7 +241,6 @@ $(document).ready(function(){
         var fd = new FormData();
         var file = $('#registerMerchantFile')[0].files[0];
         fd.append('logo', file);
-
 
         //check email
         if (!validateEmail(email)) {
@@ -256,6 +253,16 @@ $(document).ready(function(){
             errFields = true;
             M.toast({html: 'Palavras passe não coincidem!'})
         }
+
+        //check password if has one uppercase, one lowercase, one number and at least 8 characters
+        if (password.match(/[a-z]/g) === null || 
+        password.match( /[A-Z]/g) === null || 
+        null === password.match( /[0-9]/g) || password.length < 8
+        ) 
+        { 
+            M.toast({html: 'Palavra passe demasiado fraca!'})
+            errFields = true;
+        };
 
         //check if its empty fields
         if (name === '' || email === '' || password === '' || repeatPassword === '' ||
@@ -273,21 +280,6 @@ $(document).ready(function(){
             M.toast({html: 'Tipo de ficheiro não suportado!'})
         }
 
-        console.log ( {
-            email: email,
-            password: password,
-            repeatPassword: repeatPassword,
-            address: address,
-            zipCode: zipCode,
-            location: location,
-            nipc: nipc,
-            category: category,
-            description: description,
-            contactNumber: contactNumber,
-            file: file,
-            typeFile: file.type
-        })
-
         fd.append('email', email);
         fd.append('password', password);
         fd.append('address', address);
@@ -301,7 +293,6 @@ $(document).ready(function(){
 
         //check if not have errors
         if (!errFields) {
-            console.log(true);
             
             $.ajax({
                 url: 'http://localhost:3000/api/register/signupMerchant',

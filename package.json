@@ -4,7 +4,8 @@
   "description": "Uma projeto a ser realizado para a Computação Distribuída e Desenvolvimento Colaborativo de Software",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -28,7 +29,11 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "materialize-css": "^1.0.0-rc.2",
+    "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "sqlite3": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
   }
 }

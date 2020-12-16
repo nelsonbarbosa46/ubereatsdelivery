@@ -5,6 +5,7 @@ $(document).ready(function(){
 
     $('input#registerClientNIF, input#registerClientContactNumber, #registerMerchantDescription').characterCounter();
 
+    //toggle form merchant/client
     $("#openFormRegisterMerchant").click(function(){
         if ($("#divFormRegisterClient").css('display') !== 'none') {
             $("#divFormRegisterClient").slideToggle(700);
@@ -12,6 +13,15 @@ $(document).ready(function(){
         $("#divFormRegisterMerchant").slideToggle(700);
     });
 
+    //toggle form merchant/client
+    $("#openFormRegisterClient").click(function(){
+        if ($("#divFormRegisterMerchant").css('display') !== 'none') {
+            $("#divFormRegisterMerchant").slideToggle(700);
+        }
+        $("#divFormRegisterClient").slideToggle(700);
+    });
+
+    //open form driver
     $("#isDriver").click(function () {
        if ($("#isDriver").is(":checked")) {
            $("#formDriver").fadeIn();
@@ -20,18 +30,12 @@ $(document).ready(function(){
        }
     });
 
-    $("#openFormRegisterClient").click(function(){
-        if ($("#divFormRegisterMerchant").css('display') !== 'none') {
-            $("#divFormRegisterMerchant").slideToggle(700);
-        }
-        $("#divFormRegisterClient").slideToggle(700);
-    });
-
     function validateEmail(email) {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
 
+    //submit form login
     $("#formLoginSubmit").click(function (event) {
         event.preventDefault();
         
@@ -58,7 +62,7 @@ $(document).ready(function(){
         }
 
         if (!errFields) {
-            /*
+            
             $.ajax({
                 url: 'http://localhost:3000/api/login/',
                 type: 'POST',
@@ -69,6 +73,8 @@ $(document).ready(function(){
                 },
                 success: function (data) {
                     console.log(data);
+                    sessionStorage.setItem("tokenSession", "123");
+                    console.log(sessionStorage.getItem("tokenSession") + "1");
                     M.toast({html: 'Registado com sucesso!'});
 
                 }, 
@@ -78,7 +84,7 @@ $(document).ready(function(){
                     M.toast({html: 'Erro ao registar!'});
                 }
             })
-            */
+            
            console.log("Sucesso");
         }
     });

@@ -42,6 +42,7 @@ exports.login = (req, res, next) => {
                             message: "success",
                             login: {
                                 email: email,
+                                typeUser: typeUser,
                                 token: token
                             },
                             request: {

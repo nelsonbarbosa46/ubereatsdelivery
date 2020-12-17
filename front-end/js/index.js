@@ -52,13 +52,13 @@ $(document).ready(function(){
         //check if email is valid
         if (!validateEmail(email)) {
             errFields = true;
-            M.toast({html: 'Email inválido!'})
+            M.toast({html: 'Email Inválido!'})
         }
 
         //check if fields are empty
         if (email === '' || password === '') {
             errFields = true;
-            M.toast({html: 'Campos vazios!'})
+            M.toast({html: 'Campos Vazios!'})
         }
 
         if (!errFields) {
@@ -77,13 +77,13 @@ $(document).ready(function(){
                     console.log(token);
                     sessionStorage.setItem("tokenSession", data.login.token);
                     console.log(sessionStorage.getItem("tokenSession"));
-                    M.toast({html: 'Registado com sucesso!'});
+                    M.toast({html: 'Registado Com Sucesso!'});
 
                 }, 
                 error: function (jqXHR, textStatus, err) {
                     console.log(jqXHR);
                     console.log(err,textStatus);
-                    M.toast({html: 'Erro ao registar!'});
+                    M.toast({html: 'Erro Ao Registar!'});
                 }
             })
             
@@ -136,27 +136,35 @@ $(document).ready(function(){
         //check email
         if (!validateEmail(email)) {
             errFields = true;
-            M.toast({html: 'Email inválido!'})
+            M.toast({html: 'Email Inválido!'})
+        }
+
+        //check password if has one uppercase, one lowercase, one number and at least 8 characters
+        if (password.match(/[a-z]/g) === null || 
+            password.match( /[A-Z]/g) === null || 
+            null === password.match( /[0-9]/g) || password.length < 8) { 
+            errFields = true;
+            M.toast({html: 'Palavras-passes Diferentes Dos Parâmetros!'})
         }
 
         //check if passwords are correct
         if (password !== repeatPassword) {
             errFields = true;
-            M.toast({html: 'Palavras passe não coincidem!'})
+            M.toast({html: 'Palavras-passes Não Coincidem!'})
         }
 
         //check if fields are empty
         if (email === "" || password === "" || repeatPassword === '' || address === '' || zipCode === '' 
         || location === '' || nif === '' || contactNumber === '') {
             errFields = true;
-            M.toast({html: 'Campos vazios!'})
+            M.toast({html: 'Campos Vazios!'})
         }
 
         //if its Driver, check variable typeVehicle
         if (isDriver) {
             if (typeVehicle === null) {
                 errFields = true;
-                M.toast({html: 'Campos vazios!'})
+                M.toast({html: 'Campos Vazios!'})
             }
         }
 
@@ -180,13 +188,13 @@ $(document).ready(function(){
                     },
                     success: function (data) {
                         console.log(data);
-                        M.toast({html: 'Registado com sucesso!'});
+                        M.toast({html: 'Registado Com Sucesso!'});
     
                     }, 
                     error: function (jqXHR, textStatus, err) {
                         console.log(jqXHR);
                         console.log(err,textStatus);
-                        M.toast({html: 'Erro ao registar!'});
+                        M.toast({html: 'Erro Ao Registar!'});
                     }
                 })
             } else {
@@ -207,12 +215,12 @@ $(document).ready(function(){
                     },
                     success: function (data) {
                         console.log(data);
-                        M.toast({html: 'Registado com sucesso!'});
+                        M.toast({html: 'Registado Com Sucesso!'});
     
                     }
                     , error: function (jqXHR, textStatus, err) {
                         console.log(err,textStatus);
-                        M.toast({html: 'Erro ao registar!'});
+                        M.toast({html: 'Erro Ao Registar!'});
                     }
                 })
             }
@@ -245,31 +253,29 @@ $(document).ready(function(){
         //check email
         if (!validateEmail(email)) {
             errFields = true;
-            M.toast({html: 'Email inválido!'})
+            M.toast({html: 'Email Inválido!'})
         }
 
         //check if passwords are equal
         if (password !== repeatPassword) {
             errFields = true;
-            M.toast({html: 'Palavras passe não coincidem!'})
+            M.toast({html: 'Palavras-passes Não Coincidem!'})
         }
 
         //check password if has one uppercase, one lowercase, one number and at least 8 characters
         if (password.match(/[a-z]/g) === null || 
         password.match( /[A-Z]/g) === null || 
-        null === password.match( /[0-9]/g) || password.length < 8
-        ) 
-        { 
-            M.toast({html: 'Palavra passe demasiado fraca!'})
+        null === password.match( /[0-9]/g) || password.length < 8) { 
             errFields = true;
-        };
+            M.toast({html: 'Palavras-passes Diferentes dos Parâmetros!'})
+        }
 
         //check if its empty fields
         if (name === '' || email === '' || password === '' || repeatPassword === '' ||
         address === '' || zipCode === '' || location === '' || nipc === '' || category === '' ||
         description === '' || contactNumber === '') {
             errFields = true;
-            M.toast({html: 'Campos vazios!'})
+            M.toast({html: 'Campos Vazios!'})
         }
 
         //check if type files is correct
@@ -277,7 +283,7 @@ $(document).ready(function(){
             console.log("type file correct");
         } else {
             errFields = true;
-            M.toast({html: 'Tipo de ficheiro não suportado!'})
+            M.toast({html: 'Ficheiro Não Suportado!'})
         }
 
         fd.append('email', email);
@@ -304,12 +310,12 @@ $(document).ready(function(){
                 processData: false,
                 success: function (data) {
                     console.log(data);
-                    M.toast({html: 'Registado com sucesso!'});
+                    M.toast({html: 'Registado com Sucesso!'});
 
                 }
                 , error: function (jqXHR, textStatus, err) {
                     console.log(err,textStatus);
-                    M.toast({html: 'Erro ao registar!'});
+                    M.toast({html: 'Erro ao Registar!'});
                 }
             })
             

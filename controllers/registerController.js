@@ -7,6 +7,7 @@ exports.createAdmin = async (req, res, next) => {
 
     var email = req.body.email;
     var password = req.body.password;
+    var repeatPassword = req.body.repeatPassword;
     var address = req.body.address;
     var zipCode = req.body.zipCode;
     var location = req.body.location;
@@ -15,65 +16,99 @@ exports.createAdmin = async (req, res, next) => {
     //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
     var typeUser = 3;
 
+    var errFields = false;
+
     //create hash
     const hash = await bcrypt.hashSync(password, 10);
 
+    //check if fields are empty
+    if (email === '' || password === '' || repeatPassword === '' || address === '' || 
+    zipCode === '' || location === '' || name === '') {
+        errFields = true;
+    }
 
-    let sql = `INSERT INTO user(email, password, address, zipCode, location, typeUser)
-    VALUES (?, ?, ?, ?, ?, ?)`;
+    //check if password is equal to repeatPassword
+    if (password !== repeatPassword) {
+        errFields = true;
+    }
 
-    //execute sql command
-    db.run(sql, [email, hash, address, zipCode, location , typeUser],
-        function (err) {
-            if (!err) {
-                let id = this.lastID;
-                sql = `INSERT INTO admin(idUser, name) VALUES (?, ?)`;
-                db.run(sql, [id, name], 
-                    function (err) {
-                        if (err) {
-                            let response = {
-                                message: "failed",
-                                request: {
-                                    type: 'POST',
-                                    description: 'Criar um administrador'
+    //check password if has one uppercase, one lowercase, one number and at least 8 characters
+    if (password.match(/[a-z]/g) === null || 
+    password.match( /[A-Z]/g) === null || 
+    null === password.match( /[0-9]/g) || password.length < 8
+    ) 
+    {
+        errFields = true;
+    };
+
+    if (!errFields) {
+        let sql = `INSERT INTO user(email, password, address, zipCode, location, typeUser)
+        VALUES (?, ?, ?, ?, ?, ?)`;
+
+        //execute sql command
+        db.run(sql, [email, hash, address, zipCode, location , typeUser],
+            function (err) {
+                if (!err) {
+                    let id = this.lastID;
+                    sql = `INSERT INTO admin(idUser, name) VALUES (?, ?)`;
+                    db.run(sql, [id, name], 
+                        function (err) {
+                            if (err) {
+                                let response = {
+                                    message: "failed",
+                                    request: {
+                                        type: 'POST',
+                                        description: 'Criar um administrador'
+                                    }
                                 }
-                            }
-                            //error inserting on table admin
-                            res.status(500).send(response);
-                        } else {
-                            let response = {
-                                message: "success",
-                                userCreated: {
-                                    email: email,
-                                    name: name
-                                },
-                                request: {
-                                    type: 'POST',
-                                    description: 'Criar um administrador'
+                                //error inserting on table admin
+                                res.status(500).send(response);
+                            } else {
+                                let response = {
+                                    message: "success",
+                                    userCreated: {
+                                        email: email,
+                                        name: name
+                                    },
+                                    request: {
+                                        type: 'POST',
+                                        description: 'Criar um administrador'
+                                    }
                                 }
-                            }
 
-                            //status 201 because was inserted in both of the tables
-                            res.status(201).send(response);
+                                //status 201 because was inserted in both of the tables
+                                res.status(201).send(response);
+                            }
+                        }
+                    )
+                } else {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'POST',
+                            description: 'Criar um administrador'
                         }
                     }
-                )
-            } else {
-                let response = {
-                    message: "failed",
-                    request: {
-                        type: 'POST',
-                        description: 'Criar um administrador'
-                    }
+                    //error inserting on table user
+                    res.status(500).send(response);
                 }
-                //error inserting on table user
-                res.status(500).send(response);
-            }
-        }   
-    )
+            }   
+        )
 
-    //close connection
-    db.close();
+        //close connection
+        db.close();
+
+    } else {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar um administrador'
+            }
+        }
+        //error because the fields are empty/has a error
+        res.status(400).send(response);        
+    }
 
     return;
 }

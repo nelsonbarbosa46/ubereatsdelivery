@@ -1,6 +1,11 @@
 
 const bcrypt = require('bcrypt');
 
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
 exports.createAdmin = async (req, res, next) => {
 
     var db = require('../sql').db();
@@ -18,8 +23,8 @@ exports.createAdmin = async (req, res, next) => {
 
     var errFields = false;
 
-    //create hash
-    const hash = await bcrypt.hashSync(password, 10);
+    //check email if its valid
+    errFields = !validateEmail(email);
 
     //check if fields are empty
     if (email === '' || password === '' || repeatPassword === '' || address === '' || 
@@ -42,6 +47,9 @@ exports.createAdmin = async (req, res, next) => {
     };
 
     if (!errFields) {
+        //create hash
+        const hash = await bcrypt.hashSync(password, 10);
+
         let sql = `INSERT INTO user(email, password, address, zipCode, location, typeUser)
         VALUES (?, ?, ?, ?, ?, ?)`;
 

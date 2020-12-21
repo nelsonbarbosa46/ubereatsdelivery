@@ -322,6 +322,7 @@ exports.createMerchant = async (req, res, next) => {
     if (email === '' || password === '' || repeatPassword === '' || address === '' || 
     zipCode === '' || location === '' || name === '' || category === '' || nif === '' ||
     description === '' || contactNumber === '') {
+       
         errFields = true;
     }
 

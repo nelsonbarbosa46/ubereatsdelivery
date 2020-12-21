@@ -145,6 +145,7 @@ exports.createClientDriver = async (req, res, next) => {
 
     var errFields = false;
 
+
     function checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name) {
         if (isDriver == 1) {
             sql = `INSERT INTO driver(idClient, typeVehicle, canWork, isChecked) VALUES (?,?,?,?)`;
@@ -195,6 +196,10 @@ exports.createClientDriver = async (req, res, next) => {
     }
 
     const hash = await bcrypt.hashSync(password, 10);
+
+    //check email if its valid
+    errFields = !validateEmail(email);
+    console.log(errFields);
 
     //check if value is right on isDriver; 
     //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
@@ -298,6 +303,9 @@ exports.createMerchant = async (req, res, next) => {
     var logoPath;
 
     var errFields = false;
+
+    //check email if its valid
+    errFields = !validateEmail(email);
 
     //check if upload has a error
     if (!logo) {

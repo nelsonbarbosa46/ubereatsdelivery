@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const registerController = require('../controllers/registerController');
-const loginController = require('../controllers/loginController');
 const multer = require('multer');
 
 //handling with upload image (on createMerchant)
@@ -17,6 +16,21 @@ const storage = multer.diskStorage({
         date = date.getTime();
         //auxiliary variable to save changes when replace SPACES with "-" 
         let auxFileName = file.originalname.replace(/[^A-Z0-9]+/ig, "-");
+
+        //check type file to add type on the file
+        switch (file.mimetype) {
+            case 'image/png':
+                auxFileName = auxFileName + '.png';
+                break;
+            case 'image/jpeg':
+                auxFileName = auxFileName + '.jpeg';
+                break;
+            case 'image/jpg':
+                auxFileName = auxFileName + '.jpg';
+                break;
+            default:
+                break;
+        }
         cb(null, date + '-' + auxFileName);
     }
 });

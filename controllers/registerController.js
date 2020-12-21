@@ -199,7 +199,6 @@ exports.createClientDriver = async (req, res, next) => {
 
     //check email if its valid
     errFields = !validateEmail(email);
-    console.log(errFields);
 
     //check if value is right on isDriver; 
     //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
@@ -318,6 +317,13 @@ exports.createMerchant = async (req, res, next) => {
     if (password !== repeatPassword) {
         errFields = true;
     }
+    
+    //check if fields are empty
+    if (email === '' || password === '' || repeatPassword === '' || address === '' || 
+    zipCode === '' || location === '' || name === '' || category === '' || nif === '' ||
+    description === '' || contactNumber === '') {
+        errFields = true;
+    }
 
     //check password if has one uppercase, one lowercase, one number and at least 8 characters
     if (password.match(/[a-z]/g) === null || 
@@ -326,7 +332,8 @@ exports.createMerchant = async (req, res, next) => {
     ) 
     {
         errFields = true;
-    };
+    }
+
 
     //if doesnt have any errors on fields, program continues
     if (!errFields) {

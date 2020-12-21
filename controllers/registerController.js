@@ -127,6 +127,7 @@ exports.createClientDriver = async (req, res, next) => {
 
     var email = req.body.email;
     var password = req.body.password;
+    var repeatPassword = req.body.repeatPassword;
     var address = req.body.address;
     var zipCode = req.body.zipCode;
     var location = req.body.location;
@@ -140,11 +141,24 @@ exports.createClientDriver = async (req, res, next) => {
     var canWork = 0;
     var isChecked = 0;
 
+
     //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
     var typeUser;
 
     var errFields = false;
 
+    
+    //check if fields are empty
+    if (email === '' || password === '' || repeatPassword === '' || address === '' || 
+    zipCode === '' || location === '' || name === '' || nif === '' || contactNumber === ''
+    || isDriver === '') {
+        errFields = true;
+    }
+
+    //check if password is equal repeatPassword
+    if (password !== repeatPassword) {
+        errFields = true;
+    }
 
     function checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name) {
         if (isDriver == 1) {
@@ -204,14 +218,18 @@ exports.createClientDriver = async (req, res, next) => {
     //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
     if (isDriver == 1) {
         typeUser = 1;
+        //check if its undefined
+        if (typeof typeVehicle === 'undefined') {
+            errFields = true;
+        } else {
+            //check if value typeVehicle is correct
+            if (typeVehicle < 0 || typeVehicle > 3) {
+                errFields = true;
+            }
+        }
     } else {
         typeUser = 0;
-    }
-
-    //check if value typeVehicle is correct
-    if (typeVehicle < 0 || typeVehicle > 3) {
-        errFields = true;
-    }
+    }    
 
     var sql = `INSERT INTO user(email, password, address, zipCode, location, typeUser)
     VALUES (?, ?, ?, ?, ?, ?)`;

@@ -5,6 +5,7 @@ $(document).ready(function(){
 
     $('input#registerClientNIF, input#registerClientContactNumber, #registerMerchantDescription').characterCounter();
 
+    //toggle form merchant/client
     $("#openFormRegisterMerchant").click(function(){
         if ($("#divFormRegisterClient").css('display') !== 'none') {
             $("#divFormRegisterClient").slideToggle(700);
@@ -12,6 +13,15 @@ $(document).ready(function(){
         $("#divFormRegisterMerchant").slideToggle(700);
     });
 
+    //toggle form merchant/client
+    $("#openFormRegisterClient").click(function(){
+        if ($("#divFormRegisterMerchant").css('display') !== 'none') {
+            $("#divFormRegisterMerchant").slideToggle(700);
+        }
+        $("#divFormRegisterClient").slideToggle(700);
+    });
+
+    //open form driver
     $("#isDriver").click(function () {
        if ($("#isDriver").is(":checked")) {
            $("#formDriver").fadeIn();
@@ -20,18 +30,12 @@ $(document).ready(function(){
        }
     });
 
-    $("#openFormRegisterClient").click(function(){
-        if ($("#divFormRegisterMerchant").css('display') !== 'none') {
-            $("#divFormRegisterMerchant").slideToggle(700);
-        }
-        $("#divFormRegisterClient").slideToggle(700);
-    });
-
     function validateEmail(email) {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
 
+    //submit form login
     $("#formLoginSubmit").click(function (event) {
         event.preventDefault();
         
@@ -48,17 +52,17 @@ $(document).ready(function(){
         //check if email is valid
         if (!validateEmail(email)) {
             errFields = true;
-            M.toast({html: 'Email inválido!'})
+            M.toast({html: 'Email Inválido!'})
         }
 
         //check if fields are empty
         if (email === '' || password === '') {
             errFields = true;
-            M.toast({html: 'Campos vazios!'})
+            M.toast({html: 'Campos Vazios!'})
         }
 
         if (!errFields) {
-            /*
+            
             $.ajax({
                 url: 'http://localhost:3000/api/login/',
                 type: 'POST',
@@ -69,16 +73,20 @@ $(document).ready(function(){
                 },
                 success: function (data) {
                     console.log(data);
-                    M.toast({html: 'Registado com sucesso!'});
+                    let token = data.login.typeUser;
+                    console.log(token);
+                    sessionStorage.setItem("tokenSession", data.login.token);
+                    console.log(sessionStorage.getItem("tokenSession"));
+                    M.toast({html: 'Registado Com Sucesso!'});
 
                 }, 
                 error: function (jqXHR, textStatus, err) {
                     console.log(jqXHR);
                     console.log(err,textStatus);
-                    M.toast({html: 'Erro ao registar!'});
+                    M.toast({html: 'Erro Ao Registar!'});
                 }
             })
-            */
+            
            console.log("Sucesso");
         }
     });
@@ -128,27 +136,35 @@ $(document).ready(function(){
         //check email
         if (!validateEmail(email)) {
             errFields = true;
-            M.toast({html: 'Email inválido!'})
+            M.toast({html: 'Email Inválido!'})
+        }
+
+        //check password if has one uppercase, one lowercase, one number and at least 8 characters
+        if (password.match(/[a-z]/g) === null || 
+            password.match( /[A-Z]/g) === null || 
+            null === password.match( /[0-9]/g) || password.length < 8) { 
+            errFields = true;
+            M.toast({html: 'Palavras-passes Diferentes Dos Parâmetros!'})
         }
 
         //check if passwords are correct
         if (password !== repeatPassword) {
             errFields = true;
-            M.toast({html: 'Palavras passe não coincidem!'})
+            M.toast({html: 'Palavras-passes Não Coincidem!'})
         }
 
         //check if fields are empty
         if (email === "" || password === "" || repeatPassword === '' || address === '' || zipCode === '' 
         || location === '' || nif === '' || contactNumber === '') {
             errFields = true;
-            M.toast({html: 'Campos vazios!'})
+            M.toast({html: 'Campos Vazios!'})
         }
 
         //if its Driver, check variable typeVehicle
         if (isDriver) {
             if (typeVehicle === null) {
                 errFields = true;
-                M.toast({html: 'Campos vazios!'})
+                M.toast({html: 'Campos Vazios!'})
             }
         }
 
@@ -172,13 +188,13 @@ $(document).ready(function(){
                     },
                     success: function (data) {
                         console.log(data);
-                        M.toast({html: 'Registado com sucesso!'});
+                        M.toast({html: 'Registado Com Sucesso!'});
     
                     }, 
                     error: function (jqXHR, textStatus, err) {
                         console.log(jqXHR);
                         console.log(err,textStatus);
-                        M.toast({html: 'Erro ao registar!'});
+                        M.toast({html: 'Erro Ao Registar!'});
                     }
                 })
             } else {
@@ -199,12 +215,12 @@ $(document).ready(function(){
                     },
                     success: function (data) {
                         console.log(data);
-                        M.toast({html: 'Registado com sucesso!'});
+                        M.toast({html: 'Registado Com Sucesso!'});
     
                     }
                     , error: function (jqXHR, textStatus, err) {
                         console.log(err,textStatus);
-                        M.toast({html: 'Erro ao registar!'});
+                        M.toast({html: 'Erro Ao Registar!'});
                     }
                 })
             }
@@ -226,8 +242,6 @@ $(document).ready(function(){
         var category = $("#registerMerchantCategory").val();
         var description = $("#registerMerchantDescription").val();
         var contactNumber = $("#registerMerchantContactNumber").val();
-        
-        console.log("submit working");
 
         var errFields = false;
 
@@ -236,17 +250,24 @@ $(document).ready(function(){
         var file = $('#registerMerchantFile')[0].files[0];
         fd.append('logo', file);
 
-
         //check email
         if (!validateEmail(email)) {
             errFields = true;
-            M.toast({html: 'Email inválido!'})
+            M.toast({html: 'Email Inválido!'})
         }
 
         //check if passwords are equal
         if (password !== repeatPassword) {
             errFields = true;
-            M.toast({html: 'Palavras passe não coincidem!'})
+            M.toast({html: 'Palavras-passes Não Coincidem!'})
+        }
+
+        //check password if has one uppercase, one lowercase, one number and at least 8 characters
+        if (password.match(/[a-z]/g) === null || 
+        password.match( /[A-Z]/g) === null || 
+        null === password.match( /[0-9]/g) || password.length < 8) { 
+            errFields = true;
+            M.toast({html: 'Palavras-passes Diferentes dos Parâmetros!'})
         }
 
         //check if its empty fields
@@ -254,7 +275,7 @@ $(document).ready(function(){
         address === '' || zipCode === '' || location === '' || nipc === '' || category === '' ||
         description === '' || contactNumber === '') {
             errFields = true;
-            M.toast({html: 'Campos vazios!'})
+            M.toast({html: 'Campos Vazios!'})
         }
 
         //check if type files is correct
@@ -262,26 +283,12 @@ $(document).ready(function(){
             console.log("type file correct");
         } else {
             errFields = true;
-            M.toast({html: 'Tipo de ficheiro não suportado!'})
+            M.toast({html: 'Ficheiro Não Suportado!'})
         }
-
-        console.log ( {
-            email: email,
-            password: password,
-            repeatPassword: repeatPassword,
-            address: address,
-            zipCode: zipCode,
-            location: location,
-            nipc: nipc,
-            category: category,
-            description: description,
-            contactNumber: contactNumber,
-            file: file,
-            typeFile: file.type
-        })
 
         fd.append('email', email);
         fd.append('password', password);
+        fd.append('repeatPassword', repeatPassword);
         fd.append('address', address);
         fd.append('zipCode', zipCode);
         fd.append('location', location);
@@ -293,7 +300,6 @@ $(document).ready(function(){
 
         //check if not have errors
         if (!errFields) {
-            console.log(true);
             
             $.ajax({
                 url: 'http://localhost:3000/api/register/signupMerchant',
@@ -304,12 +310,12 @@ $(document).ready(function(){
                 processData: false,
                 success: function (data) {
                     console.log(data);
-                    M.toast({html: 'Registado com sucesso!'});
+                    M.toast({html: 'Registado com Sucesso!'});
 
                 }
                 , error: function (jqXHR, textStatus, err) {
                     console.log(err,textStatus);
-                    M.toast({html: 'Erro ao registar!'});
+                    M.toast({html: 'Erro ao Registar!'});
                 }
             })
             

@@ -77,6 +77,7 @@ $(document).ready(function(){
                     console.log(token);
                     sessionStorage.setItem("tokenSession", data.login.token);
                     console.log(sessionStorage.getItem("tokenSession"));
+                    
                     M.toast({html: 'Registado Com Sucesso!'});
 
                 }, 
@@ -117,19 +118,6 @@ $(document).ready(function(){
             //change to 0 because of API
             valueIsDriver = 0;
         }
-
-        console.log({
-            email: email,
-            password: password,
-            repeatPassword: repeatPassword,
-            address: address,
-            zipCode: zipCode,
-            location: location,
-            nif: nif,
-            isDriver: valueIsDriver,
-            contactNumber: contactNumber,
-            typeVehicle: typeVehicle
-        });
 
         var errFields = false;
 

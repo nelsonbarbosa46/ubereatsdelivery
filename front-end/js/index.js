@@ -73,18 +73,21 @@ $(document).ready(function(){
                 },
                 success: function (data) {
                     console.log(data);
-                    let token = data.login.typeUser;
-                    console.log(token);
-                    sessionStorage.setItem("tokenSession", data.login.token);
-                    console.log(sessionStorage.getItem("tokenSession"));
+                    let token = data.login.token;
+                    let url = data.login.url;
+                    sessionStorage.setItem("tokenSession", token);
+                    //current url page
+                    var urlPage = window.location.href;
+                    //remove index.html
+                    urlPage = urlPage.replace("/index.html", "");
+                    //redirect to right page
+                    window.location.replace(urlPage + url + "index.html");
                     
-                    M.toast({html: 'Registado Com Sucesso!'});
-
                 }, 
                 error: function (jqXHR, textStatus, err) {
                     console.log(jqXHR);
                     console.log(err,textStatus);
-                    M.toast({html: 'Erro Ao Registar!'});
+                    M.toast({html: 'Erro ao Iniciar Sessão!'});
                 }
             })
             
@@ -174,9 +177,17 @@ $(document).ready(function(){
                         typeVehicle: typeVehicle,
                         isDriver: valueIsDriver
                     },
+                    
                     success: function (data) {
-                        console.log(data);
-                        M.toast({html: 'Registado Com Sucesso!'});
+                        let token = data.login.token;
+                        let url = data.login.url;
+                        sessionStorage.setItem("tokenSession", token);
+                        //current url page
+                        var urlPage = window.location.href;
+                        //remove index.html
+                        urlPage = urlPage.replace("/index.html", "");
+                        //redirect to right page
+                        window.location.replace(urlPage + url + "index.html");
     
                     }, 
                     error: function (jqXHR, textStatus, err) {
@@ -202,8 +213,15 @@ $(document).ready(function(){
                         isDriver: valueIsDriver
                     },
                     success: function (data) {
-                        console.log(data);
-                        M.toast({html: 'Registado Com Sucesso!'});
+                        let token = data.login.token;
+                        let url = data.login.url;
+                        sessionStorage.setItem("tokenSession", token);
+                        //current url page
+                        var urlPage = window.location.href;
+                        //remove index.html
+                        urlPage = urlPage.replace("/index.html", "");
+                        //redirect to right page
+                        window.location.replace(urlPage + url + "index.html");
     
                     }
                     , error: function (jqXHR, textStatus, err) {
@@ -297,8 +315,15 @@ $(document).ready(function(){
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    console.log(data);
-                    M.toast({html: 'Registado com Sucesso!'});
+                    let token = data.login.token;
+                    let url = data.login.url;
+                    sessionStorage.setItem("tokenSession", token);
+                    //current url page
+                    var urlPage = window.location.href;
+                    //remove index.html
+                    urlPage = urlPage.replace("/index.html", "");
+                    //redirect to right page
+                    window.location.replace(urlPage + url + "index.html");
 
                 }
                 , error: function (jqXHR, textStatus, err) {

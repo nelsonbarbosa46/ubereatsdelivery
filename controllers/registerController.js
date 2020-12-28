@@ -1,5 +1,43 @@
 
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+//function when login is success, get url to redirect
+function getRedirectURL(typeUser) {
+    var url;
+
+    switch (typeUser) {
+        //client
+        case 0:
+            url = "/client/";
+            break;
+        
+        //driver
+        case 1:
+            url = "/client/";
+            break;
+
+        //merchant
+        case 2:
+            url = "/merchant/";
+            break;
+
+        //admin
+        case 3:
+            url = "/admin/";
+            break;
+
+        //superadmin
+        case 4:
+            url = "/admin/";
+            break;
+
+        default:
+            break;
+    }
+    
+    return url;
+}
 
 function validateEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -72,11 +110,30 @@ exports.createAdmin = async (req, res, next) => {
                                 //error inserting on table admin
                                 res.status(500).json(response);
                             } else {
+
+                                //create token
+                                var token = jwt.sign({
+                                    typeUser: typeUser,
+                                    email: email
+                                }, 
+                                process.env.PRIVATE_KEY, 
+                                {
+                                    algorithm:'HS256',
+                                    expiresIn:'1d'
+                                })
+
+                                //get url to redirect
+                                var url = getRedirectURL(typeUser);
+
                                 let response = {
                                     message: "success",
                                     userCreated: {
                                         email: email,
                                         name: name
+                                    },
+                                    login: {
+                                        token: token,
+                                        url: url
                                     },
                                     request: {
                                         type: 'POST',
@@ -160,7 +217,7 @@ exports.createClientDriver = async (req, res, next) => {
         errFields = true;
     }
 
-    function checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name) {
+    function checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name, typeUser) {
         if (isDriver == 1) {
             sql = `INSERT INTO driver(idClient, typeVehicle, canWork, isChecked) VALUES (?,?,?,?)`;
             db.run(sql, [id, typeVehicle, canWork, isChecked], 
@@ -176,11 +233,30 @@ exports.createClientDriver = async (req, res, next) => {
                         //error inserting on table driver
                         res.status(500).json(response)
                     } else {
+
+                        //create token
+                        var token = jwt.sign({
+                            typeUser: typeUser,
+                            email: email
+                        }, 
+                        process.env.PRIVATE_KEY, 
+                        {
+                            algorithm:'HS256',
+                            expiresIn:'1d'
+                        })
+
+                        //get url to redirect
+                        var url = getRedirectURL(typeUser);
+
                         let response = {
                             message: "success",
                             userCreated: {
                                 email: email,
                                 name: name
+                            },
+                            login: {
+                                token: token,
+                                url: url
                             },
                             request: {
                                 type: 'POST',
@@ -248,7 +324,7 @@ exports.createClientDriver = async (req, res, next) => {
                             if (!err) {
                                 let id = this.lastID;
                                 //function to check if client want to be a driver
-                                checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name);
+                                checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name, typeUser);
                             } else {
                                 let response = {
                                     message: "failed",
@@ -382,11 +458,30 @@ exports.createMerchant = async (req, res, next) => {
                                 }
                                 res.status(500).json(response)
                             } else {
+
+                                //create token
+                                var token = jwt.sign({
+                                    typeUser: typeUser,
+                                    email: email
+                                }, 
+                                process.env.PRIVATE_KEY, 
+                                {
+                                    algorithm:'HS256',
+                                    expiresIn:'1d'
+                                })
+
+                                //get url to redirect
+                                var url = getRedirectURL(typeUser);
+
                                 let response = {
                                     message: "success",
                                     userCreated: {
                                         email: email,
                                         name: name
+                                    },
+                                    login: {
+                                        token: token,
+                                        url: url
                                     },
                                     request: {
                                         type: 'POST',

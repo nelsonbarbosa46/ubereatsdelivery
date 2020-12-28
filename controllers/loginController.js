@@ -1,6 +1,42 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+//function when login is success, get url to redirect
+function getRedirectURL(typeUser) {
+    var url;
+
+    switch (typeUser) {
+        //client
+        case 0:
+            url = "/client/";
+            break;
+        
+        //driver
+        case 1:
+            url = "/client/";
+            break;
+
+        //merchant
+        case 2:
+            url = "/merchant/";
+            break;
+
+        //admin
+        case 3:
+            url = "/admin/";
+            break;
+
+        //superadmin
+        case 4:
+            url = "/admin/";
+            break;
+
+        default:
+            break;
+    }
+    
+    return url;
+}
 
 exports.login = (req, res, next) => {
     
@@ -47,12 +83,16 @@ exports.login = (req, res, next) => {
                             expiresIn:'1d'
                         })
 
+                        //get url to redirect
+                        var url = getRedirectURL(typeUser);
+
                         let response = {
                             message: "success",
                             login: {
                                 email: email,
                                 typeUser: typeUser,
-                                token: token
+                                token: token,
+                                url: url
                             },
                             request: {
                                 type: 'POST',

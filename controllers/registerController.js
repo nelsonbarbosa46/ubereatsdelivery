@@ -263,24 +263,42 @@ exports.createClientDriver = async (req, res, next) => {
                                 description: 'Criar um cliente/condutor'
                             }
                         }
-                        //status 201 because was inserted in both of the tables
+                        //status 201 because was inserted in both of the tables (driver)
                         res.status(201).json(response)
                     }
                 }
             ) 
         } else {
+            //create token
+            var token = jwt.sign({
+                typeUser: typeUser,
+                email: email
+            }, 
+            process.env.PRIVATE_KEY, 
+            {
+                algorithm:'HS256',
+                expiresIn:'1d'
+            })
+
+            //get url to redirect
+            var url = getRedirectURL(typeUser);
+
             let response = {
                 message: "success",
                 userCreated: {
                     email: email,
                     name: name
                 },
+                login: {
+                    token: token,
+                    url: url
+                },
                 request: {
                     type: 'POST',
                     description: 'Criar um cliente/condutor'
                 }
             }
-            //status 201 because was inserted in both of the tables
+            //status 201 because was inserted in both of the tables (client)
             res.status(201).json(response)
         }
     }
@@ -384,7 +402,7 @@ exports.createMerchant = async (req, res, next) => {
     var location = req.body.location;
     var name = req.body.name;
     var category = req.body.category;
-    var nif = req.body.nif;
+    var nipc = req.body.nipc;
     var description = req.body.description;
     var logo = req.file;
     var contactNumber = req.body.contactNumber;
@@ -414,7 +432,7 @@ exports.createMerchant = async (req, res, next) => {
     
     //check if fields are empty
     if (email === '' || password === '' || repeatPassword === '' || address === '' || 
-    zipCode === '' || location === '' || name === '' || category === '' || nif === '' ||
+    zipCode === '' || location === '' || name === '' || category === '' || nipc === '' ||
     description === '' || contactNumber === '') {
        
         errFields = true;
@@ -429,7 +447,6 @@ exports.createMerchant = async (req, res, next) => {
         errFields = true;
     }
 
-
     //if doesnt have any errors on fields, program continues
     if (!errFields) {
         const hash = await bcrypt.hashSync(password, 10);
@@ -442,10 +459,9 @@ exports.createMerchant = async (req, res, next) => {
             function (err) {
                 if (!err) {
                     var id = this.lastID;
-                    sql = `INSERT INTO merchant(idUser, name, category, nif, description, logo, contactNumber, canWork, isChecked)
+                    sql = `INSERT INTO merchant(idUser, name, category, nipc, description, logo, contactNumber, canWork, isChecked)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-                    db.run(sql, [id, name, category, nif, description, logoPath, contactNumber, canWork, isChecked],
+                    db.run(sql, [id, name, category, nipc, description, logoPath, contactNumber, canWork, isChecked],
                         function (err) {
                             if (err) {
                                 //error inserting on table merchant

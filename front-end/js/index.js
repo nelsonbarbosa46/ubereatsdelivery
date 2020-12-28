@@ -302,6 +302,7 @@ $(document).ready(function(){
         fd.append('nipc', nipc);
         fd.append('category', category);
         fd.append('description', description);
+        fd.append('contactNumber', contactNumber);
         
 
         //check if not have errors

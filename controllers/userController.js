@@ -1,9 +1,8 @@
-const { response } = require('express');
+
 
 exports.getUsers = (req, res, next) => {
 
     var db = require('../sql').db();
-    var arrayResults = [];
 
     var sql = `SELECT * FROM user`;
 
@@ -16,7 +15,7 @@ exports.getUsers = (req, res, next) => {
                         description: 'Iniciar Sessão'
                     }
                 }
-                res.status(500).send(response);
+                res.status(500).json(response);
             } else {
                 
                 let response = {
@@ -27,7 +26,7 @@ exports.getUsers = (req, res, next) => {
                         description: 'Obter Utilizadores'
                     }
                 }
-                res.status(200).send(response);
+                res.status(200).json(response);
                 
             }
         }

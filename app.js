@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const routeRegister = require('./routes/register');
 const routeLogin = require('./routes/login');
 const routeUser = require('./routes/user');
+const routeCheck = require('./middleware/check');
 
 app.use(bodyParser.urlencoded({extended: false})); 
 app.use(bodyParser.json()); 
@@ -35,6 +36,7 @@ app.use(morgan('dev'));
 app.use('/api/register', routeRegister);
 app.use('/api/login', routeLogin);
 app.use('/api/user', routeUser);
+app.use('/api/check', routeCheck);
 
 //dont find the page
 app.use((req, res, next) => {

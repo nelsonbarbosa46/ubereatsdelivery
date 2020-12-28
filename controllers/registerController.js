@@ -70,7 +70,7 @@ exports.createAdmin = async (req, res, next) => {
                                     }
                                 }
                                 //error inserting on table admin
-                                res.status(500).send(response);
+                                res.status(500).json(response);
                             } else {
                                 let response = {
                                     message: "success",
@@ -85,7 +85,7 @@ exports.createAdmin = async (req, res, next) => {
                                 }
 
                                 //status 201 because was inserted in both of the tables
-                                res.status(201).send(response);
+                                res.status(201).json(response);
                             }
                         }
                     )
@@ -98,7 +98,7 @@ exports.createAdmin = async (req, res, next) => {
                         }
                     }
                     //error inserting on table user
-                    res.status(500).send(response);
+                    res.status(500).json(response);
                 }
             }   
         )
@@ -115,7 +115,7 @@ exports.createAdmin = async (req, res, next) => {
             }
         }
         //error because the fields are empty/has a error
-        res.status(400).send(response);        
+        res.status(400).json(response);        
     }
 
     return;
@@ -174,7 +174,7 @@ exports.createClientDriver = async (req, res, next) => {
                             }
                         };
                         //error inserting on table driver
-                        res.status(500).send(response)
+                        res.status(500).json(response)
                     } else {
                         let response = {
                             message: "success",
@@ -188,7 +188,7 @@ exports.createClientDriver = async (req, res, next) => {
                             }
                         }
                         //status 201 because was inserted in both of the tables
-                        res.status(201).send(response)
+                        res.status(201).json(response)
                     }
                 }
             ) 
@@ -205,7 +205,7 @@ exports.createClientDriver = async (req, res, next) => {
                 }
             }
             //status 201 because was inserted in both of the tables
-            res.status(201).send(response)
+            res.status(201).json(response)
         }
     }
 
@@ -258,7 +258,7 @@ exports.createClientDriver = async (req, res, next) => {
                                     }
                                 };
                                 //error inserting on table client
-                                res.status(500).send(response)
+                                res.status(500).json(response)
                             }
                         }
                     )
@@ -271,7 +271,7 @@ exports.createClientDriver = async (req, res, next) => {
                             description: 'Criar um cliente/condutor'
                         }
                     };
-                    res.status(500).send(response)
+                    res.status(500).json(response)
                 }
             }
             
@@ -288,7 +288,7 @@ exports.createClientDriver = async (req, res, next) => {
                 description: 'Criar um cliente/condutor'
             }
         };
-        res.status(400).send(response)
+        res.status(400).json(response)
     }
 
     
@@ -380,7 +380,7 @@ exports.createMerchant = async (req, res, next) => {
                                         description: 'Criar uma empresa'
                                     }
                                 }
-                                res.status(500).send(response)
+                                res.status(500).json(response)
                             } else {
                                 let response = {
                                     message: "success",
@@ -394,7 +394,7 @@ exports.createMerchant = async (req, res, next) => {
                                     }
                                 }
                                 //status 201 because was inserted in both of the tables
-                                res.status(201).send(response)
+                                res.status(201).json(response)
                             }
                         }    
                     )
@@ -407,7 +407,7 @@ exports.createMerchant = async (req, res, next) => {
                             description: 'Criar uma empresa'
                         }
                     }
-                    res.status(500).send(response)
+                    res.status(500).json(response)
                 }
             }    
         )
@@ -419,7 +419,7 @@ exports.createMerchant = async (req, res, next) => {
                 description: 'Criar uma empresa'
             }
         }
-        res.status(400).send(response)
+        res.status(400).json(response)
     }
 
     db.close();

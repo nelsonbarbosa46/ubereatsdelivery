@@ -29,7 +29,7 @@ exports.login = (req, res, next) => {
                         description: 'Iniciar Sessão'
                     }
                 }
-                res.status(500).send(response);
+                res.status(500).json(response);
             } else {
                 //check if has rows
                 if (row) {
@@ -60,7 +60,7 @@ exports.login = (req, res, next) => {
                             }
                         }
                         
-                        res.status(200).send(response);
+                        res.status(200).json(response);
                     } else {
                         let response = {
                             message: "failed",
@@ -69,7 +69,7 @@ exports.login = (req, res, next) => {
                                 description: 'Iniciar Sessão'
                             }
                         }
-                        res.status(500).send(response);
+                        res.status(500).json(response);
                     }
                 } else {
                     let response = {
@@ -79,7 +79,7 @@ exports.login = (req, res, next) => {
                             description: 'Iniciar Sessão'
                         }
                     }
-                    res.status(500).send(response);
+                    res.status(500).json(response);
                 }
             }
         })
@@ -94,7 +94,7 @@ exports.login = (req, res, next) => {
                 description: 'Iniciar Sessão'
             }
         }
-        res.status(400).send(response);
+        res.status(400).json(response);
     }
 
     return;
@@ -119,7 +119,7 @@ exports.checkTokenRequired = (req, res, next) => {
                 description: 'Iniciar Sessão'
             }
         }
-        return res.status(401).send(response)
+        return res.status(401).json(response)
     }
 
 

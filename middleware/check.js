@@ -79,7 +79,7 @@ router.post('/checkTokenInitialPage', (req, res, next) => {
                         "description": "Verificar o Token na página inicial"
                     }
                 }
-                res.status(400).json(response);
+                res.status(401).json(response);
                 break;
         }
     } catch (err) {
@@ -90,7 +90,7 @@ router.post('/checkTokenInitialPage', (req, res, next) => {
                 "description": "Verificar o Token na página inicial"
             }
         }
-        res.status(400).json(response);
+        res.status(401).json(response);
     }
     return;
 });

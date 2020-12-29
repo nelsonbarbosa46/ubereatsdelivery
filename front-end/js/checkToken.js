@@ -1,12 +1,10 @@
 var token = sessionStorage.getItem("tokenSession");
 
-console.log(token);
 //current url page
 var urlPage = window.location.href;
 //remove index.html
 urlPage = urlPage.replace("/index.html", "");
 if (token !== '' && token !== null) {
-    console.log(token);
     //check if token is right
     $.ajax({
         url: 'http://localhost:3000/api/check/checkTokenInitialPage',

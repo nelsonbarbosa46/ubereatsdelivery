@@ -9,7 +9,7 @@ if (token !== '' && token !== null) {
     $.ajax({
         url: 'http://localhost:3000/api/check/checkTokenInitialPage',
         type: 'POST',
-        cache: true,
+        cache: false,
         data: {
             token: token
         },

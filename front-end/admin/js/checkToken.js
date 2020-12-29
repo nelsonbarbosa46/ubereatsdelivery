@@ -4,10 +4,10 @@ var typeUser;
 if (token !== '' && token !== null) {
     //check if token is right
     $.ajax({
-        //4=admin (on backend is going to check if token has typeUser=4 or typeUser=5)
-        url: 'http://localhost:3000/api/check/checkToken/4',
+        //3=admin (on backend is going to check if token has typeUser=3 or typeUser=4)
+        url: 'http://localhost:3000/api/check/checkToken/3',
         type: 'PUT',
-        cache: true,
+        cache: false,
         data: {
             token: token
         }, success: function (data) {

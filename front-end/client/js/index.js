@@ -1,10 +1,9 @@
 function continueScript() {
     $(document).ready(function () {
-       $(".modal").modal();
-       $('.sidenav').sidenav({
+        $(".modal").modal();
+        $('.sidenav').sidenav({
            edge: 'right'
-       }); 
-
+        }); 
        
         $(document).on('change', '#formChangeEP input', function() {
             var email = $("#formChangeEPEmail").val();
@@ -22,7 +21,6 @@ function continueScript() {
         one uppercase, one lowercase and one number*/
         $("#formChangeEPPassword").on("keyup", function () {
             var password = $(this).val();
-            console.log(password);
             if (password.match(/[a-z]/g) === null || 
             password.match( /[A-Z]/g) === null || 
             null === password.match( /[0-9]/g) || password.length < 8 || password.length > 15) {
@@ -52,7 +50,7 @@ function continueScript() {
             var repeatPassword = $("#formChangeEPRepeatPassword").val();
 
             $.ajax({
-                url: 'http://localhost:3000/api/user/changeEP/'+id,
+                url: 'http://localhost:3000/api/user/changeEP/'+idUser,
                 type: 'PUT',
                 cache: false,
                 data: { 

@@ -1,5 +1,4 @@
 var token = sessionStorage.getItem("tokenSession");
-
 function ajaxToken() {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -23,6 +22,10 @@ function ajaxToken() {
 if (token !== '' && token !== null) {
     ajaxToken().then((data) => {
         typeUser = data.typeUser;
+        idUser = data.id;
+        nameUser = data.name;
+        emailUser = data.email;
+        //continueScript is on file index.js
         continueScript();
     }).catch((error) => {
         console.log(error);

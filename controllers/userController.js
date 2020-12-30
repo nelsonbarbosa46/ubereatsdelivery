@@ -1,4 +1,10 @@
 
+const bcrypt = require('bcrypt');
+
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
 
 exports.getUsers = (req, res, next) => {
 
@@ -33,6 +39,195 @@ exports.getUsers = (req, res, next) => {
     )
 
     db.close();
+
+    return;
+}
+
+exports.changeEmailPassword = (req, res, next) => {
+
+    var id = req.params.id;
+    var email = req.body.email;
+    var password = req.body.password;
+    var repeatPassword = req.body.repeatPassword;
+
+    //check if fields are empty
+    if (!email && !password && !repeatPassword) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar o e-mail/palavra passe'
+            }
+        };
+        //all fields are empty
+        res.status(400).json(response);
+    //check if all fields are filled
+    } else if (email && password && repeatPassword) {
+        if (password != repeatPassword || !validateEmail(email)) {
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'PUT',
+                    description: 'Alterar o e-mail/palavra passe'
+                }
+            };
+            //password is not equal to repeatPassword or email is invalid
+            res.status(400).json(response);
+        } else {
+            changeEmailPassword(id, email, password);
+        }
+    //check if any field are filled
+    } else if (email || password || repeatPassword) {
+        //check if its empty
+        if (!email) {
+            //email empty, mean that user just want to change password 
+            //check if password is not equal to repeatPassword
+            if (password != repeatPassword) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar o e-mail/palavra passe'
+                    }
+                };
+                //password is not equal to repeatPassword
+                res.status(400).json(response);
+            } else {
+                //password not empty, mean that user just want to change password
+                changePassword(id, password);
+            }
+        } else {
+            //check if email is invalid
+            if (!validateEmail(email)) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar o e-mail/palavra passe'
+                    }
+                };
+                //email is invalid
+                res.status(400).json(response);
+            } else {
+                //email not empty, mean that user just want to change email
+                changeEmail(id, email);
+            }
+        } 
+    } 
+    
+
+    function changeEmail(id, email) {
+        var db = require('../sql').db();
+
+        var sql = 'UPDATE user SET email = ? WHERE id = ?';
+
+        db.run(sql, [email, id], function (err) {
+            if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar o e-mail/palavra passe'
+                    }
+                }
+                //error updating email
+                res.status(500).json(response);
+            } else {
+                let response = {
+                    message: "success",
+                    newEmail: email,
+                    idUser: id,
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar o e-mail/palavra passe'
+                    }
+                }
+                //update successuful on table user
+                res.status(200).json(response);
+            }
+        });
+
+        db.close();
+    }
+
+    async function changePassword(id, password) {
+
+        var db = require('../sql').db();
+
+        //create hash
+        var hash = await bcrypt.hashSync(password, 10);
+
+        var sql = 'UPDATE user SET password = ? WHERE id = ?';
+
+        db.run(sql, [hash, id], function (err) {
+           if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar o e-mail/palavra passe'
+                    }
+                }
+                //error updating password
+                res.status(500).json(response);
+           } else {
+                let response = {
+                    message: "success",
+                    password: "*******",
+                    idUser: id,
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar o e-mail/palavra passe'
+                    }
+                }
+                //update successuful on table user
+                res.status(200).json(response);
+           }
+        });
+
+        db.close();
+        
+    }
+
+    async function changeEmailPassword(id, email, password) {
+        
+        var db = require('../sql').db();
+
+        //create hash
+        var hash = await bcrypt.hashSync(password, 10);
+
+        var sql = 'UPDATE user SET email = ?, password = ? WHERE id = ?';
+
+        db.run(sql, [email, hash, id], function (err) {
+           if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar o e-mail/palavra passe'
+                    }
+                }
+                //error updating password and email
+                res.status(500).json(response);
+           } else {
+                let response = {
+                    message: "success",
+                    password: "*******",
+                    email: email,
+                    idUser: id,
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar o e-mail/palavra passe'
+                    }
+                }
+                //update successuful on table user
+                res.status(200).json(response);
+           }
+        });
+
+        db.close();
+
+    }
 
     return;
 }

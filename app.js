@@ -12,23 +12,17 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json()); 
 
 
-
 //to solve CORS
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header(
-        'Access-Control-Allow-Header', 
-        'Content-Type, Origin, X-Requested-With, Accept, Authorization'
-    );
-    
-    if (req.method === 'OPTIONS') {
-        res.headers('Access-Control-Methods', 'PUT, POST, DELETE, PATCH, GET');
-        return res.status(200).send({});
-    }
+// Add headers
+app.use(function (req, res, next) {
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
 
     next();
-
-})
+});
 
 //show which http code when having one request (show on terminal)
 app.use(morgan('dev'));
@@ -44,5 +38,6 @@ app.use((req, res, next) => {
     err.status = 404;
     next(err);
 });
+
 
 module.exports = app;

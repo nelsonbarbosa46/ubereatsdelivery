@@ -3,8 +3,8 @@ var token = sessionStorage.getItem("tokenSession");
 function ajaxToken() {
     return new Promise((resolve, reject) => {
         $.ajax({
-            //3=admin (on backend is going to check if token has typeUser=3 or typeUser=4)
-            url: 'http://localhost:3000/api/check/checkToken/3',
+            //2=merchant 
+            url: 'http://localhost:3000/api/check/checkToken/2',
             type: 'PUT',
             cache: false,
             data: {
@@ -29,14 +29,14 @@ if (token !== '' && token !== null) {
         sessionStorage.removeItem("tokenSession");
         //get current url
         var urlPage = window.location.href;
-        //remove admin/index.html
-        urlPage = urlPage.replace("/admin/index.html", "/index.html");
+        //remove merchant/index.html
+        urlPage = urlPage.replace("/merchant/index.html", "/index.html");
         location.replace(urlPage);
     })
 } else {
     //get current url
     var urlPage = window.location.href;
-    //remove admin/index.html
-    urlPage = urlPage.replace("/admin/index.html", "/index.html");
+    //remove merchant/index.html
+    urlPage = urlPage.replace("/merchant/index.html", "/index.html");
     location.replace(urlPage);
 }

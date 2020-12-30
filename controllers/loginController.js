@@ -52,7 +52,7 @@ exports.login = (req, res, next) => {
         errFields = true;
     }
 
-    var sql = `SELECT email, password, typeUser FROM user WHERE email = ?`;
+    var sql = `SELECT id, email, password, name, typeUser FROM user WHERE email = ?`;
 
     //if dont have errors, continue and going to insert on db
     if (!errFields) {
@@ -72,10 +72,14 @@ exports.login = (req, res, next) => {
                     //check if password is correct
                     if (await bcrypt.compareSync(password, row.password)) {
                         var typeUser = row.typeUser;
+                        var id = row.id;
+                        var name = row.name;
 
                         var token = jwt.sign({
                             typeUser: typeUser,
-                            email: email
+                            email: email,
+                            name: name,
+                            id: id
                         }, 
                         process.env.PRIVATE_KEY, 
                         {

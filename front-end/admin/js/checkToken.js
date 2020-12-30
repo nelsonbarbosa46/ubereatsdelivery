@@ -29,14 +29,21 @@ if (token !== '' && token !== null) {
         sessionStorage.removeItem("tokenSession");
         //get current url
         var urlPage = window.location.href;
+        
         //remove admin/index.html
-        urlPage = urlPage.replace("/admin/index.html", "/index.html");
+        //change to !delete because after is going to delete everything after a "!delete"
+        urlPage = urlPage.replace("/admin/index.html", "!delete");
+        //Remove everything after a "!delete" and after add "/index.html"
+        urlPage = urlPage.replace(/\!delete.*/, "/index.html");
         location.replace(urlPage);
     })
 } else {
     //get current url
     var urlPage = window.location.href;
     //remove admin/index.html
-    urlPage = urlPage.replace("/admin/index.html", "/index.html");
+    //change to !delete because after is going to delete everything after a "!delete"
+    urlPage = urlPage.replace("/admin/index.html", "!delete");
+    //Remove everything after a "!delete" and after add "/index.html"
+    urlPage = urlPage.replace(/\!delete.*/, "/index.html");
     location.replace(urlPage);
 }

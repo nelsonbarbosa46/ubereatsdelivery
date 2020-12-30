@@ -30,13 +30,19 @@ if (token !== '' && token !== null) {
         //get current url
         var urlPage = window.location.href;
         //remove merchant/index.html
-        urlPage = urlPage.replace("/merchant/index.html", "/index.html");
+        //change to !delete because after is going to delete everything after a "!delete"
+        urlPage = urlPage.replace("/merchant/index.html", "!delete");
+        //Remove everything after a "!delete" and after add "/index.html"
+        urlPage = urlPage.replace(/\!delete.*/, "/index.html");
         location.replace(urlPage);
     })
 } else {
     //get current url
     var urlPage = window.location.href;
     //remove merchant/index.html
-    urlPage = urlPage.replace("/merchant/index.html", "/index.html");
+    //change to !delete because after is going to delete everything after a "!delete"
+    urlPage = urlPage.replace("/merchant/index.html", "!delete");
+    //Remove everything after a "!delete" and after add "/index.html"
+    urlPage = urlPage.replace(/\!delete.*/, "/index.html");
     location.replace(urlPage);
 }

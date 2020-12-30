@@ -88,16 +88,16 @@ exports.createAdmin = async (req, res, next) => {
         //create hash
         const hash = await bcrypt.hashSync(password, 10);
 
-        let sql = `INSERT INTO user(email, password, address, zipCode, location, typeUser)
-        VALUES (?, ?, ?, ?, ?, ?)`;
+        let sql = `INSERT INTO user(email, password, name, address, zipCode, location, typeUser)
+        VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
         //execute sql command
-        db.run(sql, [email, hash, address, zipCode, location , typeUser],
+        db.run(sql, [email, hash, name, address, zipCode, location , typeUser],
             function (err) {
                 if (!err) {
                     let id = this.lastID;
-                    sql = `INSERT INTO admin(idUser, name) VALUES (?, ?)`;
-                    db.run(sql, [id, name], 
+                    sql = `INSERT INTO admin(idUser) VALUES (?)`;
+                    db.run(sql, [id], 
                         function (err) {
                             if (err) {
                                 let response = {
@@ -114,7 +114,9 @@ exports.createAdmin = async (req, res, next) => {
                                 //create token
                                 var token = jwt.sign({
                                     typeUser: typeUser,
-                                    email: email
+                                    email: email,
+                                    name: name,
+                                    id: id
                                 }, 
                                 process.env.PRIVATE_KEY, 
                                 {
@@ -217,10 +219,10 @@ exports.createClientDriver = async (req, res, next) => {
         errFields = true;
     }
 
-    function checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name, typeUser) {
+    function checkIfWantsBeDriver(isDriver, idClient, typeVehicle, canWork, isChecked, name, typeUser, idUser) {
         if (isDriver == 1) {
             sql = `INSERT INTO driver(idClient, typeVehicle, canWork, isChecked) VALUES (?,?,?,?)`;
-            db.run(sql, [id, typeVehicle, canWork, isChecked], 
+            db.run(sql, [idClient, typeVehicle, canWork, isChecked], 
                 function (err) {
                     if (err) {
                         let response = {
@@ -237,7 +239,9 @@ exports.createClientDriver = async (req, res, next) => {
                         //create token
                         var token = jwt.sign({
                             typeUser: typeUser,
-                            email: email
+                            email: email,
+                            name: name,
+                            id: idUser
                         }, 
                         process.env.PRIVATE_KEY, 
                         {
@@ -272,7 +276,9 @@ exports.createClientDriver = async (req, res, next) => {
             //create token
             var token = jwt.sign({
                 typeUser: typeUser,
-                email: email
+                email: email,
+                name: name,
+                id: idUser
             }, 
             process.env.PRIVATE_KEY, 
             {
@@ -325,24 +331,24 @@ exports.createClientDriver = async (req, res, next) => {
         typeUser = 0;
     }    
 
-    var sql = `INSERT INTO user(email, password, address, zipCode, location, typeUser)
-    VALUES (?, ?, ?, ?, ?, ?)`;
+    var sql = `INSERT INTO user(email, password, name, address, zipCode, location, typeUser)
+    VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
     //if dont have errors, continue and going to insert on db
     if (!errFields) {
         //execute sql command
-        db.run(sql, [email, hash, address, zipCode, location, typeUser],
+        db.run(sql, [email, hash, name, address, zipCode, location, typeUser],
             function (err) {
                 if (!err) {
-                    let id = this.lastID;
-                    sql = `INSERT INTO client(idUser, name, nif, contactNumber, isDriver)
-                    VALUES (?, ?, ?, ?, ?)`;
-                    db.run(sql, [id, name, nif, contactNumber, isDriver],
+                    let idUser = this.lastID;
+                    sql = `INSERT INTO client(idUser, nif, contactNumber, isDriver)
+                    VALUES (?, ?, ?, ?)`;
+                    db.run(sql, [idUser, nif, contactNumber, isDriver],
                         function (err) {
                             if (!err) {
                                 let id = this.lastID;
                                 //function to check if client want to be a driver
-                                checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name, typeUser);
+                                checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name, typeUser, idUser);
                             } else {
                                 let response = {
                                     message: "failed",
@@ -451,17 +457,17 @@ exports.createMerchant = async (req, res, next) => {
     if (!errFields) {
         const hash = await bcrypt.hashSync(password, 10);
         
-        let sql = `INSERT INTO user(email, password, address, zipCode, location, typeUser)
-        VALUES (?, ?, ?, ?, ?, ?)`;
+        let sql = `INSERT INTO user(email, password, name, address, zipCode, location, typeUser)
+        VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
         //execute sql command
-        db.run(sql, [email, hash, address, zipCode, location, typeUser],
+        db.run(sql, [email, hash, name, address, zipCode, location, typeUser],
             function (err) {
                 if (!err) {
                     var id = this.lastID;
-                    sql = `INSERT INTO merchant(idUser, name, category, nipc, description, logo, contactNumber, canWork, isChecked)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-                    db.run(sql, [id, name, category, nipc, description, logoPath, contactNumber, canWork, isChecked],
+                    sql = `INSERT INTO merchant(idUser, category, nipc, description, logo, contactNumber, canWork, isChecked)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+                    db.run(sql, [id, category, nipc, description, logoPath, contactNumber, canWork, isChecked],
                         function (err) {
                             if (err) {
                                 //error inserting on table merchant
@@ -478,7 +484,9 @@ exports.createMerchant = async (req, res, next) => {
                                 //create token
                                 var token = jwt.sign({
                                     typeUser: typeUser,
-                                    email: email
+                                    email: email,
+                                    name: name,
+                                    id: id
                                 }, 
                                 process.env.PRIVATE_KEY, 
                                 {

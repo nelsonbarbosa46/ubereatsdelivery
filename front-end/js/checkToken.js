@@ -2,8 +2,10 @@ var token = sessionStorage.getItem("tokenSession");
 
 //current url page
 var urlPage = window.location.href;
-//remove index.html
-urlPage = urlPage.replace("/index.html", "");
+//change to !delete because after is going to delete everything after a "!delete"
+urlPage = urlPage.replace("/index.html", "!delete");
+//Remove everything after a "!delete"
+urlPage = urlPage.replace(/\!delete.*/, "");
 if (token !== '' && token !== null) {
     //check if token is right
     $.ajax({

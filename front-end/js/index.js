@@ -78,8 +78,10 @@ $(document).ready(function(){
                     sessionStorage.setItem("tokenSession", token);
                     //current url page
                     var urlPage = window.location.href;
-                    //remove index.html
-                    urlPage = urlPage.replace("/index.html", "");
+                    //change to !delete because after is going to delete everything after a "!delete"
+                    urlPage = urlPage.replace("/index.html", "!delete");
+                    //Remove everything after a "!delete"
+                    urlPage = urlPage.replace(/\!delete.*/, "");
                     //redirect to right page
                     window.location.replace(urlPage + url + "index.html");
                     
@@ -184,8 +186,10 @@ $(document).ready(function(){
                         sessionStorage.setItem("tokenSession", token);
                         //current url page
                         var urlPage = window.location.href;
-                        //remove index.html
-                        urlPage = urlPage.replace("/index.html", "");
+                        //change to !delete because after is going to delete everything after a "!delete"
+                        urlPage = urlPage.replace("/index.html", "!delete");
+                        //Remove everything after a "!delete"
+                        urlPage = urlPage.replace(/\!delete.*/, "");
                         //redirect to right page
                         window.location.replace(urlPage + url + "index.html");
     
@@ -218,8 +222,10 @@ $(document).ready(function(){
                         sessionStorage.setItem("tokenSession", token);
                         //current url page
                         var urlPage = window.location.href;
-                        //remove index.html
-                        urlPage = urlPage.replace("/index.html", "");
+                        //change to !delete because after is going to delete everything after a "!delete"
+                        urlPage = urlPage.replace("/index.html", "!delete");
+                        //Remove everything after a "!delete"
+                        urlPage = urlPage.replace(/\!delete.*/, "");
                         //redirect to right page
                         window.location.replace(urlPage + url + "index.html");
     
@@ -321,8 +327,10 @@ $(document).ready(function(){
                     sessionStorage.setItem("tokenSession", token);
                     //current url page
                     var urlPage = window.location.href;
-                    //remove index.html
-                    urlPage = urlPage.replace("/index.html", "");
+                    //change to !delete because after is going to delete everything after a "!delete"
+                    urlPage = urlPage.replace("/index.html", "!delete");
+                    //Remove everything after a "!delete"
+                    urlPage = urlPage.replace(/\!delete.*/, "");
                     //redirect to right page
                     window.location.replace(urlPage + url + "index.html");
 

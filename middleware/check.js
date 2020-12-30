@@ -107,6 +107,9 @@ router.put('/checkToken/:id', (req, res, next) => {
         }
         var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
         var decTypeUser = decoded.typeUser;
+        var decName = decoded.name;
+        var decId = decoded.id;
+        var decEmail = decoded.email;
         //select what page to redirect
         switch (decTypeUser) {
             //client
@@ -117,6 +120,9 @@ router.put('/checkToken/:id', (req, res, next) => {
                 response = {
                     "message": "success",
                     "typeUser": typeUser,
+                    "email" : decEmail,
+                    "name" : decName,
+                    "id" : decId,
                     "request": {
                         "type": 'PUT',
                         "description": 'Verificar o Token numa Página Reservada'
@@ -133,10 +139,13 @@ router.put('/checkToken/:id', (req, res, next) => {
                 }
                 response = {
                     "message": "success",
-                    "typeUser": decTypeUser,
+                    "typeUser": typeUser,
+                    "email" : decEmail,
+                    "name" : decName,
+                    "id" : decId,
                     "request": {
                         "type": 'PUT',
-                        "description": 'Verificar o Token na página inicial'
+                        "description": 'Verificar o Token numa Página Reservada'
                     }
                 }
                 res.status(200).json(response);
@@ -149,10 +158,13 @@ router.put('/checkToken/:id', (req, res, next) => {
                 }
                 response = {
                     "message": "success",
-                    "typeUser": decTypeUser,
+                    "typeUser": typeUser,
+                    "email" : decEmail,
+                    "name" : decName,
+                    "id" : decId,
                     "request": {
                         "type": 'PUT',
-                        "description": 'Verificar o Token na página inicial'
+                        "description": 'Verificar o Token numa Página Reservada'
                     }
                 }
                 res.status(200).json(response);
@@ -164,10 +176,13 @@ router.put('/checkToken/:id', (req, res, next) => {
                 }
                 response = {
                     "message": "success",
-                    "typeUser": decTypeUser,
+                    "typeUser": typeUser,
+                    "email" : decEmail,
+                    "name" : decName,
+                    "id" : decId,
                     "request": {
                         "type": 'PUT',
-                        "description": 'Verificar o Token na página inicial'
+                        "description": 'Verificar o Token numa Página Reservada'
                     }
                 }
                 res.status(200).json(response);
@@ -180,10 +195,13 @@ router.put('/checkToken/:id', (req, res, next) => {
                 }
                 response = {
                     "message": "success",
-                    "typeUser": decTypeUser,
+                    "typeUser": typeUser,
+                    "email" : decEmail,
+                    "name" : decName,
+                    "id" : decId,
                     "request": {
                         "type": 'PUT',
-                        "description": 'Verificar o Token na página inicial'
+                        "description": 'Verificar o Token numa Página Reservada'
                     }
                 }
                 res.status(200).json(response);

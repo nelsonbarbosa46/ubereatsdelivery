@@ -53,13 +53,16 @@ function continueScript() {
                 url: 'http://localhost:3000/api/user/changeEP/'+idUser,
                 type: 'PUT',
                 cache: false,
+                headers: {
+                    "Authorization": 'Bearer ' + token
+                },
                 data: { 
                     email: email,
                     password: password,
                     repeatPassword: repeatPassword
                 },
                 
-                success: function (data) {
+                success: function () {
                     //clean fields and change button to disabled
                     $("#formChangeEPEmail").val('');
                     $("#formChangeEPEmail").removeClass('valid');

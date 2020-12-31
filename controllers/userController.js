@@ -63,7 +63,17 @@ exports.changeEmailPassword = (req, res, next) => {
         res.status(400).json(response);
     //check if all fields are filled
     } else if (email && password && repeatPassword) {
-        if (password != repeatPassword || !validateEmail(email)) {
+        //check if password not have one lowercase, one upercase, one number, less than 8 chars,
+        //more than 15 chars, password not equal to repeatPassword and email invalid
+        if (
+        password.match(/[a-z]/g) === null || 
+        password.match(/[A-Z]/g) === null || 
+        password.match(/[0-9]/g) === null || 
+        password.length < 8 ||
+        password.length > 15 || 
+        password != repeatPassword || 
+        !validateEmail(email)
+        ) {
             let response = {
                 message: "failed",
                 request: {
@@ -71,7 +81,9 @@ exports.changeEmailPassword = (req, res, next) => {
                     description: 'Alterar o e-mail/palavra passe'
                 }
             };
-            //password is not equal to repeatPassword or email is invalid
+            //password is not equal to repeatPassword or email is invalid or
+            //password less than 8 chars or more then 15 chars or dont have one lowercase, one upercase, 
+            //one number or less than 8 chars or more than 15 chars
             res.status(400).json(response);
         } else {
             changeEmailPassword(id, email, password);
@@ -81,8 +93,16 @@ exports.changeEmailPassword = (req, res, next) => {
         //check if its empty
         if (!email) {
             //email empty, mean that user just want to change password 
-            //check if password is not equal to repeatPassword
-            if (password != repeatPassword) {
+            //check if password is not equal to repeatPassword or dont have one lowercase, one upercase, 
+            //one number or less than 8 chars or more than 15 chars 
+            if (
+                password != repeatPassword ||
+                password.match(/[a-z]/g) === null || 
+                password.match(/[A-Z]/g) === null || 
+                password.match(/[0-9]/g) === null || 
+                password.length < 8 ||
+                password.length > 15 
+                ) {
                 let response = {
                     message: "failed",
                     request: {
@@ -90,7 +110,9 @@ exports.changeEmailPassword = (req, res, next) => {
                         description: 'Alterar o e-mail/palavra passe'
                     }
                 };
-                //password is not equal to repeatPassword
+                //password is not equal to repeatPassword or
+                //password less than 8 chars or more then 15 chars or dont have one lowercase, one upercase, 
+                //one number or less than 8 chars or more than 15 chars
                 res.status(400).json(response);
             } else {
                 //password not empty, mean that user just want to change password
@@ -106,6 +128,7 @@ exports.changeEmailPassword = (req, res, next) => {
                         description: 'Alterar o e-mail/palavra passe'
                     }
                 };
+                
                 //email is invalid
                 res.status(400).json(response);
             } else {

@@ -25,3 +25,13 @@
 .mb-3 {
     margin-bottom: 30px;
 }
+
+[type="checkbox"]:checked+span:not(.lever):before {
+    border-right: 2px solid #424242;
+    border-bottom: 2px solid #424242;
+}
+
+/* label color */
+.input-field label {
+  color: #424242;
+}

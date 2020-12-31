@@ -53,7 +53,7 @@
             </li>
             <li><div class="divider"></div></li>
             <li><a href="#modalChangeEmailPass" class="waves-effect modal-trigger">Alterar Email/Palavra passe</a></li>
-            <li><a href="#modalChangeInfo" class="waves-effect">Alterar Informações</a></li>
+            <li><a href="#modalChangeInfo" class="waves-effect modal-trigger">Alterar Informações</a></li>
             <li><a href="#modalConfirmDelete" class="waves-effect">Eliminar Conta</a></li>
             <li><div class="divider"></div></li>
             <li>
@@ -105,6 +105,81 @@
             </div>
           </div>
         </div>
+
+        <!--Modal ChangeInfo-->
+        <div id="modalChangeInfo" class="modal">
+          <div class="modal-content">
+            <h4>Alterar Informações</h4>
+            <div class="row">
+              <form action="#" id="formChangeInfo">
+                <div class="col s12">
+                  <div class="input-field col s12 m6">
+                    <input id="formChangeInfoName" type="text" class="validate" required>
+                    <label for="formChangeInfoName">Nome</label>
+                  </div>
+                  <div class="input-field col s12 m6">
+                    <input id="formChangeInfoAddress" type="text" class="validate" required>
+                    <label for="formChangeInfoAddress">Morada</label>
+                  </div>
+                </div>
+                <div class="col s12">
+                  <div class="input-field col s12 m6"> 
+                    <input id="formChangeInfoZipCode" type="tel" required class="validate" title="Insira um Código Postal válido" placeholder="XXXX-XXX"  pattern="[0-9]{4}-[0-9]{3}">
+                    <label for="formChangeInfoZipCode">Código Postal</label>
+                  </div>
+                  <div class="input-field col s12 m6">
+                    <input id="formChangeInfoLocation" required autocomplete="off" type="text" class="autocomplete">
+                    <label for="formChangeInfoLocation" id="labelFormChangeInfoLocation">Localidade (Concelho)</label>
+                  </div>
+                </div>
+                <div class="col s12">
+                  <div class="input-field col s12 m6">
+                    <input id="formChangeInfoNIF" type="text" required pattern="[1,2,5]{1}[0-9]{8}" title="Insira um NIF válido" class="validate" data-length="9">
+                    <label for="formChangeInfoNIF">NIF</label>
+                  </div>
+                  <div class="input-field col s12 m6">
+                    <input id="formChangeInfoContactNumber" required type="tel" class="validate">
+                    <label for="formChangeInfoContactNumber">Número de Contacto</label>
+                  </div>
+                </div>
+                <div class="col s12">
+                  <div class="input-field col s6 m6">
+                    <p class="left-align">
+                      <label>
+                        <input type="checkbox" id="formChangeInfoIsDriver" />
+                        <span>Condutor</span>
+                      </label>
+                    </p>
+                  </div>
+                  <div id="formDriver">
+                    <div class="input-field col s6 m6">
+                        <select id="formChangeInfoVehicle">
+                            <option value="" disabled selected>Escolher a opção</option>
+                            <option value="1">Carro</option>
+                            <option value="2">Mota</option>
+                            <option value="3">Bicicleta</option>
+                        </select>
+                        <label>Tipo de veículo</label>
+                    </div>
+                    <div class="col s12">
+                      <p class="left-align"><small>Para poder trabalhar como condutor, tem que aguardar que um administrador o aceite</small></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col s12">
+                  <button id="formSubmitChangeInfo" type="submit" class="waves-effect waves-orange btn orange lighten-2">Alterar</button>
+                  <a href="#!" class="modal-close waves-effect btn">Cancelar</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
     </header>
 
     

@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-router.post('/checkTokenInitialPage', (req, res, next) => {
-    let token = req.body.token;
+router.get('/checkTokenInitialPage', (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
 
     try {
         var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
@@ -95,9 +95,9 @@ router.post('/checkTokenInitialPage', (req, res, next) => {
     return;
 });
 
-router.put('/checkToken/:id', (req, res, next) => {
+router.get('/checkToken/:id', (req, res, next) => {
     var typeUser = req.params.id;
-    var token = req.body.token;
+    const token = req.headers.authorization.split(' ')[1];
 
     try {
         //verify typeUser (to be correct typeUser comming from frontend is 0(client/driver), 2(merchant) and 3(admin/superadmin))
@@ -124,7 +124,7 @@ router.put('/checkToken/:id', (req, res, next) => {
                     "name" : decName,
                     "id" : decId,
                     "request": {
-                        "type": 'PUT',
+                        "type": 'GET',
                         "description": 'Verificar o Token numa Página Reservada'
                     }
                 }
@@ -144,7 +144,7 @@ router.put('/checkToken/:id', (req, res, next) => {
                     "name" : decName,
                     "id" : decId,
                     "request": {
-                        "type": 'PUT',
+                        "type": 'GET',
                         "description": 'Verificar o Token numa Página Reservada'
                     }
                 }
@@ -163,7 +163,7 @@ router.put('/checkToken/:id', (req, res, next) => {
                     "name" : decName,
                     "id" : decId,
                     "request": {
-                        "type": 'PUT',
+                        "type": 'GET',
                         "description": 'Verificar o Token numa Página Reservada'
                     }
                 }
@@ -181,7 +181,7 @@ router.put('/checkToken/:id', (req, res, next) => {
                     "name" : decName,
                     "id" : decId,
                     "request": {
-                        "type": 'PUT',
+                        "type": 'GET',
                         "description": 'Verificar o Token numa Página Reservada'
                     }
                 }
@@ -200,7 +200,7 @@ router.put('/checkToken/:id', (req, res, next) => {
                     "name" : decName,
                     "id" : decId,
                     "request": {
-                        "type": 'PUT',
+                        "type": 'GET',
                         "description": 'Verificar o Token numa Página Reservada'
                     }
                 }
@@ -210,7 +210,7 @@ router.put('/checkToken/:id', (req, res, next) => {
                 response = {
                     "message": "failed",
                     "request": {
-                        "type": "PUT",
+                        "type": "GET",
                         "description": "Verificar o Token na página inicial"
                     }
                 }
@@ -221,7 +221,7 @@ router.put('/checkToken/:id', (req, res, next) => {
         let response = {
             "message": "failed",
             "request": {
-                "type": "PUT",
+                "type": "GET",
                 "description": "Verificar o Token na página inicial"
             }
         }

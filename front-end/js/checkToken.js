@@ -10,10 +10,10 @@ if (token !== '' && token !== null) {
     //check if token is right
     $.ajax({
         url: 'http://localhost:3000/api/check/checkTokenInitialPage',
-        type: 'POST',
+        type: 'GET',
         cache: false,
-        data: {
-            token: token
+        headers: {
+            "Authorization": 'Bearer ' + token
         },
         success: function (data) {
             let redirect = data.pageRedirect;

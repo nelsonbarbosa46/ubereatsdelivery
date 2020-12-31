@@ -5,10 +5,10 @@ function ajaxToken() {
         $.ajax({
             //3=admin (on backend is going to check if token has typeUser=3 or typeUser=4)
             url: 'http://localhost:3000/api/check/checkToken/3',
-            type: 'PUT',
+            type: 'GET',
             cache: false,
-            data: {
-                token: token
+            headers: {
+                "Authorization": 'Bearer ' + token
             }, 
             success: function (data) {
                 resolve(data);

@@ -5,10 +5,10 @@ function ajaxToken() {
         $.ajax({
             //2=merchant 
             url: 'http://localhost:3000/api/check/checkToken/2',
-            type: 'PUT',
+            type: 'GET',
             cache: false,
-            data: {
-                token: token
+            headers: {
+                "Authorization": 'Bearer ' + token
             }, 
             success: function (data) {
                 resolve(data);

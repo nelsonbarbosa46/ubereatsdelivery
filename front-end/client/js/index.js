@@ -25,8 +25,10 @@ function continueScript() {
             password.match( /[A-Z]/g) === null || 
             null === password.match( /[0-9]/g) || password.length < 8 || password.length > 15) {
                 $(this).addClass("invalid");
+                $(this).removeClass("valid");
             } else {
                 $(this).removeClass("invalid");
+                $(this).addClass("valid");
             }
         });
 
@@ -37,8 +39,10 @@ function continueScript() {
             
             if (repeat === password) {
                 $(this).removeClass("invalid");
+                $(this).addClass("valid");
             } else {
                 $(this).addClass("invalid");
+                $(this).removeClass('valid');
             }
         });
 
@@ -67,9 +71,9 @@ function continueScript() {
                     $("#formChangeEPEmail").val('');
                     $("#formChangeEPEmail").removeClass('valid');
                     $("#formChangeEPPassword").val('');
-                    $("#formChangeEPEmail").removeClass('valid');
+                    $("#formChangeEPPassword").removeClass('valid');
                     $("#formChangeEPRepeatPassword").val('');
-                    $("#formChangeEPEmail").removeClass('valid');
+                    $("#formChangeEPRepeatPassword").removeClass('valid');
                     $('#formSubmitChangeEP').prop('disabled', true);   
                     M.toast({html: 'Alterado com sucesso'});
 

@@ -25,3 +25,52 @@
 .mb-3 {
     margin-bottom: 30px;
 }
+
+.mb-1 {
+    margin-bottom: 10px;
+}
+
+.ml-2 {
+    margin-left: 20px;
+}
+
+.ml-1-5{
+    margin-left: 15px;
+}
+
+.mr-2 {
+    margin-right: 20px;
+}
+
+[type="checkbox"]:checked+span:not(.lever):before {
+    border-right: 2px solid #424242;
+    border-bottom: 2px solid #424242;
+}
+
+/* label color */
+.input-field label {
+  color: #424242;
+}
+
+select {
+    background-color: #fafafa;
+    border: 0;
+    color: #424242;
+    border-bottom: 1px solid #9e9e9e;
+}
+
+select:focus {
+    outline-width: 0;
+}
+
+.label-sel {
+    color: #26a69a;
+}
+
+select option {
+    padding: 10px !important;
+}
+
+.sm-toast {
+    font-size: 85%;
+}

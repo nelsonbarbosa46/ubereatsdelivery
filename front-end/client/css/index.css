@@ -17,3 +17,7 @@
     font-size: 60px !important;
     color: black;
 }
+
+#formDriver {
+    display: none;
+}

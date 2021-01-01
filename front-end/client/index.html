@@ -47,15 +47,23 @@
                   account_circle
                   </span>
                 </a>
-                <span class="name">John Doe</span>
-                <span class="email">jdandturk@gmail.com</span>
+                <span class="name" id="pageNameUser"></span>
+                <span class="email" id="pageEmailUser"></span>
               </div>
             </li>
             <li><div class="divider"></div></li>
+            <li><a class="subheader">Definições</a></li>
             <li><a href="#modalChangeEmailPass" class="waves-effect modal-trigger">Alterar Email/Palavra passe</a></li>
-            <li><a href="#modalChangeInfo" class="waves-effect">Alterar Informações</a></li>
-            <li><a href="#modalConfirmDelete" class="waves-effect">Eliminar Conta</a></li>
+            <li><a id="openFormChangeInfo" href="#modalChangeInfo" class="waves-effect modal-trigger">Alterar Informações</a></li>
+            <li><a href="#modalDeleteAccount" class="waves-effect modal-trigger">Eliminar Conta</a></li>
             <li><div class="divider"></div></li>
+            <div>
+              <li><a class="subheader">Condutor</a></li>
+              <div clas="divProfileDriver">
+                <li><a class="waves-effect modal-trigger" id="openFormDriver" href="#modalFormDriver"></a></li>
+              </div>
+              <li><div class="divider"></div></li>
+            </div>
             <li>
               <a href="#" id="btnTermissaoSessao" class="waves-effect waves-red">
                 <i class="material-icons-round">
@@ -105,6 +113,81 @@
             </div>
           </div>
         </div>
+
+        <!--Modal ChangeInfo-->
+        <div id="modalChangeInfo" class="modal">
+          <div class="modal-content">
+            <h4>Alterar Informações</h4>
+            <div class="row">
+              <form action="#" id="formChangeInfo">
+                <div class="col s12">
+                  <div class="input-field col s12 m6">
+                    <input id="formChangeInfoName" data-field="Nome" type="text" class="validate" name="formChangeInfoName">
+                    <label for="formChangeInfoName">Nome</label>
+                  </div>
+                  <div class="input-field col s12 m6">
+                    <input id="formChangeInfoAddress" data-field="Morada" type="text" class="validate" name="formChangeInfoAddress">
+                    <label for="formChangeInfoAddress">Morada</label>
+                  </div>
+                </div>
+                <div class="col s12">
+                  <div class="input-field col s12 m6"> 
+                    <input id="formChangeInfoZipCode" data-field="Código Postal" type="tel" name="formChangeInfoZipCode" class="validate" title="Insira um Código Postal válido" placeholder="XXXX-XXX">
+                    <label for="formChangeInfoZipCode">Código Postal</label>
+                  </div>
+                  <div class="input-field col s12 m6">
+                    <input id="formChangeInfoLocation" data-field="Localidade" name="formChangeInfoLocation" autocomplete="off" type="text" class="autocomplete">
+                    <label for="formChangeInfoLocation" id="labelFormChangeInfoLocation">Localidade (Concelho)</label>
+                  </div>
+                </div>
+                <div class="col s12">
+                  <div class="input-field col s12 m6">
+                    <input id="formChangeInfoNIF" type="text" data-field="NIF" name="formChangeInfoNIF" title="Insira um NIF válido" class="validate" data-length="9">
+                    <label for="formChangeInfoNIF">NIF</label>
+                  </div>
+                  <div class="input-field col s12 m6">
+                    <input id="formChangeInfoContactNumber" data-field="Número de Contacto" name="formChangeInfoContactNumber" title="Insira um número válido" type="tel" data-length="9" class="validate">
+                    <label for="formChangeInfoContactNumber">Número de Contacto</label>
+                  </div>
+                </div>
+                <div class="col s12">
+                  <button id="formSubmitChangeInfo" type="submit" class="waves-effect waves-orange btn orange lighten-2">Alterar</button>
+                  <a href="#!" class="modal-close waves-effect btn">Cancelar</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!--Modal DeleteAccount-->
+        <div id="modalDeleteAccount" class="modal">
+          <div class="modal-content">
+            <h4>Eliminar Conta</h4>
+            <div class="row">
+              <div class="col s12">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Modal FormDriver-->
+        <div id="modalFormDriver" class="modal">
+          <div class="modal-content">
+            <h4>Condutor</h4>
+            <div class="row">
+              <div class="col s12">
+                
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+
+
+
+
     </header>
 
     
@@ -128,6 +211,7 @@
     </footer>
 
     <script src="../../node_modules/materialize-css/dist/js/materialize.min.js"></script>
+    <script src="js/settings.js"></script>
     <script src="js/index.js"></script>
     <script src="../js/logout.js"></script>
 </body>

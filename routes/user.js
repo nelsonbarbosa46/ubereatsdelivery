@@ -9,4 +9,6 @@ router.put('/changeEP/:id', personValid, userController.changeEmailPassword);
 
 router.get('/infoUser/:id', personValid, userController.getInfoUser);
 
+router.put('/changeInfo/:id', personValid, userController.changeInfo);
+
 module.exports = router;

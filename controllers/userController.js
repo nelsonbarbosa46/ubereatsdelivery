@@ -43,6 +43,79 @@ exports.getUsers = (req, res, next) => {
     return;
 }
 
+exports.getInfoUser = (req, res, next) => {
+    
+    var id = req.params.id;
+
+    if (id) {  
+        var db = require('../sql').db();
+        var sql = `SELECT * FROM user WHERE id = ?`; 
+
+        db.get(sql, [id], function (err, row) {
+           if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Obter Informação do Utilizador'
+                    }
+                }
+                res.status(500).json(response)
+           } else {
+                var name = row.name;
+                var address = row.address;
+                var zipCode = row.zipCode;
+                var location = row.location;
+                sql = `SELECT nif, contactNumber FROM client WHERE idUser = ?`;
+                db.get(sql, [id], function (err, row) {
+                    if (err) {
+                        let response = {
+                            message: "failed",
+                            request: {
+                                type: 'PUT',
+                                description: 'Obter Informação do Utilizador'
+                            }
+                        }
+                        res.status(500).json(response)
+                    } else {
+                        let response = {
+                            message: "success",
+                            user: {
+                                id: id,
+                                name: name,
+                                address: address,
+                                zipCode: zipCode,
+                                location: location,
+                                nif: row.nif,
+                                contactNumber: row.contactNumber
+                            },
+                            request: {
+                                type: 'PUT',
+                                description: 'Obter Informação do Utilizador'
+                            }
+                        }
+                        res.status(200).json(response)
+                    }
+                });
+           }
+        });
+
+
+        db.close();
+    } else {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Obter Informação do Utilizador'
+            }
+        }
+        res.status(400).json(response)
+    }
+    
+    return;
+}
+
 exports.changeEmailPassword = (req, res, next) => {
 
     var id = req.params.id;

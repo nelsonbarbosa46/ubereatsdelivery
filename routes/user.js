@@ -11,4 +11,6 @@ router.get('/infoUser/:id', personValid, userController.getInfoUser);
 
 router.put('/changeInfo/:id', personValid, userController.changeInfo);
 
+router.put('/changeInfoAd/:id', personValid, userController.changeInfoAd);
+
 module.exports = router;

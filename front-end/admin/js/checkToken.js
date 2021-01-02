@@ -11,6 +11,7 @@ function ajaxToken() {
                 "Authorization": 'Bearer ' + token
             }, 
             success: function (data) {
+                console.log(data);
                 resolve(data);
             },
             error: function (error) {
@@ -23,6 +24,7 @@ function ajaxToken() {
 if (token !== '' && token !== null) {
     ajaxToken().then((data) => {
         typeUser = data.typeUser;
+        console.log(typeUser);
         idUser = data.id;
         nameUser = data.name;
         emailUser = data.email;

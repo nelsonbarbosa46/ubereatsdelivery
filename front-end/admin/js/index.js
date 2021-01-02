@@ -5,7 +5,15 @@ function continueScript() {
     $('.sidenav').sidenav({
        edge: 'right'
     }); 
-
+    //put email and name on sidenav (profile)
+    $("#pageNameUser").text(nameUser);
+    $("#pageEmailUser").text(emailUser);
+    //delete option "Eliminar conta" if user is SuperAdmin
+    console.log(typeUser);
+    if (typeUser == 4) {
+        $("#liModalDeleteAccount").remove();
+        $("#modalDeleteAccount").remove();
+    }
     //verify if on change input on form change email/password is empty or not, if its empty disabled button
     //to submit, if not, button is enabled
     $(document).on('change', '#formChangeEP input', verifyInputsFormEP);

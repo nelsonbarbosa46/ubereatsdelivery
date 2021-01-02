@@ -112,9 +112,6 @@ router.get('/checkToken/:id', (req, res, next) => {
         var decEmail = decoded.email;
         //select what page to redirect
         
-            //super administrator
-            console.log(typeUser+1);
-            console.log(decTypeUser);
         switch (decTypeUser) {
             //client
             case 0:
@@ -123,7 +120,7 @@ router.get('/checkToken/:id', (req, res, next) => {
                 }
                 response = {
                     "message": "success",
-                    "typeUser": typeUser,
+                    "typeUser": decTypeUser,
                     "email" : decEmail,
                     "name" : decName,
                     "id" : decId,
@@ -143,7 +140,7 @@ router.get('/checkToken/:id', (req, res, next) => {
                 }
                 response = {
                     "message": "success",
-                    "typeUser": typeUser,
+                    "typeUser": decTypeUser,
                     "email" : decEmail,
                     "name" : decName,
                     "id" : decId,
@@ -162,7 +159,7 @@ router.get('/checkToken/:id', (req, res, next) => {
                 }
                 response = {
                     "message": "success",
-                    "typeUser": typeUser,
+                    "typeUser": decTypeUser,
                     "email" : decEmail,
                     "name" : decName,
                     "id" : decId,
@@ -180,7 +177,7 @@ router.get('/checkToken/:id', (req, res, next) => {
                 }
                 response = {
                     "message": "success",
-                    "typeUser": typeUser,
+                    "typeUser": decTypeUser,
                     "email" : decEmail,
                     "name" : decName,
                     "id" : decId,
@@ -198,7 +195,7 @@ router.get('/checkToken/:id', (req, res, next) => {
                 }
                 response = {
                     "message": "success",
-                    "typeUser": typeUser,
+                    "typeUser": decTypeUser,
                     "email" : decEmail,
                     "name" : decName,
                     "id" : decId,

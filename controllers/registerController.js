@@ -57,7 +57,7 @@ exports.createAdmin = async (req, res, next) => {
     var name = req.body.name;
 
     //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
-    var typeUser = 3;
+    var typeUser = 4;
 
     var errFields = false;
 

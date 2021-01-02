@@ -163,7 +163,7 @@ function colorLabelLocation() {
 }
 
 
-function toastErrFormChangeInfo(errFields) {
+function toastErrForm(errFields) {
     var htmlErrors = '';
     var typeErrors = [];
     var showHtmlErrors = [];

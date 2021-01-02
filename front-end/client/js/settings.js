@@ -41,7 +41,7 @@ function submitFormChangeInfo(e) {
             }
         });
     } else {
-        toastErrFormChangeInfo(errFields);
+        toastErrForm(errFields);
     }
 }
 

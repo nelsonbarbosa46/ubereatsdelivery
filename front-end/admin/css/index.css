@@ -1,6 +1,6 @@
 #page-container {
     position: relative;
-    min-height: 90vh;
+    min-height: 100vh;
 }
 
 #content-wrap {
@@ -8,8 +8,36 @@
 }
 
 #footer {
-    position: absolute;
-    bottom: 0;
+    position: relative;
+    bottom: 0 !important;
     width: 100%;
     height: 2.5rem;            /* Footer height */
+}
+
+.tabs .tab a {
+  color: #26a69a;
+}
+.tabs .tab a.active {
+  color: #26a69a;
+}
+.tabs .tab a:hover {
+  color: #26a69a;
+}
+.tabs .tab a:focus {
+  background-color: rgba(0, 255, 0, 0.1);
+}
+.tabs .tab a:focus.active {
+  background-color: rgba(0, 255, 0, 0.1);
+}
+.tabs .indicator {
+  background-color: #26a69a;
+}
+
+#newCredentialsP {
+  margin-block-end: 0; 
+  margin-block-start: 0;
+}
+
+#newCredentialsDiv {
+  display: none;
 }

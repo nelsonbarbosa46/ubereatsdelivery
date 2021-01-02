@@ -106,8 +106,8 @@
                                 <input id="formChangeEPPassword" type="password" class="validate">
                                 <label for="formChangeEPPassword">Palavra passe</label>
                             </div>
-                            <div class="col s12 m6 input-field">
-                                <small>A palavra passe necessita de pelo menos 8 carácteres, uma letra minúscula, uma
+                            <div class="col s12 m6">
+                                <small>A palavra passe necessita de pelo menos 8 carácteres e no máximo de 15 carácteres, uma letra minúscula, uma
                                     letra maiúscula e um número</small>
                             </div>
                         </div>
@@ -186,10 +186,77 @@
     </header>
 
     <main id="page-container">
-        <div id="content-wrap">
-            <section>
-                <h1>Página Inicial - Administrador</h1>
+        <div id="content-wrap container">
+            <section id="begin">
+                <div class="center-align">
+                    <h2>Dashboard - </h2>
+                </div>
             </section>
+            <section id="options" class="container">
+                <div class="row">
+                    <div class="col s12">
+                        <ul class="tabs" id="tabsOptions">
+                            <li class="tab col s3"><a class="active" href="#pendingOrders">Ver Pedidos Pendentes</a></li>
+                            <li class="tab col s3"><a href="#createAdmin">Criar Administrador</a></li>
+                        </ul>
+                    </div>        
+                    <div id="pendingOrders" class="col s12">
+                        <div class="mt-2 row">
+                            Pedidos Pendentes
+                        </div>
+                    </div>
+                    <div id="createAdmin" class="col s12">
+                        <div class="mt-2 row">
+                            <h5>Criar Administrador</h5>
+                            <form action="#" id="formRegisterAdmin">
+                                <div class="input-field col s12 m6">
+                                    <input id="formRegisterAdminName" name="name" data-field="Nome" type="text" class="validate">
+                                    <label for="formRegisterAdminName">Nome</label>
+                                </div>
+                                <div class="input-field col s12 m6">
+                                    <input id="formRegisterAdminEmail" name="email" data-field="E-mail" type="email" class="validate">
+                                    <label for="formRegisterAdminEmail">E-mail</label>
+                                </div>
+                                <div class="input-field col s12 m6">
+                                    <input id="formRegisterAdminPassword" name="password" data-field="Palavra passe" type="password" class="validate">
+                                    <label for="formRegisterAdminPassword">Palavra passe</label>
+                                    <span class="helper-text">A palavra passe necessita de pelo menos 8 carácteres e no máximo de 15 carácteres, uma letra minúscula, uma letra maiúscula e um número</span>
+                                </div>
+                                <div class="input-field col s12 m6">
+                                    <input id="formRegisterAdminRepeatPassword" name="repeatPassword" data-field="Repetir Palavra passe" type="password" class="validate">
+                                    <label for="formRegisterAdminRepeatPassword">Repetir Palavra passe</label>
+                                    <span class="helper-text"> &nbsp; <br> &nbsp; </span>
+                                </div>
+                                <div class="input-field col s12 m6">
+                                    <input id="formRegisterAdminAddress" name="address" data-field="Morada" type="text" class="validate">
+                                    <label for="formRegisterAdminAddress">Morada</label>
+                                </div>
+                                <div class="input-field col s12 m6">
+                                    <input id="formRegisterAdminZipCode" placeholder="XXXX-XXX" name="zipCode" data-field="Código Postal" pattern="[0-9]{4}[-]{1}[0-9]{3}" type="tel" class="validate">
+                                    <label for="formRegisterAdminZipCode">Código Postal</label>
+                                </div>
+                                <div class="input-field col s12 m6">
+                                    <input id="formRegisterAdminLocation" data-field="Localidade" name="location" autocomplete="off" type="text" class="autocomplete">
+                                    <label for="formRegisterAdminLocation" id="labelFormRegisterAdminLocation">Localidade (Concelho)</label>
+                                  </div>
+                                <div class="col s12">
+                                    <div class="row left-align">
+                                        <div class="col s12 m4">
+                                            <button type="submit" class="btn waves-effect">Criar Administrador</button>
+                                        </div>
+                                        <div class="col s12 m8" id="newCredentialsDiv">
+                                            <span>Novo utilizador (credenciais): </span>
+                                            <p id="newCredentialsP">Email: <span id="newCredentialsEmail"></span><br> 
+                                                Password: <span id="newCredentialsPassword"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>              
+            </section>
+        
         </div>
     </main>
 

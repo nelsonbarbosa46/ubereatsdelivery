@@ -6,6 +6,8 @@ function continueScript() {
        edge: 'right'
     }); 
 
+    $('.tabs').tabs();
+
     //autocomplete Field Address(County) on form to change info
     $('input.autocomplete').autocomplete({
         //data is compressed (counties)
@@ -20,6 +22,9 @@ function continueScript() {
     if (typeUser == 4) {
         $("#liModalDeleteAccount").remove();
         $("#modalDeleteAccount").remove();
+        $("#begin div h2").append("Super Administrador");
+    } else {
+        $("#begin div h2").append("Administrador");
     }
     //verify if on change input on form change email/password is empty or not, if its empty disabled button
     //to submit, if not, button is enabled
@@ -32,7 +37,7 @@ function continueScript() {
     //submit form Change Email/Password
     $("#formChangeEP").submit(function (e) {submitFormChangeEP(e);});
     //on writing on input check if its empty or not on field Address(County) on form change info
-    $("#formChangeInfoLocation").on("keyup", checkCounty);
+    $("#formChangeInfoLocation, #formRegisterAdminLocation").on("keyup", checkCounty);
     //change color on label - autocomplete on focus - form change info
     $('#formChangeInfoLocation').focusin(function () {
         $('#labelFormChangeInfoLocation').css("color", "#26a69a");
@@ -43,4 +48,14 @@ function continueScript() {
     $("#formChangeInfo").submit(function (e) {
         submitFormChangeInfo(e);
     });
+    $('#formRegisterAdminLocation').focusin(function () {
+        $('#labelFormRegisterAdminLocation').css("color", "#26a69a");
+    });
+    $('#formRegisterAdminLocation').focusout(function () {
+        $('#labelFormRegisterAdminLocation').css("color", "#212121");
+    });
+    $("#formRegisterAdmin").submit(function (e) {
+       submitFormRegisterAdmin(e); 
+    });
+    
 }

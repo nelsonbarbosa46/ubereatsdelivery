@@ -2,7 +2,7 @@ $(document).ready(function(){
     $('.collapsible').collapsible();
     $('.modal').modal();
     $('select').formSelect();
-
+    $('.parallax').parallax();
     $('input#registerClientNIF, input#registerClientContactNumber, #registerMerchantDescription').characterCounter();
 
     //toggle form merchant/client

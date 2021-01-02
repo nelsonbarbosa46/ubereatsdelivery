@@ -30,6 +30,14 @@
     margin-bottom: 10px;
 }
 
+.mt-1 {
+    margin-top: 10px;
+}
+
+.mt-2 {
+    margin-top: 20px;
+}
+
 .ml-2 {
     margin-left: 20px;
 }

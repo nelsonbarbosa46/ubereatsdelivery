@@ -27,14 +27,14 @@
                         <div class="card darken-1">
                             <div class="card-content">
                                 <h4 class="center-align">Iniciar Sessão</h4>
-                                <form method="post">
+                                <form method="post" id="formLogin">
                                     <div class="input-field col s12">
-                                        <input id="formLoginEmail" type="email" name="email" class="validate">
+                                        <input id="formLoginEmail" type="email" name="email" data-field="E-mail" class="validate">
                                         <label for="formLoginEmail">E-mail</label>
                                     </div>
                                     <div class="input-field col s12">
-                                        <input id="formLoginPassword" type="password" name="loginPassword" class="validate">
-                                        <label for="formLoginPassword">Palavra-passe</label>
+                                        <input id="formLoginPassword" type="password" name="loginPassword" data-field="Palavra passe" class="validate">
+                                        <label for="formLoginPassword">Palavra passe</label>
                                     </div>
                                     <div class="center-align">
                                         <button class="waves-effect waves-light btn" id="formLoginSubmit" type="submit">Iniciar sessão</button>
@@ -154,41 +154,41 @@
                         <form action="#" id="formRegisterMerchant">
                             <div class="row">
                                 <div class="input-field col s12 m6">
-                                    <input id="formRegisterMerchantName" name="name" type="text" class="validate">
+                                    <input id="formRegisterMerchantName" data-field="Nome" name="name" type="text" class="validate">
                                     <label for="formRegisterMerchantName">Nome da Empresa</label>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <input id="formRegisterMerchantEmail" name="email" type="email" class="validate">
+                                    <input id="formRegisterMerchantEmail" data-field="E-mail" name="email" type="email" class="validate">
                                     <label for="formRegisterMerchantEmail">E-mail</label>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <input id="formRegisterMerchantPassword" name="password" type="password" class="validate">
+                                    <input id="formRegisterMerchantPassword" data-field="Palavra passe" name="password" type="password" class="validate">
                                     <label for="formRegisterMerchantPassword">Palavra passe</label>
-                                    <span class="helper-text" data-error="wrong" data-success="right">A palavra passe necessita de pelo menos 8 carácteres, uma letra minúscula, uma letra maiúscula e um número</span>
+                                    <span class="helper-text">A palavra passe necessita de pelo menos 8 carácteres, uma letra minúscula, uma letra maiúscula e um número</span>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <input id="formRegisterMerchantRepeatPassword" name="repeatPassword" type="password" class="validate">
+                                    <input id="formRegisterMerchantRepeatPassword" data-field="Repetir Palavra Passe" name="repeatPassword" type="password" class="validate">
                                     <label for="formRegisterMerchantRepeatPassword">Repetir Palavra passe</label>
-                                    <span class="helper-text" data-error="wrong" data-success="right" id=""> &nbsp; <br> &nbsp; </span>
+                                    <span class="helper-text"> &nbsp; <br> &nbsp; </span>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <input id="formRegisterMerchantAddress" name="address" type="text" class="validate">
+                                    <input id="formRegisterMerchantAddress" data-field="Morada" name="address" type="text" class="validate">
                                     <label for="formRegisterMerchantAddress">Morada</label>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <input id="formRegisterMerchantZipCode" name="zipCode" placeholder="XXXX-XXX" type="tel" class="validate">
+                                    <input id="formRegisterMerchantZipCode" data-field="Código Postal" name="zipCode" placeholder="XXXX-XXX" type="tel" class="validate">
                                     <label for="formRegisterMerchantZipCode">Código Postal</label>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <input id="formRegisterMerchantLocation" name="location" autocomplete="off" type="text" class="autocomplete">
+                                    <input id="formRegisterMerchantLocation" data-field="Localidade" name="location" autocomplete="off" type="text" class="autocomplete">
                                     <label for="formRegisterMerchantLocation" id="labelFormRegisterMerchantLocation">Localidade (Concelho)</label>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <input id="formRegisterMerchantNIPC" type="text" name="nipc" title="Insira um NIPC válido" class="validate" data-length="9">
+                                    <input id="formRegisterMerchantNIPC" type="text" data-field="NIPC" name="nipc" title="Insira um NIPC válido" class="validate" data-length="9">
                                     <label for="formRegisterMerchantNIPC">NIPC</label>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <select id="formRegisterMerchantCategory" name="category">
+                                    <select id="formRegisterMerchantCategory" data-field="Categoria" name="category">
                                         <option value="" disabled selected>Escolher a opção</option>
                                         <option value="1">Churrascaria</option>
                                         <option value="2">Massas</option>
@@ -199,17 +199,17 @@
                                     <label>Categoria</label>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <textarea id="formRegisterMerchantDescription" class="materialize-textarea" data-length="120"></textarea>
+                                    <textarea id="formRegisterMerchantDescription" data-field="Descrição" class="materialize-textarea" data-length="120"></textarea>
                                     <label for="formRegisterMerchantDescription">Descrição</label>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <input id="formRegisterMerchantContactNumber" name="contactNumber" type="tel" data-length="9" class="validate">
+                                    <input id="formRegisterMerchantContactNumber" data-field="Número de Contacto" name="contactNumber" type="tel" data-length="9" class="validate">
                                     <label for="formRegisterMerchantContactNumber">Número de Contacto</label>
                                 </div>
                                 <div class="file-field input-field col s12 m6">
                                     <div class="btn grey darken-3">
                                       <span>Logótipo</span>
-                                      <input type="file" id="registerMerchantFile" name="registerMerchantFile" accept="image/png, image/jpg, image/jpeg">
+                                      <input type="file" id="formRegisterMerchantFile" data-field="Logótipo" name="registerMerchantFile" accept="image/png, image/jpg, image/jpeg">
                                     </div>
                                     <div class="file-path-wrapper">
                                       <input class="file-path validate" type="text">

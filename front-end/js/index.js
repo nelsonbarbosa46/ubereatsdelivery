@@ -4,7 +4,8 @@ $(document).ready(function(){
     $('.collapsible').collapsible();
     $('.modal').modal();
     $('select').formSelect();
-    $('input#formRegisterClientNIF, input#formRegisterClientContactNumber, #formRregisterMerchantDescription').characterCounter();
+    $('input#formRegisterClientNIF, input#formRegisterClientContactNumber').characterCounter();
+    $('input#formRegisterMerchantNIPC, input#formRegisterMerchantContactNumber').characterCounter();
     //autocomplete Field Address(County) on form to change info
     $('input.autocomplete').autocomplete({
         //data is compressed (counties)
@@ -37,10 +38,10 @@ $(document).ready(function(){
     $("#formRegisterMerchant").submit(function (e) {
         submitRegisterMerchant(e);
     });
-    function validateEmail(email) {
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
-    }
+    //submit login
+    $("#formLogin").submit(function (e) {
+        submitLogin(e);
+    });
     //open form driver
     function openFormDriver() {
         if ($("#formRegisterClientIsDriver").is(":checked")) {
@@ -135,6 +136,48 @@ $(document).ready(function(){
                     clearInterval(interval);
                 }
             }
+        }
+    }
+    function submitLogin(e) {
+        e.preventDefault();
+        var errFields = [];
+        var email = $("#formLoginEmail").val();
+        var password = $("#formLoginPassword").val();
+
+        verifyFieldsLogin(errFields, email, password);
+
+        if (errFields.length === 0) {
+            $.ajax({
+                url: 'http://localhost:3000/api/login/',
+                type: 'POST',
+                cache: false,
+                data: { 
+                    email: email,
+                    password: password
+                },
+                success: function (data) {
+                    console.log(data);
+                    let token = data.login.token;
+                    let url = data.login.url;
+                    sessionStorage.setItem("tokenSession", token);
+                    //current url page
+                    var urlPage = window.location.href;
+                    //change to !delete because after is going to delete everything after a "!delete"
+                    urlPage = urlPage.replace("/index.html", "!delete");
+                    //Remove everything after a "!delete"
+                    urlPage = urlPage.replace(/\!delete.*/, "");
+                    //redirect to right page
+                    window.location.replace(urlPage + url + "index.html");
+                    
+                }, 
+                error: function (jqXHR, textStatus, err) {
+                    console.log(jqXHR);
+                    console.log(err,textStatus);
+                    M.toast({html: 'Erro ao Iniciar Sessão!'});
+                }
+            });
+        } else {
+            toastErrFormRegister(errFields);
         }
     }
     function submitRegisterClient(e) {
@@ -247,7 +290,76 @@ $(document).ready(function(){
 
     function submitRegisterMerchant(e) {
         e.preventDefault();
-        console.log("Deu Merchant");
+
+        var errFields = [];
+        var name = $("#formRegisterMerchantName").val();
+        var email = $("#formRegisterMerchantEmail").val();
+        var password = $("#formRegisterMerchantPassword").val();
+        var repeatPassword = $("#formRegisterMerchantRepeatPassword").val();
+        var address = $("#formRegisterMerchantAddress").val();
+        var zipCode = $("#formRegisterMerchantZipCode").val();
+        var location = $("#formRegisterMerchantLocation").val();
+        var nipc = $("#formRegisterMerchantNIPC").val();
+        var category = $("#formRegisterMerchantCategory").val();
+        var description = $("#formRegisterMerchantDescription").val();
+        var contactNumber = $("#formRegisterMerchantContactNumber").val();
+        
+        //handling file
+        var fd = new FormData();
+        var file = $('#formRegisterMerchantFile')[0].files[0];
+
+        verifyFieldsRegisterMerchant(errFields, name, email, password, repeatPassword, 
+            address, zipCode, location, nipc, category, description, contactNumber, file);
+
+        //check if has errors
+        if (errFields.length === 0) {
+            
+            fd.append('name', name);
+            fd.append('email', email);
+            fd.append('password', password);
+            fd.append('repeatPassword', repeatPassword);
+            fd.append('address', address);
+            fd.append('zipCode', zipCode);
+            fd.append('location', location);
+            fd.append('nipc', nipc);
+            fd.append('category', category);
+            fd.append('description', description);
+            fd.append('contactNumber', contactNumber);
+            fd.append('logo', file);
+
+            $.ajax({
+                url: 'http://localhost:3000/api/register/signupMerchant',
+                type: 'POST',
+                cache: false,
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    let token = data.login.token;
+                    let url = data.login.url;
+                    sessionStorage.setItem("tokenSession", token);
+                    //current url page
+                    var urlPage = window.location.href;
+                    //change to !delete because after is going to delete everything after a "!delete"
+                    urlPage = urlPage.replace("/index.html", "!delete");
+                    //Remove everything after a "!delete"
+                    urlPage = urlPage.replace(/\!delete.*/, "");
+                    //redirect to right page
+                    window.location.replace(urlPage + url + "index.html");
+
+                }
+                , error: function (jqXHR, textStatus, err) {
+                    console.log(err,textStatus);
+                    M.toast({html: 'Erro ao Registar!'});
+                }
+            })
+
+
+        } else {
+            toastErrFormRegister(errFields);
+        }
+        
+
     }
 
     function toastErrFormRegister(errFields) {
@@ -266,7 +378,7 @@ $(document).ready(function(){
                 } else if (errFields[i].error == 'invalid') {
                     showHtmlErrors.push('O seguinte campo está inválido: </br>');
                 } else if (errFields[i].error == 'notcorrespond') {
-                    showHtmlErrors.push('O seguinte campo está inválido: </br>');
+                    showHtmlErrors.push('O seguinte campo não corresponde </br> à palavra passe: </br>');
                 }
             }
             //counting how many times repeting the error

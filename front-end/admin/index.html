@@ -148,7 +148,7 @@
                         <div class="col s12">
                             <div class="input-field col s12 m6">
                                 <input id="formChangeInfoZipCode" data-field="Código Postal" type="tel"
-                                    name="formChangeInfoZipCode" class="validate" title="Insira um Código Postal válido"
+                                    name="formChangeInfoZipCode" class="validate" pattern="[0-9]{4}[-][0-9]{3}" title="Insira um Código Postal válido"
                                     placeholder="XXXX-XXX">
                                 <label for="formChangeInfoZipCode">Código Postal</label>
                             </div>
@@ -157,19 +157,6 @@
                                     autocomplete="off" type="text" class="autocomplete">
                                 <label for="formChangeInfoLocation" id="labelFormChangeInfoLocation">Localidade
                                     (Concelho)</label>
-                            </div>
-                        </div>
-                        <div class="col s12">
-                            <div class="input-field col s12 m6">
-                                <input id="formChangeInfoNIF" type="text" data-field="NIF" name="formChangeInfoNIF"
-                                    title="Insira um NIF válido" class="validate" data-length="9">
-                                <label for="formChangeInfoNIF">NIF</label>
-                            </div>
-                            <div class="input-field col s12 m6">
-                                <input id="formChangeInfoContactNumber" data-field="Número de Contacto"
-                                    name="formChangeInfoContactNumber" title="Insira um número válido" type="tel"
-                                    data-length="9" class="validate">
-                                <label for="formChangeInfoContactNumber">Número de Contacto</label>
                             </div>
                         </div>
                         <div class="col s12">
@@ -216,6 +203,7 @@
 
     <script src="../../node_modules/materialize-css/dist/js/materialize.min.js"></script>
     <script src="../js/generalFunc.js"></script>
+    <script src="js/settings.js"></script>
     <script src="js/index.js"></script>
     <script src="../js/logout.js"></script>
 </body>

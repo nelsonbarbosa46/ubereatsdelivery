@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
 .bg-color-web-primary {
     background-color: #264653;
 }
@@ -81,4 +83,20 @@ select option {
 
 .sm-toast {
     font-size: 85%;
+}
+
+.brand-logo {
+    font-weight: 500; 
+}
+
+
+@media screen and (min-width: 993px) {
+    .brand-logo {
+        margin-left: 15px;
+    }
+}
+
+#userIcon {
+    font-size: 60px;
+    color: #212121;
 }

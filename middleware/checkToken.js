@@ -111,6 +111,10 @@ router.get('/checkToken/:id', (req, res, next) => {
         var decId = decoded.id;
         var decEmail = decoded.email;
         //select what page to redirect
+        
+            //super administrator
+            console.log(typeUser+1);
+            console.log(decTypeUser);
         switch (decTypeUser) {
             //client
             case 0:
@@ -134,7 +138,7 @@ router.get('/checkToken/:id', (req, res, next) => {
             //driver
             case 1:
                 //plus 1, because driver comming from frontend 0
-                if (decTypeUser != (typeUser+1)) {
+                if (decTypeUser != (parseInt(typeUser)+1)) {
                     throw "failed";
                 }
                 response = {
@@ -187,10 +191,9 @@ router.get('/checkToken/:id', (req, res, next) => {
                 }
                 res.status(200).json(response);
                 break;
-            //super administrator
             case 4:
                 //plus 1, because superadministrator comming from frontend 3
-                if (decTypeUser != (typeUser+1)) {
+                if (decTypeUser != (parseInt(typeUser)+1)) {
                     throw "failed";
                 }
                 response = {

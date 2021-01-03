@@ -549,58 +549,110 @@ exports.createMerchant = async (req, res, next) => {
     var isChecked = 0;
     var logoPath;
 
-    var errFields = false;
-
-    //check email if its valid
-    errFields = !validateEmail(email);
-
-    //check if upload has a error
-    if (!logo) {
-        errFields = true;
+    //check if any field is empty
+    if (!email || !password || !repeatPassword || !address || !zipCode || 
+        !location || !name || !category || !nipc || !description ||
+        !contactNumber || !logo
+        ) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar uma empresa'
+            }
+        }
+        //some field is empty
+        res.status(400).json(response);
+    //check if email invalid
+    } else if (!validateEmail(email)) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar uma empresa'
+            }
+        }
+        //email invalid
+        res.status(400).json(response);
+    //check if password is invalid
+    } else if (
+        password.match(/[a-z]/g) === null || 
+        password.match(/[A-Z]/g) === null || 
+        password.match(/[0-9]/g) === null || 
+        password.length < 8 ||
+        password.length > 15 
+    ) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar uma empresa'
+            }
+        }
+        //password invalid
+        res.status(400).json(response)
+    //check if password is not equal to repeatPassword
+    } else if (password != repeatPassword) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar uma empresa'
+            }
+        }
+        //password is not equal to repeatPassword
+        res.status(400).json(response)
+    //check if zipCode is invalid
+    } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar uma empresa'
+            }
+        }
+        //zipCode invalid
+        res.status(400).json(response)
+    //check if location is invalid
+    } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar uma empresa'
+            }
+        }
+        //location invalid
+        res.status(400).json(response)
     } else {
         logoPath = req.file.path;
-    }
+        var db = require("../sql").db();
 
-    //check if its equal
-    if (password !== repeatPassword) {
-        errFields = true;
-    }
-    
-    //check if fields are empty
-    if (email === '' || password === '' || repeatPassword === '' || address === '' || 
-    zipCode === '' || location === '' || name === '' || category === '' || nipc === '' ||
-    description === '' || contactNumber === '') {
-       
-        errFields = true;
-    }
-
-    //check password if has one uppercase, one lowercase, one number and at least 8 characters
-    if (password.match(/[a-z]/g) === null || 
-    password.match( /[A-Z]/g) === null || 
-    null === password.match( /[0-9]/g) || password.length < 8
-    ) 
-    {
-        errFields = true;
-    }
-
-    //if doesnt have any errors on fields, program continues
-    if (!errFields) {
         const hash = await bcrypt.hashSync(password, 10);
-        
-        let sql = `INSERT INTO user(email, password, name, address, zipCode, location, typeUser)
+
+        var sql = `INSERT INTO user(email, password, name, address, zipCode, location, typeUser)
         VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
         //execute sql command
-        db.run(sql, [email, hash, name, address, zipCode, location, typeUser],
+        db.run(sql, [email, hash, name, address, zipCode, location, typeUser], 
             function (err) {
-                if (!err) {
-                    var id = this.lastID;
-                    sql = `INSERT INTO merchant(idUser, category, nipc, description, logo, contactNumber, canWork, isChecked)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-                    db.run(sql, [id, category, nipc, description, logoPath, contactNumber, canWork, isChecked],
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'POST',
+                            description: 'Criar uma empresa'
+                        }
+                    }
+                    //error inserting on table user
+                    res.status(500).json(response)
+                } else {
+                    var idUser = this.lastID;
+                    sql = `INSERT INTO merchant(idUser, category, nipc, description, logo, contactNumber, canWork, 
+                        isChecked) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+                    db.run(sql, [idUser, category, nipc, description, logoPath, contactNumber, canWork, isChecked], 
                         function (err) {
                             if (err) {
-                                //error inserting on table merchant
                                 let response = {
                                     message: "failed",
                                     request: {
@@ -608,14 +660,12 @@ exports.createMerchant = async (req, res, next) => {
                                         description: 'Criar uma empresa'
                                     }
                                 }
+                                //error inserting on table merchant
                                 res.status(500).json(response)
                             } else {
-
                                 //create token
                                 var token = jwt.sign({
                                     typeUser: typeUser,
-                                    email: email,
-                                    name: name,
                                     id: id
                                 }, 
                                 process.env.PRIVATE_KEY, 
@@ -647,31 +697,11 @@ exports.createMerchant = async (req, res, next) => {
                             }
                         }    
                     )
-                } else {
-                    //error inserting on table user
-                    let response = {
-                        message: "failed",
-                        request: {
-                            type: 'POST',
-                            description: 'Criar uma empresa'
-                        }
-                    }
-                    res.status(500).json(response)
                 }
-            }    
-        )
-    } else {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'POST',
-                description: 'Criar uma empresa'
             }
-        }
-        res.status(400).json(response)
+        )
+        db.close();
     }
-
-    db.close();
 
     return;
 }

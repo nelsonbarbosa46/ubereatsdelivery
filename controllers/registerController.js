@@ -213,8 +213,6 @@ exports.createAdmin = async (req, res, next) => {
 
 exports.createClientDriver = async (req, res, next) => {
 
-    var db = require('../sql').db();
-
     var email = req.body.email;
     var password = req.body.password;
     var repeatPassword = req.body.repeatPassword;
@@ -234,8 +232,10 @@ exports.createClientDriver = async (req, res, next) => {
     //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
     var typeUser;
     
+    console.log(email, password, repeatPassword, address, zipCode, location, name, nif, contactNumber, isDriver);
+
     //check if any fields is empty
-    if (!email || !password || !repeatPassword || !address || zipCode ||
+    if (!email || !password || !repeatPassword || !address || !zipCode ||
         !location || !name || !nif || !contactNumber) {
         let response = {
             message: "failed",
@@ -311,7 +311,7 @@ exports.createClientDriver = async (req, res, next) => {
         //typeUser Driver = 1
         typeUser = 1;
         //check if its empty
-        if (!tpyeVehicle) {
+        if (!typeVehicle) {
             let response = {
                 message: "failed",
                 request: {
@@ -319,8 +319,19 @@ exports.createClientDriver = async (req, res, next) => {
                     description: 'Criar um cliente/condutor'
                 }
             };
-            //tpyeVehicle empty
+            //typeVehicle empty
             res.status(400).json(response)
+        //check if tpyeVehicle is invalid
+        } else if (typeVehicle < 1 || typeVehicle > 3) {
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'POST',
+                    description: 'Criar um cliente/condutor'
+                }
+            };
+            res.status(400).json(response)
+            //typeVehicle invalid
         } else {
             createDriver(email, password, name, address, zipCode, location, typeUser, nif, 
                 contactNumber, isDriver, typeVehicle);
@@ -518,8 +529,6 @@ exports.createClientDriver = async (req, res, next) => {
 }
 
 exports.createMerchant = async (req, res, next) => {
-    
-    var db = require('../sql').db();
 
     var email = req.body.email;
     var password = req.body.password;

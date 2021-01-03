@@ -65,4 +65,6 @@ router.put('/changeInfoAd/:id', personValid, userController.changeInfoAd);
 
 router.put('/changeLogoMe/:id', personValid, upload.single('logo'), userController.changeLogoMe);
 
+router.put('/changeInfoMe/:id', personValid, userController.changeInfoMe);
+
 module.exports = router;

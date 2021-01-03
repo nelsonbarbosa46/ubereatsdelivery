@@ -218,6 +218,7 @@ $(document).ready(function(){
                     data: { 
                         email: email,
                         password: password,
+                        repeatPassword: repeatPassword,
                         address: address,
                         zipCode: zipCode,
                         location: location,
@@ -255,6 +256,7 @@ $(document).ready(function(){
                     data: {
                         email: email,
                         password: password,
+                        repeatPassword: repeatPassword,
                         address: address,
                         zipCode: zipCode,
                         location: location,

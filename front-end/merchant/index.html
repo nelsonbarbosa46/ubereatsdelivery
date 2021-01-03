@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,18 +9,253 @@
     <meta name="keywords" content="Infood, INFOOD, Pedidos, Entregas, Restaurantes">
     <meta name="author" content="Hugo Gomes, Nelson Barbosa e Welington Silva">
     <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+        rel="stylesheet">
     <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="../../node_modules/materialize-css/dist/css/materialize.min.css"  media="screen,projection"/>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+    <link type="text/css" rel="stylesheet" href="../../node_modules/materialize-css/dist/css/materialize.min.css"
+        media="screen,projection" />
     <link rel="stylesheet" href="css/index.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/website.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="js/checkToken.js"></script>
 </head>
+
 <body>
-    <h1>Página Inicial - Empresa</h1>
+
+    <header>
+
+        <!--Menu-->
+        <nav class="bg-color-web-primary">
+            <div class="nav-wrapper">
+                <a href="#!" class="brand-logo">Infood</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i
+                        class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <!--<li><a href="mobile.html">Mobile</a></li>-->
+                    <li><a href="#" data-target="slide-out" class="sidenav-trigger show-on-large">Conta</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!--Menu Mobile-->
+        <ul class="sidenav" id="mobile-demo">
+            <!--<li><a href="mobile.html">Mobile</a></li>-->
+            <li><a href="#" data-target="slide-out" class="sidenav-trigger show-on-large">Conta</a></li>
+        </ul>
+        <!--/Menu Mobile-->
+        <!--/Menu-->
+
+        <!--SideNav Perfil-->
+        <ul id="slide-out" class="sidenav">
+            <li>
+                <div class="user-view">
+                    <a href="#" class="align-center">
+                        <span id="userIcon" class="material-icons-round">
+                            storefront
+                        </span>
+                    </a>
+                    <span class="name" id="pageNameUser"></span>
+                    <span class="email" id="pageEmailUser"></span>
+                </div>
+            </li>
+            <li>
+                <div class="divider"></div>
+            </li>
+            <li><a class="subheader">Definições</a></li>
+            <li><a href="#modalChangeEmailPass" class="waves-effect modal-trigger">Alterar Email/Palavra passe</a></li>
+            <li><a id="openFormChangeInfo" href="#modalChangeInfo" class="waves-effect modal-trigger">Alterar
+                    Informações</a></li>
+            <li><a id="openFormChangeInfo" href="#modalChangeLogo" class="waves-effect modal-trigger">Alterar
+                Logótipo</a></li>
+            <li id="liModalDeleteAccount"><a href="#modalDeleteAccount" class="waves-effect modal-trigger">Eliminar
+                Conta</a></li>
+            <li>
+                <div class="divider"></div>
+            </li>
+            <li>
+                <a href="#" id="btnTermissaoSessao" class="waves-effect waves-red">
+                    <i class="material-icons-round">
+                        exit_to_app
+                    </i>
+                    Terminar Sessão
+                </a>
+            </li>
+        </ul>
+        <!--/SideNav Perfil-->
+
+
+        <!--Modal ChangeEmailPass-->
+        <div id="modalChangeEmailPass" class="modal">
+            <div class="modal-content">
+                <h4>Alterar Email/Palavra passe</h4>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            Se pretende alterar apenas o e-mail, pode deixar os campos da palavra passe vazios e
+                            vice-versa. <br>
+                        </p>
+                    </div>
+                    <form action="#" id="formChangeEP">
+                        <div class="col s12">
+                            <div class="input-field col s12 m6">
+                                <input id="formChangeEPEmail" type="email" class="validate">
+                                <label for="formChangeEPEmail">E-mail</label>
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <div class="input-field col s12 m6">
+                                <input id="formChangeEPPassword" type="password" class="validate">
+                                <label for="formChangeEPPassword">Palavra passe</label>
+                            </div>
+                            <div class="col s12 m6">
+                                <small>A palavra passe necessita de pelo menos 8 carácteres e no máximo de 15
+                                    carácteres, uma letra minúscula, uma letra maiúscula e um número</small>
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <div class="input-field col s12 m6">
+                                <input id="formChangeEPRepeatPassword" type="password" class="validate">
+                                <label for="formChangeEPRepeatPassword">Repetir Palavra Passe</label>
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <button id="formSubmitChangeEP" class="waves-effect waves-orange btn orange lighten-2"
+                                disabled>Alterar</button>
+                            <a href="#!" class="modal-close waves-effect btn">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--/Modal Change EmailPassword-->
+
+
+        <!--Modal ChangeInfo-->
+        <div id="modalChangeInfo" class="modal">
+            <div class="modal-content">
+                <h4>Alterar Informações</h4>
+                <div class="row">
+                    <form action="#" id="formChangeInfo">
+                        <div class="col s12">
+                            <div class="input-field col s12 m6">
+                                <input id="formChangeInfoName" data-field="Nome" type="text" class="validate"
+                                    name="formChangeInfoName">
+                                <label for="formChangeInfoName">Nome</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="formChangeInfoAddress" data-field="Morada" type="text" class="validate"
+                                    name="formChangeInfoAddress">
+                                <label for="formChangeInfoAddress">Morada</label>
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <div class="input-field col s12 m6">
+                                <input id="formChangeInfoZipCode" data-field="Código Postal" type="tel"
+                                    name="formChangeInfoZipCode" class="validate" title="Insira um Código Postal válido"
+                                    placeholder="XXXX-XXX">
+                                <label for="formChangeInfoZipCode">Código Postal</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="formChangeInfoLocation" data-field="Localidade" name="formChangeInfoLocation"
+                                    autocomplete="off" type="text" class="autocomplete">
+                                <label for="formChangeInfoLocation" id="labelFormChangeInfoLocation">Localidade
+                                    (Concelho)</label>
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <div class="input-field col s12 m6">
+                                <input id="formChangeInfoNIPC" type="text" data-field="NIPC" name="formChangeInfoNIPC"
+                                    title="Insira um NIF válido" class="validate" data-length="9">
+                                <label for="formChangeInfoNIPC">NIPC</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="formChangeInfoContactNumber" data-field="Número de Contacto"
+                                    name="formChangeInfoContactNumber" title="Insira um número válido" type="tel"
+                                    data-length="9" class="validate">
+                                <label for="formChangeInfoContactNumber">Número de Contacto</label>
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <div class="input-field col s12 m6">
+                                <textarea id="formChangeInfoDescription" data-field="Descrição" name="formChangeInfoDescripton" class="materialize-textarea" data-length="120"></textarea>
+                                <label for="formChangeInfoDescription">Descrição</label>
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <button id="formSubmitChangeInfo" type="submit"
+                                class="waves-effect waves-orange btn orange lighten-2">Alterar</button>
+                            <a href="#!" class="modal-close waves-effect btn">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--/Modal Change Info-->
+
+        <!--Modal Change Logo-->
+        <div id="modalChangeLogo" class="modal">
+            <div class="modal-content">
+                <h4>Alterar Logótipo</h4>
+                <div class="row">
+                    <form action="#" class="mt-2" id="formChangeLogo">
+                        <div class="file-field input-field col s12 m6 mb-3">
+                            <div class="btn grey darken-3">
+                              <span>Logótipo</span>
+                              <input type="file" id="formChangeLogoFile" data-field="Logótipo" name="formChangeLogoFile" accept="image/png, image/jpg, image/jpeg">
+                            </div>
+                            <div class="file-path-wrapper">
+                              <input class="file-path validate" type="text">
+                            </div>
+                            <small>Só é aceite ficheiros tipo PNG, JPEG e JPG</small>
+                        </div>
+                        <div class="col s12">
+                            <button id="formSubmitFormLogo" type="submit"
+                                class="waves-effect waves-orange btn orange lighten-2">Alterar</button>
+                            <a href="#!" class="modal-close waves-effect btn">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal Delete Account-->
+        <div id="modalDeleteAccount" class="modal">
+            <div class="modal-content">
+                <h4>Eliminar Conta</h4>
+                <div class="row">
+                    
+                </div>
+            </div>
+        </div>
+        <!--/Modal Delete Account-->
+
+    </header>
+
+    <main id="page-container">
+        <div id="content-wrap container">
+            <p>TESTE1</p>
+        </div>
+        <aside>
+
+        </aside>
+    </main>
+
+
+    <footer id="footer" class="page-footer bg-color-web-primary">
+        <div class="footer-copyright">
+          <div class="container center-align ">
+            © 2021 INFOOD
+          </div>
+        </div>
+    </footer>
 
     <script src="../../node_modules/materialize-css/dist/js/materialize.min.js"></script>
+    <script src="../js/generalFunc.js"></script>
+    <script src="js/settings.js"></script>
     <script src="js/index.js"></script>
+    <script src="../js/logout.js"></script>
 </body>
+
 </html>

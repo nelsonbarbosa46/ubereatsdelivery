@@ -4,24 +4,16 @@
     background-color: #264653;
 }
 
-.bg-color-web-secondary {
-    background-color: #2A9D8F;
-}
-
-.bg-color-web-danger {
-    background-color: #E76F51;
-}
-
-.bg-color-web-warning {
-    background-color: #E9C46A;
-}
-
 .page-footer {
     padding-top: 0 !important;
 }
 
 .page-footer .footer-copyright {
     background-color: #264653;
+}
+
+.mb-2 {
+    margin-bottom: 20px;
 }
 
 .mb-3 {

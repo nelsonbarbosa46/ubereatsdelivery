@@ -525,3 +525,95 @@ exports.changeInfoAd = (req, res, next) => {
     
     return;
 }
+
+exports.changeLogoMe = (req, res, next) => {
+
+    var id = req.params.id;
+    var logo = req.file;
+    const fs = require('fs');
+
+    //check if any field is empty
+    if (!id || !logo) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Logótipo da Empresa'
+            }
+        }
+        //some field is empty
+        res.status(400).json(response);
+    } else {
+        var logoPath = req.file.path;
+        var db = require("../sql").db();
+
+        var sql = `SELECT logo FROM merchant WHERE idUser = ?`;
+
+        //get old image url
+        db.get(sql, [id], 
+            function (err, row) {
+                if (err) {
+                    //delete new image because was error on update
+                    fs.unlink(logoPath, (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'PUT',
+                            description: 'Alterar Logótipo da Empresa'
+                        }
+                    }
+                    //error getting image url
+                    res.status(500).json(response);
+                } else {
+                    var oldLogoPath = row.logo;
+                    sql = `UPDATE merchant SET logo=? WHERE idUser = ?`;
+                    db.run(sql, [logoPath, id], 
+                        function (err) {
+                            if (err) {
+                                //delete new image because was error on update
+                                fs.unlink(logoPath, (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                })
+                                let response = {
+                                    message: "failed",
+                                    request: {
+                                        type: 'PUT',
+                                        description: 'Alterar Logótipo da Empresa'
+                                    }
+                                }
+                                //error updating on merchant
+                                res.status(500).json(response);
+                            } else {
+                                //delete old image
+                                fs.unlink(oldLogoPath, (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                })
+                                let response = {
+                                    message: "success",
+                                    request: {
+                                        type: 'PUT',
+                                        description: 'Alterar Logótipo da Empresa'
+                                    }
+                                }
+                                //update successful
+                                res.status(200).json(response);
+                            }
+                        }
+                    )
+                }
+            }
+        )
+
+        db.close();
+    }
+
+    return;
+}

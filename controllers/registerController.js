@@ -666,7 +666,7 @@ exports.createMerchant = async (req, res, next) => {
                                 //create token
                                 var token = jwt.sign({
                                     typeUser: typeUser,
-                                    id: id
+                                    id: idUser
                                 }, 
                                 process.env.PRIVATE_KEY, 
                                 {

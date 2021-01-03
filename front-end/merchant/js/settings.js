@@ -13,8 +13,9 @@ function submitFormChangeInfo(e) {
     var nipc = $("#formChangeInfoNIPC").val();
     var contactNumber = $("#formChangeInfoContactNumber").val();
     var description = $("#formChangeInfoDescription").val();
+    var category = $("#formChangeInfoCategory").val();
 
-    verifyFieldsChangeInfo(errFields, name, address, zipCode, location, nipc, contactNumber, description);
+    verifyFieldsChangeInfo(errFields, name, address, zipCode, location, nipc, contactNumber, description, category);
 
     if (errFields.length === 0) {
         $.ajax({
@@ -31,7 +32,8 @@ function submitFormChangeInfo(e) {
                 location: location,
                 nipc: nipc,
                 contactNumber: contactNumber,
-                description: description
+                description: description,
+                category: category
             },
             success: function () {   
                 M.toast({html: 'Alterado com sucesso'});
@@ -46,7 +48,7 @@ function submitFormChangeInfo(e) {
     }
 }
 
-function verifyFieldsChangeInfo(errFields, name, address, zipCode, location, nipc, contactNumber, description) {
+function verifyFieldsChangeInfo(errFields, name, address, zipCode, location, nipc, contactNumber, description, category) {
 
     //check if its empty
     if (!name) errFields.push({"error": "empty", "field": $("#formChangeInfoName").data("field")});
@@ -63,7 +65,7 @@ function verifyFieldsChangeInfo(errFields, name, address, zipCode, location, nip
     //check if its empty
     if (!location) {
         errFields.push({"error": "empty", "field": $("#formChangeInfoLocation").data("field")});
-    //check if county is correct
+    //check if location is invalid
     } else if (jQuery.inArray(location, arrCountiesLowerCase) == -1) {
         errFields.push({"error": "invalid", "field": $("#formChangeInfoLocation").data("field")});
     }
@@ -80,13 +82,20 @@ function verifyFieldsChangeInfo(errFields, name, address, zipCode, location, nip
     //check if has diferent 9 chars
     } else if (contactNumber.length !== 9) {
             errFields.push({"error": "invalid", "field": $("#formChangeInfoContactNumber").data("field")});
-    //check if its valid
+    //check if its invalid
     } else if (!contactNumber.match('[2,3,9]{1}[0-9]{8}')) {
         errFields.push({"error": "invalid", "field": $("#formChangeInfoContactNumber").data("field")});
     }
     //check if its empty
     if (!description) {
         errFields.push({"error": "empty", "field": $("#formChangeInfoDescription").data("field")});
+    }
+    //check if its empty
+    if (!category) {
+        errFields.push({"error": "empty", "field": $("#formChangeInfoCategory").data("field")});
+    //check if its invalid
+    } else if (category < 1 || category > 5) {
+        errFields.push({"error": "empty", "field": $("#formChangeInfoCategory").data("field")});
     }
 }
 

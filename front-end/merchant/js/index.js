@@ -7,6 +7,8 @@ function continueScript() {
 
     $('input#formChangeInfoNIF, input#formChangeInfoContactNumber').characterCounter();
 
+    $('select').formSelect();
+
     //autocomplete Field Address(County) on form to change info
     $('input.autocomplete').autocomplete({
         //data is compressed (counties)

@@ -27,6 +27,7 @@ if (token !== '' && token !== null) {
         continueScript();
     }).catch((error) => {
         console.log(error);
+        alert(error);
         sessionStorage.removeItem("tokenSession");
         //get current url
         var urlPage = window.location.href;

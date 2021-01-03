@@ -67,8 +67,10 @@
             <li><a href="#modalChangeEmailPass" class="waves-effect modal-trigger">Alterar Email/Palavra passe</a></li>
             <li><a id="openFormChangeInfo" href="#modalChangeInfo" class="waves-effect modal-trigger">Alterar
                     Informações</a></li>
+            <li><a id="openFormChangeInfo" href="#modalChangeLogo" class="waves-effect modal-trigger">Alterar
+                Logótipo</a></li>
             <li id="liModalDeleteAccount"><a href="#modalDeleteAccount" class="waves-effect modal-trigger">Eliminar
-                    Conta</a></li>
+                Conta</a></li>
             <li>
                 <div class="divider"></div>
             </li>
@@ -164,9 +166,9 @@
                         </div>
                         <div class="col s12">
                             <div class="input-field col s12 m6">
-                                <input id="formChangeInfoNIF" type="text" data-field="NIF" name="formChangeInfoNIF"
+                                <input id="formChangeInfoNIPC" type="text" data-field="NIPC" name="formChangeInfoNIPC"
                                     title="Insira um NIF válido" class="validate" data-length="9">
-                                <label for="formChangeInfoNIF">NIF</label>
+                                <label for="formChangeInfoNIPC">NIPC</label>
                             </div>
                             <div class="input-field col s12 m6">
                                 <input id="formChangeInfoContactNumber" data-field="Número de Contacto"
@@ -180,16 +182,6 @@
                                 <textarea id="formChangeInfoDescription" data-field="Descrição" name="formChangeInfoDescripton" class="materialize-textarea" data-length="120"></textarea>
                                 <label for="formChangeInfoDescription">Descrição</label>
                             </div>
-                            <div class="file-field input-field col s12 m6">
-                                <div class="btn grey darken-3">
-                                  <span>Logótipo</span>
-                                  <input type="file" id="formChangeInfoFile" data-field="Logótipo" name="formChangeInfoFile" accept="image/png, image/jpg, image/jpeg">
-                                </div>
-                                <div class="file-path-wrapper">
-                                  <input class="file-path validate" type="text">
-                                </div>
-                                <small>Só é aceite ficheiros tipo PNG, JPEG e JPG</small>
-                            </div>
                         </div>
                         <div class="col s12">
                             <button id="formSubmitChangeInfo" type="submit"
@@ -202,6 +194,42 @@
         </div>
         <!--/Modal Change Info-->
 
+        <!--Modal Change Logo-->
+        <div id="modalChangeLogo" class="modal">
+            <div class="modal-content">
+                <h4>Alterar Logótipo</h4>
+                <div class="row">
+                    <form action="#" class="mt-2" id="formChangeLogo">
+                        <div class="file-field input-field col s12 m6 mb-3">
+                            <div class="btn grey darken-3">
+                              <span>Logótipo</span>
+                              <input type="file" id="formChangeLogoFile" data-field="Logótipo" name="formChangeLogoFile" accept="image/png, image/jpg, image/jpeg">
+                            </div>
+                            <div class="file-path-wrapper">
+                              <input class="file-path validate" type="text">
+                            </div>
+                            <small>Só é aceite ficheiros tipo PNG, JPEG e JPG</small>
+                        </div>
+                        <div class="col s12">
+                            <button id="formSubmitFormLogo" type="submit"
+                                class="waves-effect waves-orange btn orange lighten-2">Alterar</button>
+                            <a href="#!" class="modal-close waves-effect btn">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal Delete Account-->
+        <div id="modalDeleteAccount" class="modal">
+            <div class="modal-content">
+                <h4>Eliminar Conta</h4>
+                <div class="row">
+                    
+                </div>
+            </div>
+        </div>
+        <!--/Modal Delete Account-->
 
     </header>
 
@@ -225,6 +253,7 @@
 
     <script src="../../node_modules/materialize-css/dist/js/materialize.min.js"></script>
     <script src="../js/generalFunc.js"></script>
+    <script src="js/settings.js"></script>
     <script src="js/index.js"></script>
     <script src="../js/logout.js"></script>
 </body>

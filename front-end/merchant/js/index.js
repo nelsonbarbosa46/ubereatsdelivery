@@ -36,5 +36,8 @@ function continueScript() {
     $("#formChangeInfo").submit(function (e) {
         submitFormChangeInfo(e);
     });
+    $("#formChangeLogo").submit(function (e) {
+        submitFormChangeLogo(e);
+    });
 
 }

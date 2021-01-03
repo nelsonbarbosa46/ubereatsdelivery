@@ -23,6 +23,7 @@ function ajaxToken() {
 if (token !== '' && token !== null) {
     ajaxToken().then((data) => {
         typeUser = data.typeUser;
+        idUser = data.id;
         continueScript();
     }).catch((error) => {
         console.log(error);

@@ -69,7 +69,7 @@ exports.createAdmin = async (req, res, next) => {
                 description: 'Criar um administrador'
             }
         };
-        //all fields are empty
+        //some field is empty
         res.status(400).json(response);
     //check if password is invalid
     } else if (!validateEmail(email)) {
@@ -231,156 +231,136 @@ exports.createClientDriver = async (req, res, next) => {
     var canWork = 0;
     var isChecked = 0;
 
-
     //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
     var typeUser;
-
-    var errFields = false;
-
     
-    //check if fields are empty
-    if (email === '' || password === '' || repeatPassword === '' || address === '' || 
-    zipCode === '' || location === '' || name === '' || nif === '' || contactNumber === ''
-    || isDriver === '') {
-        errFields = true;
-    }
-
-    //check if password is equal repeatPassword
-    if (password !== repeatPassword) {
-        errFields = true;
-    }
-
-    function checkIfWantsBeDriver(isDriver, idClient, typeVehicle, canWork, isChecked, name, typeUser, idUser) {
-        if (isDriver == 1) {
-            sql = `INSERT INTO driver(idClient, typeVehicle, canWork, isChecked) VALUES (?,?,?,?)`;
-            db.run(sql, [idClient, typeVehicle, canWork, isChecked], 
-                function (err) {
-                    if (err) {
-                        let response = {
-                            message: "failed",
-                            request: {
-                                type: 'POST',
-                                description: 'Criar um cliente/condutor'
-                            }
-                        };
-                        //error inserting on table driver
-                        res.status(500).json(response)
-                    } else {
-
-                        //create token
-                        var token = jwt.sign({
-                            typeUser: typeUser,
-                            email: email,
-                            name: name,
-                            id: idUser
-                        }, 
-                        process.env.PRIVATE_KEY, 
-                        {
-                            algorithm:'HS256',
-                            expiresIn:'1d'
-                        })
-
-                        //get url to redirect
-                        var url = getRedirectURL(typeUser);
-
-                        let response = {
-                            message: "success",
-                            userCreated: {
-                                email: email,
-                                name: name
-                            },
-                            login: {
-                                token: token,
-                                url: url
-                            },
-                            request: {
-                                type: 'POST',
-                                description: 'Criar um cliente/condutor'
-                            }
-                        }
-                        //status 201 because was inserted in both of the tables (driver)
-                        res.status(201).json(response)
-                    }
-                }
-            ) 
-        } else {
-            //create token
-            var token = jwt.sign({
-                typeUser: typeUser,
-                email: email,
-                name: name,
-                id: idUser
-            }, 
-            process.env.PRIVATE_KEY, 
-            {
-                algorithm:'HS256',
-                expiresIn:'1d'
-            })
-
-            //get url to redirect
-            var url = getRedirectURL(typeUser);
-
+    //check if any fields is empty
+    if (!email || !password || !repeatPassword || !address || zipCode ||
+        !location || !name || !nif || !contactNumber) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar um cliente/condutor'
+            }
+        };
+        //some field is empty
+        res.status(400).json(response)
+    //check if password is invalid
+    } else if (!validateEmail(email)) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar um cliente/condutor'
+            }
+        };
+        //email invalid
+        res.status(400).json(response)
+    //check if password is invalid
+    } else if (
+        password.match(/[a-z]/g) === null || 
+        password.match(/[A-Z]/g) === null || 
+        password.match(/[0-9]/g) === null || 
+        password.length < 8 ||
+        password.length > 15
+    ) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar um cliente/condutor'
+            }
+        };
+        //password invalid
+        res.status(400).json(response)
+    //check if password is not equal to repeatPassword
+    } else if (password != repeatPassword) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar um cliente/condutor'
+            }
+        };
+        //password not equal to repeatPassword
+        res.status(400).json(response)
+    //check if zipCode invalid
+    } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar um cliente/condutor'
+            }
+        };
+        //zipCode invalid
+        res.status(400).json(response)
+    //check if location invalid
+    } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'POST',
+                description: 'Criar um cliente/condutor'
+            }
+        };
+        //location invalid
+        res.status(400).json(response)
+    } else if (isDriver == 1) {
+        //typeUser Driver = 1
+        typeUser = 1;
+        //check if its empty
+        if (!tpyeVehicle) {
             let response = {
-                message: "success",
-                userCreated: {
-                    email: email,
-                    name: name
-                },
-                login: {
-                    token: token,
-                    url: url
-                },
+                message: "failed",
                 request: {
                     type: 'POST',
                     description: 'Criar um cliente/condutor'
                 }
-            }
-            //status 201 because was inserted in both of the tables (client)
-            res.status(201).json(response)
-        }
-    }
-
-    const hash = await bcrypt.hashSync(password, 10);
-
-    //check email if its valid
-    errFields = !validateEmail(email);
-
-    //check if value is right on isDriver; 
-    //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
-    if (isDriver == 1) {
-        typeUser = 1;
-        //check if its undefined
-        if (typeof typeVehicle === 'undefined') {
-            errFields = true;
+            };
+            //tpyeVehicle empty
+            res.status(400).json(response)
         } else {
-            //check if value typeVehicle is correct
-            if (typeVehicle < 0 || typeVehicle > 3) {
-                errFields = true;
-            }
+            createDriver(email, password, name, address, zipCode, location, typeUser, nif, 
+                contactNumber, isDriver, typeVehicle);
         }
     } else {
+        //typeUser Client = 0
         typeUser = 0;
-    }    
+        createClient(email, password, name, address, zipCode, location, typeUser, nif, contactNumber, isDriver);
+    }
 
-    var sql = `INSERT INTO user(email, password, name, address, zipCode, location, typeUser)
-    VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    async function createClient(email, password, name, address, zipCode, location, typeUser, nif, contactNumber, isDriver) {
+        
+        var db = require('../sql').db();
 
-    //if dont have errors, continue and going to insert on db
-    if (!errFields) {
+        //create hash
+        const hash = await bcrypt.hashSync(password, 10);
+
+        var sql = `INSERT INTO user(email, password, name, address, zipCode, location, typeUser)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    
         //execute sql command
-        db.run(sql, [email, hash, name, address, zipCode, location, typeUser],
+        db.run(sql, [email, hash, name, address, zipCode, location, typeUser], 
             function (err) {
-                if (!err) {
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'POST',
+                            description: 'Criar um cliente/condutor'
+                        }
+                    };
+                    //error inserting on table user
+                    res.status(500).json(response)
+                } else {
                     let idUser = this.lastID;
                     sql = `INSERT INTO client(idUser, nif, contactNumber, isDriver)
                     VALUES (?, ?, ?, ?)`;
-                    db.run(sql, [idUser, nif, contactNumber, isDriver],
+                    db.run(sql, [idUser, nif, contactNumber, isDriver], 
                         function (err) {
-                            if (!err) {
-                                let id = this.lastID;
-                                //function to check if client want to be a driver
-                                checkIfWantsBeDriver(isDriver, id, typeVehicle, canWork, isChecked, name, typeUser, idUser);
-                            } else {
+                            if (err) {
                                 let response = {
                                     message: "failed",
                                     request: {
@@ -390,11 +370,64 @@ exports.createClientDriver = async (req, res, next) => {
                                 };
                                 //error inserting on table client
                                 res.status(500).json(response)
+                            } else {
+
+                                //create token
+                                var token = jwt.sign({
+                                    typeUser: typeUser,
+                                    id: idUser
+                                }, 
+                                process.env.PRIVATE_KEY, 
+                                {
+                                    algorithm:'HS256',
+                                    expiresIn:'1d'
+                                })
+
+                                //get url to redirect
+                                var url = getRedirectURL(typeUser);
+
+                                let response = {
+                                    message: "success",
+                                    userCreated: {
+                                        email: email,
+                                        name: name
+                                    },
+                                    login: {
+                                        token: token,
+                                        url: url
+                                    },
+                                    request: {
+                                        type: 'POST',
+                                        description: 'Criar um cliente/condutor'
+                                    }
+                                }
+                                //status 201 because was inserted in both of the tables
+                                res.status(201).json(response)
                             }
                         }
                     )
-                } else {
-                    //error inserting on table user
+                }
+            }
+        )
+
+        db.close();
+    }
+
+    async function createDriver(email, password, name, address, zipCode, location, typeUser, nif, 
+        contactNumber, isDriver, typeVehicle) {
+        
+        var db = require('../sql').db();
+
+        //create hash
+        const hash = await bcrypt.hashSync(password, 10);
+
+        var sql = `INSERT INTO user(email, password, name, address, zipCode, location, typeUser)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    
+        //execute sql command
+        db.run(sql, [email, hash, name, address, zipCode, location, typeUser], 
+            function (err) {
+                if (err) {
                     let response = {
                         message: "failed",
                         request: {
@@ -402,29 +435,86 @@ exports.createClientDriver = async (req, res, next) => {
                             description: 'Criar um cliente/condutor'
                         }
                     };
+                    //error inserting on table user
                     res.status(500).json(response)
+                } else {
+                    let idUser = this.lastID;
+                    sql = `INSERT INTO client(idUser, nif, contactNumber, isDriver)
+                    VALUES (?, ?, ?, ?)`;
+                    db.run(sql, [idUser, nif, contactNumber, isDriver], 
+                        function (err) {
+                            if (err) {
+                                let response = {
+                                    message: "failed",
+                                    request: {
+                                        type: 'POST',
+                                        description: 'Criar um cliente/condutor'
+                                    }
+                                };
+                                //error inserting on table client
+                                res.status(500).json(response)
+                            } else {
+                                let idClient = this.lastID;
+                                sql = `INSERT INTO driver(idClient, typeVehicle, canWork, isChecked) VALUES (?,?,?,?)`;
+                                db.run(sql, [idClient, typeVehicle, canWork, isChecked], 
+                                    function (err) {
+                                        if (err) {
+                                            let response = {
+                                                message: "failed",
+                                                request: {
+                                                    type: 'POST',
+                                                    description: 'Criar um cliente/condutor'
+                                                }
+                                            };
+                                            //error inserting on table driver
+                                            res.status(500).json(response)
+                                        } else {
+
+                                            //create token
+                                            var token = jwt.sign({
+                                                typeUser: typeUser,
+                                                id: idUser
+                                            }, 
+                                            process.env.PRIVATE_KEY, 
+                                            {
+                                                algorithm:'HS256',
+                                                expiresIn:'1d'
+                                            })
+
+                                            //get url to redirect
+                                            var url = getRedirectURL(typeUser);
+
+                                            let response = {
+                                                message: "success",
+                                                userCreated: {
+                                                    email: email,
+                                                    name: name
+                                                },
+                                                login: {
+                                                    token: token,
+                                                    url: url
+                                                },
+                                                request: {
+                                                    type: 'POST',
+                                                    description: 'Criar um cliente/condutor'
+                                                }
+                                            }
+                                            //status 201 because was inserted in both of the tables (driver)
+                                            res.status(201).json(response)
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    )
                 }
             }
-            
         )
 
         db.close();
-
-    } else {
-        //error inserting on table user
-        let response = {
-            message: "failed",
-            request: {
-                type: 'POST',
-                description: 'Criar um cliente/condutor'
-            }
-        };
-        res.status(400).json(response)
     }
 
-    
     return;
-    
 }
 
 exports.createMerchant = async (req, res, next) => {

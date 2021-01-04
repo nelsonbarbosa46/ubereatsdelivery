@@ -748,3 +748,64 @@ exports.changeInfoMe = (req, res, next) => {
 
     return;
 }
+
+exports.getInfoUserMe = (req, res, next) => {
+
+    var id = req.params.id;
+
+    if (id) {
+        var db = require("../sql").db();
+        var sql = `SELECT user.name, user.address, user.zipCode, user.location, merchant.category, merchant.nipc,
+        merchant.description, merchant.contactNumber FROM user
+        INNER JOIN merchant ON user.id = merchant.idUser WHERE user.id = ?`;
+
+        db.get(sql, [id], 
+            function (err, row) {
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'GET',
+                            description: 'Obter Informações da Empresa'
+                        }
+                    }
+                    //error getting info
+                    res.status(500).json(response)
+                } else {
+                    let response = {
+                        message: "success",
+                        user: {
+                            id: id,
+                            name: row.name,
+                            address: row.address,
+                            zipCode: row.zipCode,
+                            location: row.location,
+                            category: row.category,
+                            nipc: row.nipc,
+                            description: row.description,
+                            contactNumber: row.contactNumber 
+                        },
+                        "request": {
+                            type: 'GET',
+                            description: 'Obter Informações da Empresa'
+                        }
+                    }
+                    //error getting info
+                    res.status(500).json(response)
+                }
+            }
+        )
+    } else {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informações da Empresa'
+            }
+        }
+        //empty field
+        res.status(400).json(response)
+    }
+
+    return;
+}

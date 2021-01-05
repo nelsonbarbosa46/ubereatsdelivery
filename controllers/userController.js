@@ -1,5 +1,6 @@
 
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 function validateEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -42,83 +43,6 @@ exports.getUsers = (req, res, next) => {
 
     db.close();
 
-    return;
-}
-
-exports.getInfoUser = (req, res, next) => {
-    
-    var id = req.params.id;
-    //check if its not empty
-    if (id) {  
-        var db = require('../sql').db();
-        var sql = `SELECT * FROM user WHERE id = ?`; 
-
-        db.get(sql, [id], function (err, row) {
-           if (err) {
-                let response = {
-                    message: "failed",
-                    request: {
-                        type: 'GET',
-                        description: 'Obter Informação do Utilizador'
-                    }
-                }
-                //error getting from table user
-                res.status(500).json(response)
-           } else {
-                var name = row.name;
-                var address = row.address;
-                var zipCode = row.zipCode;
-                var location = row.location;
-                sql = `SELECT nif, contactNumber FROM client WHERE idUser = ?`;
-                db.get(sql, [id], function (err, row) {
-                    if (err) {
-                        let response = {
-                            message: "failed",
-                            request: {
-                                type: 'GET',
-                                description: 'Obter Informação do Utilizador'
-                            }
-                        }
-                        //error getting from table client
-                        res.status(500).json(response)
-                    } else {
-                        let response = {
-                            message: "success",
-                            user: {
-                                id: id,
-                                name: name,
-                                address: address,
-                                zipCode: zipCode,
-                                location: location,
-                                nif: row.nif,
-                                contactNumber: row.contactNumber
-                            },
-                            request: {
-                                type: 'GET',
-                                description: 'Obter Informação do Utilizador'
-                            }
-                        }
-                        //success getting info
-                        res.status(200).json(response)
-                    }
-                });
-           }
-        });
-
-
-        db.close();
-    } else {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'GET',
-                description: 'Obter Informação do Utilizador'
-            }
-        }
-        //id is empty
-        res.status(400).json(response)
-    }
-    
     return;
 }
 
@@ -790,11 +714,14 @@ exports.getInfoUserMe = (req, res, next) => {
                             description: 'Obter Informações da Empresa'
                         }
                     }
-                    //error getting info
-                    res.status(500).json(response)
+                    //select successful
+                    res.status(200).json(response)
                 }
             }
         )
+
+        db.close();
+
     } else {
         let response = {
             message: "failed",
@@ -807,5 +734,134 @@ exports.getInfoUserMe = (req, res, next) => {
         res.status(400).json(response)
     }
 
+    return;
+}
+
+exports.getInfoUserCl = (req, res, next) => {
+    
+    var id = req.params.id;
+    //check if its not empty
+    if (id) {  
+        var db = require('../sql').db();
+        var sql = `SELECT user.name, user.address, user.zipCode, user.location, client.nif, client.contactNumber 
+        FROM user INNER JOIN client ON user.id = client.idUser WHERE user.id = ?`; 
+
+        db.get(sql, [id], function (err, row) {
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'GET',
+                            description: 'Obter Informações do Cliente/Condutor'
+                        }
+                    }
+                    //error getting info
+                    res.status(500).json(response)
+                } else {
+                    let response = {
+                        message: "success",
+                        user: {
+                            id: id,
+                            name: row.name,
+                            address: row.address,
+                            zipCode: row.zipCode,
+                            location: row.location,
+                            nif: row.nif,
+                            contactNumber: row.contactNumber 
+                        },
+                        "request": {
+                            type: 'GET',
+                            description: 'Obter Informações do Cliente/Condutor'
+                        }
+                    }
+                    //select successful
+                    res.status(200).json(response)
+                }
+            }
+        )
+
+        db.close();
+        
+    } else {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação do Cliente/Condutor'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    }
+    
+    return;
+}
+
+exports.getInfoUserAd = (req, res, next) => {
+    
+    var id = req.params.id;
+    const token = req.headers.authorization.split(' ')[1];
+    var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    //check it typeUser is incorrect
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação do Administrador'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!id) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação do Administrador'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    } else {
+        var db = require('../sql').db();
+        var sql = `SELECT name, address, zipCode, location FROM user WHERE id = ?`; 
+
+        db.get(sql, [id], function (err, row) {
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'GET',
+                            description: 'Obter Informações do Administrador'
+                        }
+                    }
+                    //error getting info
+                    res.status(500).json(response)
+                } else {
+                    let response = {
+                        message: "success",
+                        user: {
+                            id: id,
+                            name: row.name,
+                            address: row.address,
+                            zipCode: row.zipCode,
+                            location: row.location
+                        },
+                        "request": {
+                            type: 'GET',
+                            description: 'Obter Informações do Administrador'
+                        }
+                    }
+                    //select successful
+                    res.status(200).json(response)
+                }
+            }
+        )
+
+        db.close();
+    }
+    
     return;
 }

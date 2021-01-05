@@ -57,8 +57,6 @@ router.get('/', userController.getUsers);
 
 router.put('/changeEP/:id', personValid, userController.changeEmailPassword);
 
-router.get('/infoUser/:id', personValid, userController.getInfoUser);
-
 router.put('/changeInfo/:id', personValid, userController.changeInfo);
 
 router.put('/changeInfoAd/:id', personValid, userController.changeInfoAd);
@@ -67,6 +65,10 @@ router.put('/changeLogoMe/:id', personValid, upload.single('logo'), userControll
 
 router.put('/changeInfoMe/:id', personValid, userController.changeInfoMe);
 
+router.get('/getInfoCl/:id', personValid, userController.getInfoUserCl);
+
 router.get('/getInfoMe/:id', personValid, userController.getInfoUserMe);
+
+router.get('/getInfoAd/:id', personValid, userController.getInfoUserAd);
 
 module.exports = router;

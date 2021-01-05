@@ -1022,15 +1022,8 @@ exports.delUserCl = (req, res, next) => {
                                         //error deleting on table user
                                         res.status(500).json(response) 
                                     } else {
-                                        let response = {
-                                            message: "success",
-                                            request: {
-                                                type: 'DELETE',
-                                                description: 'Eliminar Conta Cliente/Condutor'
-                                            }
-                                        }
                                         //delete successful
-                                        res.status(200).json(response)
+                                        res.status(204).json()
                                     }
                                 })   
                             }
@@ -1077,15 +1070,8 @@ exports.delUserCl = (req, res, next) => {
                                                         //error deleting on table user
                                                         res.status(500).json(response)
                                                     } else {
-                                                        let response = {
-                                                            message: "success",
-                                                            request: {
-                                                                type: 'DELETE',
-                                                                description: 'Eliminar Conta Cliente/Condutor'
-                                                            }
-                                                        }
                                                         //delete successful
-                                                        res.status(200).json(response)
+                                                        res.status(204).json()
                                                     }
                                                 }
                                             )
@@ -1163,15 +1149,8 @@ exports.delUserMe = (req, res, next) => {
                         //error deleting on table user
                         res.status(500).json(response)    
                     } else {
-                        let response = {
-                            message: "success",
-                            request: {
-                                type: 'DELETE',
-                                description: 'Eliminar Conta Empresa'
-                            }
-                        }
                         //delete successful
-                        res.status(200).json(response)
+                        res.status(204).json(response)
                     }
                 });
             }
@@ -1240,15 +1219,8 @@ exports.delUserAd = (req, res, next) => {
                         //error deleting on table user
                         res.status(500).json(response)    
                     } else {
-                        let response = {
-                            message: "success",
-                            request: {
-                                type: 'DELETE',
-                                description: 'Eliminar Conta Administrador'
-                            }
-                        }
                         //delete successful
-                        res.status(200).json(response)
+                        res.status(204).json()
                     }
                 });
             }

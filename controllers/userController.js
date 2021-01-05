@@ -676,8 +676,31 @@ exports.changeInfoMe = (req, res, next) => {
 exports.getInfoUserMe = (req, res, next) => {
 
     var id = req.params.id;
-
-    if (id) {
+    const token = req.headers.authorization.split(' ')[1];
+    var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    //check it typeUser is incorrect
+    if (decoded.typeUser != 2) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação da Empresa'
+            }
+        }
+        //typeUser is incorrect
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!id) { 
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informações da Empresa'
+            }
+        }
+        //empty field
+        res.status(400).json(response)
+    } else {
         var db = require("../sql").db();
         var sql = `SELECT user.name, user.address, user.zipCode, user.location, merchant.category, merchant.nipc,
         merchant.description, merchant.contactNumber FROM user
@@ -719,20 +742,9 @@ exports.getInfoUserMe = (req, res, next) => {
                 }
             }
         )
-
         db.close();
-
-    } else {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'GET',
-                description: 'Obter Informações da Empresa'
-            }
-        }
-        //empty field
-        res.status(400).json(response)
     }
+
 
     return;
 }
@@ -740,8 +752,31 @@ exports.getInfoUserMe = (req, res, next) => {
 exports.getInfoUserCl = (req, res, next) => {
     
     var id = req.params.id;
-    //check if its not empty
-    if (id) {  
+    const token = req.headers.authorization.split(' ')[1];
+    var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    //check it typeUser is incorrect
+    if (decoded.typeUser != 0 && decoded.typeUser != 1) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação do Cliente/Condutor'
+            }
+        }
+        //typeUser is incorrect
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!id) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação do Cliente/Condutor'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    } else {
         var db = require('../sql').db();
         var sql = `SELECT user.name, user.address, user.zipCode, user.location, client.nif, client.contactNumber 
         FROM user INNER JOIN client ON user.id = client.idUser WHERE user.id = ?`; 
@@ -781,17 +816,6 @@ exports.getInfoUserCl = (req, res, next) => {
         )
 
         db.close();
-        
-    } else {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'GET',
-                description: 'Obter Informação do Cliente/Condutor'
-            }
-        }
-        //id is empty
-        res.status(400).json(response)
     }
     
     return;

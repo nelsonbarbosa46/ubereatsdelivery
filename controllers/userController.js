@@ -1030,7 +1030,7 @@ exports.delUserCl = (req, res, next) => {
                                             }
                                         }
                                         //delete successful
-                                        res.status(204).json(response)
+                                        res.status(200).json(response)
                                     }
                                 })   
                             }
@@ -1085,7 +1085,7 @@ exports.delUserCl = (req, res, next) => {
                                                             }
                                                         }
                                                         //delete successful
-                                                        res.status(204).json(response)
+                                                        res.status(200).json(response)
                                                     }
                                                 }
                                             )
@@ -1171,7 +1171,7 @@ exports.delUserMe = (req, res, next) => {
                             }
                         }
                         //delete successful
-                        res.status(204).json(response)
+                        res.status(200).json(response)
                     }
                 });
             }
@@ -1248,7 +1248,7 @@ exports.delUserAd = (req, res, next) => {
                             }
                         }
                         //delete successful
-                        res.status(204).json(response)
+                        res.status(200).json(response)
                     }
                 });
             }

@@ -57,13 +57,13 @@ router.get('/', userController.getUsers);
 
 router.put('/changeEP/:id', personValid, userController.changeEmailPassword);
 
-router.put('/changeInfo/:id', personValid, userController.changeInfo);
+router.put('/changeInfoCl/:id', personValid, userController.changeInfo);
 
-router.put('/changeInfoAd/:id', personValid, userController.changeInfoAd);
+router.put('/changeInfoMe/:id', personValid, userController.changeInfoMe);
 
 router.put('/changeLogoMe/:id', personValid, upload.single('logo'), userController.changeLogoMe);
 
-router.put('/changeInfoMe/:id', personValid, userController.changeInfoMe);
+router.put('/changeInfoAd/:id', personValid, userController.changeInfoAd);
 
 router.get('/getInfoCl/:id', personValid, userController.getInfoUserCl);
 

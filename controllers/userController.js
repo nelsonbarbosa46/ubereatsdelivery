@@ -258,7 +258,7 @@ exports.changeEmailPassword = (req, res, next) => {
     return;
 }
 
-exports.changeInfo = (req, res, next) => {
+exports.changeInfoCl = (req, res, next) => {
         
     var id = req.params.id;
     var name = req.body.name;
@@ -268,13 +268,28 @@ exports.changeInfo = (req, res, next) => {
     var nif = req.body.nif;
     var contactNumber = req.body.contactNumber;
 
-    //checking if any field is empty
-    if (!id || !name || !address || !zipCode || !location || !nif || !contactNumber) {
+    //get token and decoded
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check if typeUser is incorrect
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
         let response = {
             message: "failed",
             request: {
                 type: 'PUT',
-                description: 'Alterar Informações do Utilizador'
+                description: 'Alterar Informações do Cliente/Condutor'
+            }
+        }
+        //typeUser incorrect
+        res.status(401).json(response);
+    //checking if any field is empty
+    } else if (!id || !name || !address || !zipCode || !location || !nif || !contactNumber) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações do Cliente/Condutor'
             }
         }
         //some field is empty
@@ -285,7 +300,7 @@ exports.changeInfo = (req, res, next) => {
             message: "failed",
             request: {
                 type: 'PUT',
-                description: 'Alterar Informações do Utilizador'
+                description: 'Alterar Informações do Cliente/Condutor'
             }
         }
         //zipCode is invalid
@@ -296,7 +311,7 @@ exports.changeInfo = (req, res, next) => {
             message: "failed",
             request: {
                 type: 'PUT',
-                description: 'Alterar Informações do Utilizador'
+                description: 'Alterar Informações do Cliente/Condutor'
             }
         }
         //location is invalid
@@ -307,7 +322,7 @@ exports.changeInfo = (req, res, next) => {
             message: "failed",
             request: {
                 type: 'PUT',
-                description: 'Alterar Informações do Utilizador'
+                description: 'Alterar Informações do Cliente/Condutor'
             }
         }
         //nif is invalid
@@ -318,7 +333,7 @@ exports.changeInfo = (req, res, next) => {
             message: "failed",
             request: {
                 type: 'PUT',
-                description: 'Alterar Informações do Utilizador'
+                description: 'Alterar Informações do Cliente/Condutor'
             }
         }
         //contactNumber is invalid
@@ -333,7 +348,7 @@ exports.changeInfo = (req, res, next) => {
                     message: "failed",
                     request: {
                         type: 'PUT',
-                        description: 'Alterar Informações do Utilizador'
+                        description: 'Alterar Informações do Cliente/Condutor'
                     }
                 }
                 //error updating on table user
@@ -346,7 +361,7 @@ exports.changeInfo = (req, res, next) => {
                             message: "failed",
                             request: {
                                 type: 'PUT',
-                                description: 'Alterar Informações do Utilizador'
+                                description: 'Alterar Informações do Cliente/Condutor'
                             }
                         }
                         //error updating on table client
@@ -356,7 +371,7 @@ exports.changeInfo = (req, res, next) => {
                             message: "success",
                             request: {
                                 type: 'PUT',
-                                description: 'Alterar Informações do Utilizador'
+                                description: 'Alterar Informações do Cliente/Condutor'
                             }
                         }
                         //update successfuly
@@ -372,175 +387,6 @@ exports.changeInfo = (req, res, next) => {
     return;
 }
 
-exports.changeInfoAd = (req, res, next) => {
-    
-    
-    
-    var id = req.params.id;
-    var name = req.body.name;
-    var address = req.body.address;
-    var zipCode = req.body.zipCode;
-    var location = req.body.location;
-
-    //checking if any field is empty
-    if (!id || !name || !address || !zipCode || !location) {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'PUT',
-                description: 'Alterar Informações do Utilizador (tipo Admin)'
-            }
-        }
-        //some field is empty
-        res.status(400).json(response)
-    //check if zipCode is invalid
-    } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'PUT',
-                description: 'Alterar Informações do Utilizador (tipo Admin)'
-            }
-        }
-        //zipCode is invalid
-        res.status(400).json(response)
-    //check if location is invalid
-    } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'PUT',
-                description: 'Alterar Informações do Utilizador (tipo Admin)'
-            }
-        }
-        //location is invalid
-        res.status(400).json(response)
-    } else {
-        var db = require('../sql').db();
-        var sql = `UPDATE user SET name=?, address=?, zipCode=?, location=? WHERE id = ?`;
-        
-        db.run(sql, [name, address, zipCode, location.toLowerCase(), id], function (err) {
-            if (err) {
-                let response = {
-                    message: "failed",
-                    request: {
-                        type: 'PUT',
-                        description: 'Alterar Informações do Utilizador (tipo Admin)'
-                    }
-                }
-                //error updating on table user
-                res.status(500).json(response)
-            } else {
-                let response = {
-                    message: "success",
-                    request: {
-                        type: 'PUT',
-                        description: 'Alterar Informações do Utilizador (tipo Admin)'
-                    }
-                }
-                //update successfuly
-                res.status(200).json(response)
-            }
-        });
-
-        db.close();
-    }
-    
-    return;
-}
-
-exports.changeLogoMe = (req, res, next) => {
-
-    var id = req.params.id;
-    var logo = req.file;
-    const fs = require('fs');
-
-    //check if any field is empty
-    if (!id || !logo) {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'PUT',
-                description: 'Alterar Logótipo da Empresa'
-            }
-        }
-        //some field is empty
-        res.status(400).json(response);
-    } else {
-        var logoPath = req.file.path;
-        var db = require("../sql").db();
-
-        var sql = `SELECT logo FROM merchant WHERE idUser = ?`;
-
-        //get old image url
-        db.get(sql, [id], 
-            function (err, row) {
-                if (err) {
-                    //delete new image because was error on update
-                    fs.unlink(logoPath, (err) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                    })
-                    let response = {
-                        message: "failed",
-                        request: {
-                            type: 'PUT',
-                            description: 'Alterar Logótipo da Empresa'
-                        }
-                    }
-                    //error getting image url
-                    res.status(500).json(response);
-                } else {
-                    var oldLogoPath = row.logo;
-                    sql = `UPDATE merchant SET logo=? WHERE idUser = ?`;
-                    db.run(sql, [logoPath, id], 
-                        function (err) {
-                            if (err) {
-                                //delete new image because was error on update
-                                fs.unlink(logoPath, (err) => {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-                                })
-                                let response = {
-                                    message: "failed",
-                                    request: {
-                                        type: 'PUT',
-                                        description: 'Alterar Logótipo da Empresa'
-                                    }
-                                }
-                                //error updating on merchant
-                                res.status(500).json(response);
-                            } else {
-                                //delete old image
-                                fs.unlink(oldLogoPath, (err) => {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-                                })
-                                let response = {
-                                    message: "success",
-                                    request: {
-                                        type: 'PUT',
-                                        description: 'Alterar Logótipo da Empresa'
-                                    }
-                                }
-                                //update successful
-                                res.status(200).json(response);
-                            }
-                        }
-                    )
-                }
-            }
-        )
-
-        db.close();
-    }
-
-    return;
-}
-
 exports.changeInfoMe = (req, res, next) => {
 
     var id = req.params.id;
@@ -553,8 +399,24 @@ exports.changeInfoMe = (req, res, next) => {
     var description = req.body.description;
     var category = req.body.category;
 
+    //get token and decoded
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check if typeUser is incorrect
+    if (decoded.typeUser != 2) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações da Empresa'
+            }
+        }
+        //typeUser incorrect
+        res.status(401).json(response);
     //check if any field is empty
-    if (!name || !address || !zipCode || !location || !nipc || !contactNumber || !description || !category) {
+    } else if (
+        !name || !address || !zipCode || !location || !nipc || !contactNumber || !description || !category) {
         let response = {
             message: "failed",
             request: {
@@ -673,79 +535,200 @@ exports.changeInfoMe = (req, res, next) => {
     return;
 }
 
-exports.getInfoUserMe = (req, res, next) => {
+exports.changeLogoMe = (req, res, next) => {
 
     var id = req.params.id;
+    var logo = req.file;
+    const fs = require('fs');
+
+    //get token and decoded
     const token = req.headers.authorization.split(' ')[1];
-    var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
-    //check it typeUser is incorrect
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check if typeUser is invalid
     if (decoded.typeUser != 2) {
         let response = {
             message: "failed",
             request: {
-                type: 'GET',
-                description: 'Obter Informação da Empresa'
+                type: 'PUT',
+                description: 'Alterar Logótipo da Empresa'
             }
         }
-        //typeUser is incorrect
-        res.status(401).json(response)
-    //check if its empty
-    } else if (!id) { 
+        //some field is empty
+        res.status(401).json(response);
+    //check if any field is empty
+    } else if (!id || !logo) {
         let response = {
             message: "failed",
             request: {
-                type: 'GET',
-                description: 'Obter Informações da Empresa'
+                type: 'PUT',
+                description: 'Alterar Logótipo da Empresa'
             }
         }
-        //empty field
-        res.status(400).json(response)
+        //some field is empty
+        res.status(400).json(response);
     } else {
+        var logoPath = req.file.path;
         var db = require("../sql").db();
-        var sql = `SELECT user.name, user.address, user.zipCode, user.location, merchant.category, merchant.nipc,
-        merchant.description, merchant.contactNumber FROM user
-        INNER JOIN merchant ON user.id = merchant.idUser WHERE user.id = ?`;
 
+        var sql = `SELECT logo FROM merchant WHERE idUser = ?`;
+
+        //get old image url
         db.get(sql, [id], 
             function (err, row) {
                 if (err) {
+                    //delete new image because was error on update
+                    fs.unlink(logoPath, (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
                     let response = {
                         message: "failed",
                         request: {
-                            type: 'GET',
-                            description: 'Obter Informações da Empresa'
+                            type: 'PUT',
+                            description: 'Alterar Logótipo da Empresa'
                         }
                     }
-                    //error getting info
-                    res.status(500).json(response)
+                    //error getting image url
+                    res.status(500).json(response);
                 } else {
-                    let response = {
-                        message: "success",
-                        user: {
-                            id: id,
-                            name: row.name,
-                            address: row.address,
-                            zipCode: row.zipCode,
-                            location: row.location,
-                            category: row.category,
-                            nipc: row.nipc,
-                            description: row.description,
-                            contactNumber: row.contactNumber 
-                        },
-                        "request": {
-                            type: 'GET',
-                            description: 'Obter Informações da Empresa'
+                    var oldLogoPath = row.logo;
+                    sql = `UPDATE merchant SET logo=? WHERE idUser = ?`;
+                    db.run(sql, [logoPath, id], 
+                        function (err) {
+                            if (err) {
+                                //delete new image because was error on update
+                                fs.unlink(logoPath, (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                })
+                                let response = {
+                                    message: "failed",
+                                    request: {
+                                        type: 'PUT',
+                                        description: 'Alterar Logótipo da Empresa'
+                                    }
+                                }
+                                //error updating on merchant
+                                res.status(500).json(response);
+                            } else {
+                                //delete old image
+                                fs.unlink(oldLogoPath, (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                })
+                                let response = {
+                                    message: "success",
+                                    request: {
+                                        type: 'PUT',
+                                        description: 'Alterar Logótipo da Empresa'
+                                    }
+                                }
+                                //update successful
+                                res.status(200).json(response);
+                            }
                         }
-                    }
-                    //select successful
-                    res.status(200).json(response)
+                    )
                 }
             }
         )
+
         db.close();
     }
 
+    return;
+}
 
+exports.changeInfoAd = (req, res, next) => {
+    
+    var id = req.params.id;
+    var name = req.body.name;
+    var address = req.body.address;
+    var zipCode = req.body.zipCode;
+    var location = req.body.location;
+
+    //get token and decoded
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check if typeUser is incorrect
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações do Administrador'
+            }
+        }
+        //typeUser incorrect
+        res.status(401).json(response);
+    //checking if any field is empty
+    } else if (!id || !name || !address || !zipCode || !location) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações do Administrador'
+            }
+        }
+        //some field is empty
+        res.status(400).json(response)
+    //check if zipCode is invalid
+    } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações do Administrador'
+            }
+        }
+        //zipCode is invalid
+        res.status(400).json(response)
+    //check if location is invalid
+    } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações do Administrador'
+            }
+        }
+        //location is invalid
+        res.status(400).json(response)
+    } else {
+        var db = require('../sql').db();
+        var sql = `UPDATE user SET name=?, address=?, zipCode=?, location=? WHERE id = ?`;
+        
+        db.run(sql, [name, address, zipCode, location.toLowerCase(), id], function (err) {
+            if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar Informações do Administrador'
+                    }
+                }
+                //error updating on table user
+                res.status(500).json(response)
+            } else {
+                let response = {
+                    message: "success",
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar Informações do Administrador'
+                    }
+                }
+                //update successfuly
+                res.status(200).json(response)
+            }
+        });
+
+        db.close();
+    }
+    
     return;
 }
 
@@ -818,6 +801,82 @@ exports.getInfoUserCl = (req, res, next) => {
         db.close();
     }
     
+    return;
+}
+
+exports.getInfoUserMe = (req, res, next) => {
+
+    var id = req.params.id;
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    //check it typeUser is incorrect
+    if (decoded.typeUser != 2) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação da Empresa'
+            }
+        }
+        //typeUser is incorrect
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!id) { 
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informações da Empresa'
+            }
+        }
+        //empty field
+        res.status(400).json(response)
+    } else {
+        var db = require("../sql").db();
+        var sql = `SELECT user.name, user.address, user.zipCode, user.location, merchant.category, merchant.nipc,
+        merchant.description, merchant.contactNumber FROM user
+        INNER JOIN merchant ON user.id = merchant.idUser WHERE user.id = ?`;
+
+        db.get(sql, [id], 
+            function (err, row) {
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'GET',
+                            description: 'Obter Informações da Empresa'
+                        }
+                    }
+                    //error getting info
+                    res.status(500).json(response)
+                } else {
+                    let response = {
+                        message: "success",
+                        user: {
+                            id: id,
+                            name: row.name,
+                            address: row.address,
+                            zipCode: row.zipCode,
+                            location: row.location,
+                            category: row.category,
+                            nipc: row.nipc,
+                            description: row.description,
+                            contactNumber: row.contactNumber 
+                        },
+                        "request": {
+                            type: 'GET',
+                            description: 'Obter Informações da Empresa'
+                        }
+                    }
+                    //select successful
+                    res.status(200).json(response)
+                }
+            }
+        )
+        db.close();
+    }
+
+
     return;
 }
 

@@ -4,7 +4,7 @@
   "description": "Uma projeto a ser realizado para a Computação Distribuída e Desenvolvimento Colaborativo de Software",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter list",
+    "test": "jest",
     "start": "nodemon server.js"
   },
   "repository": {
@@ -34,7 +34,6 @@
     "sqlite3": "^5.0.0"
   },
   "devDependencies": {
-    "mocha": "^8.2.1",
     "nodemon": "^2.0.6"
   }
 }

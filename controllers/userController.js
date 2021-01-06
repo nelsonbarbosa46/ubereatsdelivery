@@ -1404,3 +1404,221 @@ exports.getMerchantsUnchecked = async (req, res, next) => {
     
     return;
 }
+
+exports.checkDriver = (req, res, next) => {
+    
+    const idDriver = req.params.id;
+    const canWork = req.body.canWork;
+    const reasonCanWork = req.body.reasonCanWork;
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    
+
+    //check token to see if the user type is the same as the admin type
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido do condutor'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!idDriver) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido do condutor'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    //check if canWork is invalid
+    } else if (canWork != 0 && canWork != 1) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido do condutor'
+            }
+        }
+        //canWork is invalid
+        res.status(400).json(response);
+    } else {
+        const db = require("../sql").db();
+        var sql = `SELECT isChecked FROM driver WHERE id = ?`;
+
+        db.get(sql, [idDriver], function (err, row) {
+            if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Responder pedido do condutor'
+                    }
+                }
+                //error getting isChecked
+                res.status(500).json(response);
+            } else {
+                if (row.isChecked == 1) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'PUT',
+                            description: 'Responder pedido do condutor'
+                        }
+                    }
+                    //error because is already checked
+                    res.status(403).json(response);
+                } else {
+                    sql = `UPDATE driver SET canWork = ?, isChecked = ?, reasonCanWork = ? WHERE id = ?`;
+                    db.run(sql, [canWork, 1, reasonCanWork, idDriver], function (err) {
+                        if (err) {
+                            let response = {
+                                message: "failed",
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Responder pedido do condutor'
+                                }
+                            }
+                            //error updating
+                            res.status(500).json(response);
+                        } else {
+                            let response = {
+                                message: "success",
+                                driver: {
+                                    canWork: canWork,
+                                    reasonCanWork: reasonCanWork
+                                },
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Responder pedido do condutor'
+                                }
+                            }
+                            //update successful
+                            res.status(200).json(response);
+                        }
+                    });
+                }
+            }
+        });
+
+        db.close();
+
+    }
+    
+    return;
+}
+
+exports.checkMerchant = (req, res, next) => {
+    
+    const idMerchant = req.params.id;
+    const canWork = req.body.canWork;
+    const reasonCanWork = req.body.reasonCanWork;
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    
+
+    //check token to see if the user type is the same as the admin type
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido da empresa'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!idMerchant) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido da empresa'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    //check if canWork is invalid
+    } else if (canWork != 0 && canWork != 1) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido da empresa'
+            }
+        }
+        //canWork is invalid
+        res.status(400).json(response);
+    } else {
+        const db = require("../sql").db();
+        var sql = `SELECT isChecked FROM merchant WHERE id = ?`;
+
+        db.get(sql, [idMerchant], function (err, row) {
+            if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Responder pedido da empresa'
+                    }
+                }
+                //error getting isChecked
+                res.status(500).json(response);
+            } else {
+                if (row.isChecked == 1) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'PUT',
+                            description: 'Responder pedido da empresa'
+                        }
+                    }
+                    //error because is already checked
+                    res.status(403).json(response);
+                } else {
+                    sql = `UPDATE merchant SET canWork = ?, isChecked = ?, reasonCanWork = ? WHERE id = ?`;
+                    db.run(sql, [canWork, 1, reasonCanWork, idMerchant], function (err) {
+                        if (err) {
+                            let response = {
+                                message: "failed",
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Responder pedido da empresa'
+                                }
+                            }
+                            //error updating
+                            res.status(500).json(response);
+                        } else {
+                            let response = {
+                                message: "success",
+                                driver: {
+                                    canWork: canWork,
+                                    reasonCanWork: reasonCanWork
+                                },
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Responder pedido da empresa'
+                                }
+                            }
+                            //update successful
+                            res.status(200).json(response);
+                        }
+                    });
+                }
+            }
+        });
+
+        db.close();
+
+    }
+    
+    return;
+}

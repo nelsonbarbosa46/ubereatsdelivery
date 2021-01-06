@@ -81,4 +81,8 @@ router.get('/getDriversUncheck/', userController.getDriversUnchecked);
 
 router.get('/getMerchantsUncheck/', userController.getMerchantsUnchecked);
 
+router.put('/checkDriver/:id', userController.checkDriver);
+
+router.put('/checkMerchant/:id', userController.checkMerchant);
+
 module.exports = router;

@@ -884,7 +884,7 @@ exports.getInfoUserAd = (req, res, next) => {
     
     var id = req.params.id;
     const token = req.headers.authorization.split(' ')[1];
-    var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
     //check it typeUser is incorrect
     if (decoded.typeUser != 3 && decoded.typeUser != 4) {
         let response = {
@@ -953,7 +953,7 @@ exports.delUserCl = (req, res, next) => {
 
     var id = req.params.id;
     const token = req.headers.authorization.split(' ')[1];
-    var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
 
     //in the future, need to change this code because of the future dependences (deliverys, etc.)
 
@@ -996,8 +996,8 @@ exports.delUserCl = (req, res, next) => {
                     res.status(500).json(response)
                 } else {
                     if (row.isDriver == 0) {
-                        sql = `DELETE FROM client WHERE id = ?`;
-                        db.run(sql, [idClient], function (err) {
+                        sql = `DELETE FROM client WHERE idUser = ?`;
+                        db.run(sql, [id], function (err) {
                             if (err) {
                                 let response = {
                                     message: "failed",
@@ -1030,7 +1030,7 @@ exports.delUserCl = (req, res, next) => {
                         })
                     //not driver
                     } else {
-                        var idClient = row.idClient;
+                        var idClient = row.id;
                         sql = `DELETE FROM driver WHERE idClient = ?`;
                         db.run(sql, [idClient], function (err) {
                             if (err) {
@@ -1095,7 +1095,7 @@ exports.delUserMe = (req, res, next) => {
 
     var id = req.params.id;
     const token = req.headers.authorization.split(' ')[1];
-    var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
 
     //in the future, need to change this code because of the future dependences (deliverys, etc.)
 
@@ -1165,7 +1165,7 @@ exports.delUserAd = (req, res, next) => {
 
     var id = req.params.id;
     const token = req.headers.authorization.split(' ')[1];
-    var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
 
     //in the future, need to change this code because of the future dependences
 
@@ -1228,5 +1228,93 @@ exports.delUserAd = (req, res, next) => {
         db.close();   
     }
 
+    return;
+}
+
+exports.getDriversUnchecked = async (req, res, next) => {
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check token to see if the user type is the same as the admin type
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Condutores com estado pendente'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    } else {
+        var sql = `SELECT user.id, user.email, user.name, user.address, user.zipCode, user.location,
+        client.nif, client.contactNumber, client.id AS 'idClient', driver.id AS 'idDriver', driver.typeVehicle FROM ((user
+        INNER JOIN client ON user.id = client.idUser)
+        INNER JOIN driver ON client.id = driver.idClient) WHERE driver.isChecked = ?`;
+
+
+        function getUsersSQL() {
+            return new Promise ((resolve, reject) => {
+                var db = require("../sql").db();
+                var query = [];
+
+                db.each(sql, [0], function (err, row) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        query.push(
+                            {
+                                idUser: row.id,
+                                email: row.email,
+                                name: row.name,
+                                address: row.address,
+                                zipCode: row.zipCode,
+                                location: row.location,
+                                nif: row.nif,
+                                contactNumber: row.contactNumber,
+                                idClient: row.idClient,
+                                idDriver: row.idDriver,
+                                typeVehicle: row.typeVehicle
+                            }
+                        );
+                    } 
+                }, function (err) {
+                    db.close();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(query);
+                    }
+                });
+            });
+        }
+
+        getUsersSQL().then(function (data) {
+            let response = {
+                message: "success",
+                listUsers: data,
+                request: {
+                    type: 'GET',
+                    description: 'Obter Condutores com estado pendente'
+                }
+            };
+            res.status(200).json(response);
+        //got a error 
+        }).catch(function (data) {
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'GET',
+                    description: 'Obter Condutores com estado pendente'
+                }
+            }
+            errSQL = true;
+            //error selecting
+            res.status(500).json(response)
+        });
+
+    }
+    
     return;
 }

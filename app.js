@@ -7,6 +7,7 @@ const routeRegister = require('./routes/register');
 const routeLogin = require('./routes/login');
 const routeUser = require('./routes/user');
 const routeCheck = require('./middleware/checkToken');
+const routeProduct = require('./routes/product');
 
 app.use(bodyParser.urlencoded({extended: false})); 
 app.use(bodyParser.json()); 
@@ -31,6 +32,7 @@ app.use('/api/register', routeRegister);
 app.use('/api/login', routeLogin);
 app.use('/api/user', routeUser);
 app.use('/api/check', routeCheck);
+app.use('/api/product', routeProduct);
 
 //dont find the page
 app.use((req, res, next) => {

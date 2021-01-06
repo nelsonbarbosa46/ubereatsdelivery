@@ -57,14 +57,32 @@ router.get('/', userController.getUsers);
 
 router.put('/changeEP/:id', personValid, userController.changeEmailPassword);
 
-router.get('/infoUser/:id', personValid, userController.getInfoUser);
+router.put('/changeInfoCl/:id', personValid, userController.changeInfoCl);
 
-router.put('/changeInfo/:id', personValid, userController.changeInfo);
-
-router.put('/changeInfoAd/:id', personValid, userController.changeInfoAd);
+router.put('/changeInfoMe/:id', personValid, userController.changeInfoMe);
 
 router.put('/changeLogoMe/:id', personValid, upload.single('logo'), userController.changeLogoMe);
 
-router.put('/changeInfoMe/:id', personValid, userController.changeInfoMe);
+router.put('/changeInfoAd/:id', personValid, userController.changeInfoAd);
+
+router.get('/getInfoCl/:id', personValid, userController.getInfoUserCl);
+
+router.get('/getInfoMe/:id', personValid, userController.getInfoUserMe);
+
+router.get('/getInfoAd/:id', personValid, userController.getInfoUserAd);
+
+router.delete('/delUserCl/:id', personValid, userController.delUserCl);
+
+router.delete('/delUserMe/:id', personValid, userController.delUserMe);
+
+router.delete('/delUserAd/:id', personValid, userController.delUserAd);
+
+router.get('/getDriversUncheck/', userController.getDriversUnchecked);
+
+router.get('/getMerchantsUncheck/', userController.getMerchantsUnchecked);
+
+router.put('/checkDriver/:id', userController.checkDriver);
+
+router.put('/checkMerchant/:id', userController.checkMerchant);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 function validateEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -42,83 +43,6 @@ exports.getUsers = (req, res, next) => {
 
     db.close();
 
-    return;
-}
-
-exports.getInfoUser = (req, res, next) => {
-    
-    var id = req.params.id;
-    //check if its not empty
-    if (id) {  
-        var db = require('../sql').db();
-        var sql = `SELECT * FROM user WHERE id = ?`; 
-
-        db.get(sql, [id], function (err, row) {
-           if (err) {
-                let response = {
-                    message: "failed",
-                    request: {
-                        type: 'GET',
-                        description: 'Obter Informação do Utilizador'
-                    }
-                }
-                //error getting from table user
-                res.status(500).json(response)
-           } else {
-                var name = row.name;
-                var address = row.address;
-                var zipCode = row.zipCode;
-                var location = row.location;
-                sql = `SELECT nif, contactNumber FROM client WHERE idUser = ?`;
-                db.get(sql, [id], function (err, row) {
-                    if (err) {
-                        let response = {
-                            message: "failed",
-                            request: {
-                                type: 'GET',
-                                description: 'Obter Informação do Utilizador'
-                            }
-                        }
-                        //error getting from table client
-                        res.status(500).json(response)
-                    } else {
-                        let response = {
-                            message: "success",
-                            user: {
-                                id: id,
-                                name: name,
-                                address: address,
-                                zipCode: zipCode,
-                                location: location,
-                                nif: row.nif,
-                                contactNumber: row.contactNumber
-                            },
-                            request: {
-                                type: 'GET',
-                                description: 'Obter Informação do Utilizador'
-                            }
-                        }
-                        //success getting info
-                        res.status(200).json(response)
-                    }
-                });
-           }
-        });
-
-
-        db.close();
-    } else {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'GET',
-                description: 'Obter Informação do Utilizador'
-            }
-        }
-        //id is empty
-        res.status(400).json(response)
-    }
-    
     return;
 }
 
@@ -334,7 +258,7 @@ exports.changeEmailPassword = (req, res, next) => {
     return;
 }
 
-exports.changeInfo = (req, res, next) => {
+exports.changeInfoCl = (req, res, next) => {
         
     var id = req.params.id;
     var name = req.body.name;
@@ -344,13 +268,28 @@ exports.changeInfo = (req, res, next) => {
     var nif = req.body.nif;
     var contactNumber = req.body.contactNumber;
 
-    //checking if any field is empty
-    if (!id || !name || !address || !zipCode || !location || !nif || !contactNumber) {
+    //get token and decoded
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check if typeUser is incorrect
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
         let response = {
             message: "failed",
             request: {
                 type: 'PUT',
-                description: 'Alterar Informações do Utilizador'
+                description: 'Alterar Informações do Cliente/Condutor'
+            }
+        }
+        //typeUser incorrect
+        res.status(401).json(response);
+    //checking if any field is empty
+    } else if (!id || !name || !address || !zipCode || !location || !nif || !contactNumber) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações do Cliente/Condutor'
             }
         }
         //some field is empty
@@ -361,7 +300,7 @@ exports.changeInfo = (req, res, next) => {
             message: "failed",
             request: {
                 type: 'PUT',
-                description: 'Alterar Informações do Utilizador'
+                description: 'Alterar Informações do Cliente/Condutor'
             }
         }
         //zipCode is invalid
@@ -372,7 +311,7 @@ exports.changeInfo = (req, res, next) => {
             message: "failed",
             request: {
                 type: 'PUT',
-                description: 'Alterar Informações do Utilizador'
+                description: 'Alterar Informações do Cliente/Condutor'
             }
         }
         //location is invalid
@@ -383,7 +322,7 @@ exports.changeInfo = (req, res, next) => {
             message: "failed",
             request: {
                 type: 'PUT',
-                description: 'Alterar Informações do Utilizador'
+                description: 'Alterar Informações do Cliente/Condutor'
             }
         }
         //nif is invalid
@@ -394,7 +333,7 @@ exports.changeInfo = (req, res, next) => {
             message: "failed",
             request: {
                 type: 'PUT',
-                description: 'Alterar Informações do Utilizador'
+                description: 'Alterar Informações do Cliente/Condutor'
             }
         }
         //contactNumber is invalid
@@ -409,7 +348,7 @@ exports.changeInfo = (req, res, next) => {
                     message: "failed",
                     request: {
                         type: 'PUT',
-                        description: 'Alterar Informações do Utilizador'
+                        description: 'Alterar Informações do Cliente/Condutor'
                     }
                 }
                 //error updating on table user
@@ -422,7 +361,7 @@ exports.changeInfo = (req, res, next) => {
                             message: "failed",
                             request: {
                                 type: 'PUT',
-                                description: 'Alterar Informações do Utilizador'
+                                description: 'Alterar Informações do Cliente/Condutor'
                             }
                         }
                         //error updating on table client
@@ -432,7 +371,7 @@ exports.changeInfo = (req, res, next) => {
                             message: "success",
                             request: {
                                 type: 'PUT',
-                                description: 'Alterar Informações do Utilizador'
+                                description: 'Alterar Informações do Cliente/Condutor'
                             }
                         }
                         //update successfuly
@@ -448,175 +387,6 @@ exports.changeInfo = (req, res, next) => {
     return;
 }
 
-exports.changeInfoAd = (req, res, next) => {
-    
-    
-    
-    var id = req.params.id;
-    var name = req.body.name;
-    var address = req.body.address;
-    var zipCode = req.body.zipCode;
-    var location = req.body.location;
-
-    //checking if any field is empty
-    if (!id || !name || !address || !zipCode || !location) {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'PUT',
-                description: 'Alterar Informações do Utilizador (tipo Admin)'
-            }
-        }
-        //some field is empty
-        res.status(400).json(response)
-    //check if zipCode is invalid
-    } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'PUT',
-                description: 'Alterar Informações do Utilizador (tipo Admin)'
-            }
-        }
-        //zipCode is invalid
-        res.status(400).json(response)
-    //check if location is invalid
-    } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'PUT',
-                description: 'Alterar Informações do Utilizador (tipo Admin)'
-            }
-        }
-        //location is invalid
-        res.status(400).json(response)
-    } else {
-        var db = require('../sql').db();
-        var sql = `UPDATE user SET name=?, address=?, zipCode=?, location=? WHERE id = ?`;
-        
-        db.run(sql, [name, address, zipCode, location.toLowerCase(), id], function (err) {
-            if (err) {
-                let response = {
-                    message: "failed",
-                    request: {
-                        type: 'PUT',
-                        description: 'Alterar Informações do Utilizador (tipo Admin)'
-                    }
-                }
-                //error updating on table user
-                res.status(500).json(response)
-            } else {
-                let response = {
-                    message: "success",
-                    request: {
-                        type: 'PUT',
-                        description: 'Alterar Informações do Utilizador (tipo Admin)'
-                    }
-                }
-                //update successfuly
-                res.status(200).json(response)
-            }
-        });
-
-        db.close();
-    }
-    
-    return;
-}
-
-exports.changeLogoMe = (req, res, next) => {
-
-    var id = req.params.id;
-    var logo = req.file;
-    const fs = require('fs');
-
-    //check if any field is empty
-    if (!id || !logo) {
-        let response = {
-            message: "failed",
-            request: {
-                type: 'PUT',
-                description: 'Alterar Logótipo da Empresa'
-            }
-        }
-        //some field is empty
-        res.status(400).json(response);
-    } else {
-        var logoPath = req.file.path;
-        var db = require("../sql").db();
-
-        var sql = `SELECT logo FROM merchant WHERE idUser = ?`;
-
-        //get old image url
-        db.get(sql, [id], 
-            function (err, row) {
-                if (err) {
-                    //delete new image because was error on update
-                    fs.unlink(logoPath, (err) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                    })
-                    let response = {
-                        message: "failed",
-                        request: {
-                            type: 'PUT',
-                            description: 'Alterar Logótipo da Empresa'
-                        }
-                    }
-                    //error getting image url
-                    res.status(500).json(response);
-                } else {
-                    var oldLogoPath = row.logo;
-                    sql = `UPDATE merchant SET logo=? WHERE idUser = ?`;
-                    db.run(sql, [logoPath, id], 
-                        function (err) {
-                            if (err) {
-                                //delete new image because was error on update
-                                fs.unlink(logoPath, (err) => {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-                                })
-                                let response = {
-                                    message: "failed",
-                                    request: {
-                                        type: 'PUT',
-                                        description: 'Alterar Logótipo da Empresa'
-                                    }
-                                }
-                                //error updating on merchant
-                                res.status(500).json(response);
-                            } else {
-                                //delete old image
-                                fs.unlink(oldLogoPath, (err) => {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-                                })
-                                let response = {
-                                    message: "success",
-                                    request: {
-                                        type: 'PUT',
-                                        description: 'Alterar Logótipo da Empresa'
-                                    }
-                                }
-                                //update successful
-                                res.status(200).json(response);
-                            }
-                        }
-                    )
-                }
-            }
-        )
-
-        db.close();
-    }
-
-    return;
-}
-
 exports.changeInfoMe = (req, res, next) => {
 
     var id = req.params.id;
@@ -629,8 +399,24 @@ exports.changeInfoMe = (req, res, next) => {
     var description = req.body.description;
     var category = req.body.category;
 
+    //get token and decoded
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check if typeUser is incorrect
+    if (decoded.typeUser != 2) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações da Empresa'
+            }
+        }
+        //typeUser incorrect
+        res.status(401).json(response);
     //check if any field is empty
-    if (!name || !address || !zipCode || !location || !nipc || !contactNumber || !description || !category) {
+    } else if (
+        !name || !address || !zipCode || !location || !nipc || !contactNumber || !description || !category) {
         let response = {
             message: "failed",
             request: {
@@ -746,5 +532,1093 @@ exports.changeInfoMe = (req, res, next) => {
         db.close();
     }
 
+    return;
+}
+
+exports.changeLogoMe = (req, res, next) => {
+
+    var id = req.params.id;
+    var logo = req.file;
+    const fs = require('fs');
+
+    //get token and decoded
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check if typeUser is invalid
+    if (decoded.typeUser != 2) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Logótipo da Empresa'
+            }
+        }
+        //some field is empty
+        res.status(401).json(response);
+    //check if any field is empty
+    } else if (!id || !logo) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Logótipo da Empresa'
+            }
+        }
+        //some field is empty
+        res.status(400).json(response);
+    } else {
+        var logoPath = req.file.path;
+        var db = require("../sql").db();
+
+        var sql = `SELECT logo FROM merchant WHERE idUser = ?`;
+
+        //get old image url
+        db.get(sql, [id], 
+            function (err, row) {
+                if (err) {
+                    //delete new image because was error on update
+                    fs.unlink(logoPath, (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'PUT',
+                            description: 'Alterar Logótipo da Empresa'
+                        }
+                    }
+                    //error getting image url
+                    res.status(500).json(response);
+                } else {
+                    var oldLogoPath = row.logo;
+                    sql = `UPDATE merchant SET logo=? WHERE idUser = ?`;
+                    db.run(sql, [logoPath, id], 
+                        function (err) {
+                            if (err) {
+                                //delete new image because was error on update
+                                fs.unlink(logoPath, (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                })
+                                let response = {
+                                    message: "failed",
+                                    request: {
+                                        type: 'PUT',
+                                        description: 'Alterar Logótipo da Empresa'
+                                    }
+                                }
+                                //error updating on merchant
+                                res.status(500).json(response);
+                            } else {
+                                //delete old image
+                                fs.unlink(oldLogoPath, (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                })
+                                let response = {
+                                    message: "success",
+                                    request: {
+                                        type: 'PUT',
+                                        description: 'Alterar Logótipo da Empresa'
+                                    }
+                                }
+                                //update successful
+                                res.status(200).json(response);
+                            }
+                        }
+                    )
+                }
+            }
+        )
+
+        db.close();
+    }
+
+    return;
+}
+
+exports.changeInfoAd = (req, res, next) => {
+    
+    var id = req.params.id;
+    var name = req.body.name;
+    var address = req.body.address;
+    var zipCode = req.body.zipCode;
+    var location = req.body.location;
+
+    //get token and decoded
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check if typeUser is incorrect
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações do Administrador'
+            }
+        }
+        //typeUser incorrect
+        res.status(401).json(response);
+    //checking if any field is empty
+    } else if (!id || !name || !address || !zipCode || !location) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações do Administrador'
+            }
+        }
+        //some field is empty
+        res.status(400).json(response)
+    //check if zipCode is invalid
+    } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações do Administrador'
+            }
+        }
+        //zipCode is invalid
+        res.status(400).json(response)
+    //check if location is invalid
+    } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar Informações do Administrador'
+            }
+        }
+        //location is invalid
+        res.status(400).json(response)
+    } else {
+        var db = require('../sql').db();
+        var sql = `UPDATE user SET name=?, address=?, zipCode=?, location=? WHERE id = ?`;
+        
+        db.run(sql, [name, address, zipCode, location.toLowerCase(), id], function (err) {
+            if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar Informações do Administrador'
+                    }
+                }
+                //error updating on table user
+                res.status(500).json(response)
+            } else {
+                let response = {
+                    message: "success",
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar Informações do Administrador'
+                    }
+                }
+                //update successfuly
+                res.status(200).json(response)
+            }
+        });
+
+        db.close();
+    }
+    
+    return;
+}
+
+exports.getInfoUserCl = (req, res, next) => {
+    
+    var id = req.params.id;
+    const token = req.headers.authorization.split(' ')[1];
+    var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    //check it typeUser is incorrect
+    if (decoded.typeUser != 0 && decoded.typeUser != 1) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação do Cliente/Condutor'
+            }
+        }
+        //typeUser is incorrect
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!id) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação do Cliente/Condutor'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    } else {
+        var db = require('../sql').db();
+        var sql = `SELECT user.name, user.address, user.zipCode, user.location, client.nif, client.contactNumber 
+        FROM user INNER JOIN client ON user.id = client.idUser WHERE user.id = ?`; 
+
+        db.get(sql, [id], function (err, row) {
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'GET',
+                            description: 'Obter Informações do Cliente/Condutor'
+                        }
+                    }
+                    //error getting info
+                    res.status(500).json(response)
+                } else {
+                    let response = {
+                        message: "success",
+                        user: {
+                            id: id,
+                            name: row.name,
+                            address: row.address,
+                            zipCode: row.zipCode,
+                            location: row.location,
+                            nif: row.nif,
+                            contactNumber: row.contactNumber 
+                        },
+                        "request": {
+                            type: 'GET',
+                            description: 'Obter Informações do Cliente/Condutor'
+                        }
+                    }
+                    //select successful
+                    res.status(200).json(response)
+                }
+            }
+        )
+
+        db.close();
+    }
+    
+    return;
+}
+
+exports.getInfoUserMe = (req, res, next) => {
+
+    var id = req.params.id;
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    //check it typeUser is incorrect
+    if (decoded.typeUser != 2) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação da Empresa'
+            }
+        }
+        //typeUser is incorrect
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!id) { 
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informações da Empresa'
+            }
+        }
+        //empty field
+        res.status(400).json(response)
+    } else {
+        var db = require("../sql").db();
+        var sql = `SELECT user.name, user.address, user.zipCode, user.location, merchant.category, merchant.nipc,
+        merchant.description, merchant.contactNumber FROM user
+        INNER JOIN merchant ON user.id = merchant.idUser WHERE user.id = ?`;
+
+        db.get(sql, [id], 
+            function (err, row) {
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'GET',
+                            description: 'Obter Informações da Empresa'
+                        }
+                    }
+                    //error getting info
+                    res.status(500).json(response)
+                } else {
+                    let response = {
+                        message: "success",
+                        user: {
+                            id: id,
+                            name: row.name,
+                            address: row.address,
+                            zipCode: row.zipCode,
+                            location: row.location,
+                            category: row.category,
+                            nipc: row.nipc,
+                            description: row.description,
+                            contactNumber: row.contactNumber 
+                        },
+                        "request": {
+                            type: 'GET',
+                            description: 'Obter Informações da Empresa'
+                        }
+                    }
+                    //select successful
+                    res.status(200).json(response)
+                }
+            }
+        )
+        db.close();
+    }
+
+
+    return;
+}
+
+exports.getInfoUserAd = (req, res, next) => {
+    
+    var id = req.params.id;
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    //check it typeUser is incorrect
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação do Administrador'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!id) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Informação do Administrador'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    } else {
+        var db = require('../sql').db();
+        var sql = `SELECT name, address, zipCode, location FROM user WHERE id = ?`; 
+
+        db.get(sql, [id], function (err, row) {
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'GET',
+                            description: 'Obter Informações do Administrador'
+                        }
+                    }
+                    //error getting info
+                    res.status(500).json(response)
+                } else {
+                    let response = {
+                        message: "success",
+                        user: {
+                            id: id,
+                            name: row.name,
+                            address: row.address,
+                            zipCode: row.zipCode,
+                            location: row.location
+                        },
+                        "request": {
+                            type: 'GET',
+                            description: 'Obter Informações do Administrador'
+                        }
+                    }
+                    //select successful
+                    res.status(200).json(response)
+                }
+            }
+        )
+
+        db.close();
+    }
+    
+    return;
+}
+
+exports.delUserCl = (req, res, next) => {
+
+    var id = req.params.id;
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //in the future, need to change this code because of the future dependences (deliverys, etc.)
+
+    if (decoded.typeUser != 0 && decoded.typeUser != 1) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'DELETE',
+                description: 'Eliminar Conta Cliente/Condutor'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    //id is empty
+    } else if (!id) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'DELETE',
+                description: 'Eliminar Conta Cliente/Condutor'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    } else {
+        var db = require("../sql").db();
+        var sql = `SELECT id, isDriver FROM client WHERE idUser = ?`;
+        
+        db.get(sql, [id], 
+            function (err, row) {
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'DELETE',
+                            description: 'Eliminar Conta Cliente/Condutor'
+                        }
+                    }
+                    //error selecting
+                    res.status(500).json(response)
+                } else {
+                    if (row.isDriver == 0) {
+                        sql = `DELETE FROM client WHERE idUser = ?`;
+                        db.run(sql, [id], function (err) {
+                            if (err) {
+                                let response = {
+                                    message: "failed",
+                                    request: {
+                                        type: 'DELETE',
+                                        description: 'Eliminar Conta Cliente/Condutor'
+                                    }
+                                }
+                                //error deleting on table client
+                                res.status(500).json(response)     
+                            } else {
+                                sql = `DELETE FROM user WHERE id = ?`;
+                                db.run(sql, [id], function (err) {
+                                    if (err) {
+                                        let response = {
+                                            message: "failed",
+                                            request: {
+                                                type: 'DELETE',
+                                                description: 'Eliminar Conta Cliente/Condutor'
+                                            }
+                                        }
+                                        //error deleting on table user
+                                        res.status(500).json(response) 
+                                    } else {
+                                        //delete successful
+                                        res.status(204).json()
+                                    }
+                                })   
+                            }
+                        })
+                    //not driver
+                    } else {
+                        var idClient = row.id;
+                        sql = `DELETE FROM driver WHERE idClient = ?`;
+                        db.run(sql, [idClient], function (err) {
+                            if (err) {
+                                let response = {
+                                    message: "failed",
+                                    request: {
+                                        type: 'DELETE',
+                                        description: 'Eliminar Conta Cliente/Condutor'
+                                    }
+                                }
+                                //error deleting on table driver
+                                res.status(500).json(response)
+                            } else {
+                                sql = `DELETE FROM client WHERE id = ?`;
+                                db.run(sql, [idClient], function (err) {
+                                        if (err) {
+                                            let response = {
+                                                message: "failed",
+                                                request: {
+                                                    type: 'DELETE',
+                                                    description: 'Eliminar Conta Cliente/Condutor'
+                                                }
+                                            }
+                                            //error deleting on table client
+                                            res.status(500).json(response)
+                                        } else {
+                                            sql = `DELETE FROM user WHERE id = ?`;
+                                            db.run(sql, [id], function (err) {
+                                                    if (err) {
+                                                        let response = {
+                                                            message: "failed",
+                                                            request: {
+                                                                type: 'DELETE',
+                                                                description: 'Eliminar Conta Cliente/Condutor'
+                                                            }
+                                                        }
+                                                        //error deleting on table user
+                                                        res.status(500).json(response)
+                                                    } else {
+                                                        //delete successful
+                                                        res.status(204).json()
+                                                    }
+                                                }
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                        })
+                    }
+                }
+            }     
+        )
+
+        db.close();
+    }
+
+    return;
+}
+
+exports.delUserMe = (req, res, next) => {
+
+    var id = req.params.id;
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //in the future, need to change this code because of the future dependences (deliverys, etc.)
+
+    if (decoded.typeUser != 2) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'DELETE',
+                description: 'Eliminar Conta Empresa'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    //id is empty
+    } else if (!id) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'DELETE',
+                description: 'Eliminar Conta Empresa'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    } else {
+        var db = require("../sql").db();
+        var sql = `DELETE FROM merchant WHERE idUser = ?`;
+        
+        db.run(sql, [id], function (err) {
+            if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'DELETE',
+                        description: 'Eliminar Conta Empresa'
+                    }
+                }
+                //error deleting on table merchant
+                res.status(500).json(response)
+            } else {
+                sql = `DELETE FROM user WHERE id = ?`;
+                db.run(sql, [id], function (err) {
+                    if (err) {
+                        let response = {
+                            message: "failed",
+                            request: {
+                                type: 'DELETE',
+                                description: 'Eliminar Conta Empresa'
+                            }
+                        }
+                        //error deleting on table user
+                        res.status(500).json(response)    
+                    } else {
+                        //delete successful
+                        res.status(204).json(response)
+                    }
+                });
+            }
+        });
+        db.close();   
+    }
+
+    return;
+}
+
+exports.delUserAd = (req, res, next) => {
+
+    var id = req.params.id;
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //in the future, need to change this code because of the future dependences
+
+    if (decoded.typeUser != 3) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'DELETE',
+                description: 'Eliminar Conta Administrador'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    //id is empty
+    } else if (!id) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'DELETE',
+                description: 'Eliminar Conta Administrador'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    } else {
+        var db = require("../sql").db();
+        var sql = `DELETE FROM admin WHERE idUser = ?`;
+        
+        db.run(sql, [id], function (err) {
+            if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'DELETE',
+                        description: 'Eliminar Conta Administrador'
+                    }
+                }
+                //error deleting on table merchant
+                res.status(500).json(response)
+            } else {
+                sql = `DELETE FROM user WHERE id = ?`;
+                db.run(sql, [id], function (err) {
+                    if (err) {
+                        let response = {
+                            message: "failed",
+                            request: {
+                                type: 'DELETE',
+                                description: 'Eliminar Conta Administrador'
+                            }
+                        }
+                        //error deleting on table user
+                        res.status(500).json(response)    
+                    } else {
+                        //delete successful
+                        res.status(204).json()
+                    }
+                });
+            }
+        });
+        db.close();   
+    }
+
+    return;
+}
+
+exports.getDriversUnchecked = async (req, res, next) => {
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check token to see if the user type is the same as the admin type
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Condutores com estado pendente'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    } else {
+        var sql = `SELECT user.id, user.email, user.name, user.address, user.zipCode, user.location,
+        client.nif, client.contactNumber, client.id AS 'idClient', driver.id AS 'idDriver', driver.typeVehicle FROM ((user
+        INNER JOIN client ON user.id = client.idUser)
+        INNER JOIN driver ON client.id = driver.idClient) WHERE driver.isChecked = ?`;
+
+
+        function getUsersSQL() {
+            return new Promise ((resolve, reject) => {
+                var db = require("../sql").db();
+                var query = [];
+
+                db.each(sql, [0], function (err, row) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        query.push(
+                            {
+                                idUser: row.id,
+                                email: row.email,
+                                name: row.name,
+                                address: row.address,
+                                zipCode: row.zipCode,
+                                location: row.location,
+                                nif: row.nif,
+                                contactNumber: row.contactNumber,
+                                idClient: row.idClient,
+                                idDriver: row.idDriver,
+                                typeVehicle: row.typeVehicle
+                            }
+                        );
+                    } 
+                }, function (err) {
+                    db.close();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(query);
+                    }
+                });
+            });
+        }
+
+        getUsersSQL().then(function (data) {
+            let response = {
+                message: "success",
+                listUsers: data,
+                request: {
+                    type: 'GET',
+                    description: 'Obter Condutores com estado pendente'
+                }
+            };
+            res.status(200).json(response);
+        //got a error 
+        }).catch(function (data) {
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'GET',
+                    description: 'Obter Condutores com estado pendente'
+                }
+            }
+            errSQL = true;
+            //error selecting
+            res.status(500).json(response)
+        });
+
+    }
+    
+    return;
+}
+
+exports.getMerchantsUnchecked = async (req, res, next) => {
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check token to see if the user type is the same as the admin type
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Empresas com estado pendente'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    } else {
+        var sql = `SELECT user.id, user.email, user.name, user.address, user.zipCode, user.location,
+        merchant.id AS 'idMerchant', merchant.description, merchant.nipc, merchant.contactNumber FROM user
+        INNER JOIN merchant ON user.id = merchant.idUser WHERE merchant.isChecked = ?`;
+
+
+        function getUsersSQL() {
+            return new Promise ((resolve, reject) => {
+                var db = require("../sql").db();
+                var query = [];
+
+                db.each(sql, [0], function (err, row) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        query.push(
+                            {
+                                idUser: row.id,
+                                email: row.email,
+                                name: row.name,
+                                address: row.address,
+                                zipCode: row.zipCode,
+                                location: row.location,
+                                idMerchant: row.idMerchant,
+                                description: row.description,
+                                nipc: row.nipc,
+                                contactNumber: row.contactNumber
+                            }
+                        );
+                    } 
+                }, function (err) {
+                    db.close();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(query);
+                    }
+                });
+            });
+        }
+
+        getUsersSQL().then(function (data) {
+            let response = {
+                message: "success",
+                listUsers: data,
+                request: {
+                    type: 'GET',
+                    description: 'Obter Empresas com estado pendente'
+                }
+            };
+            res.status(200).json(response);
+        //got a error 
+        }).catch(function (data) {
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'GET',
+                    description: 'Obter Empresas com estado pendente'
+                }
+            }
+            errSQL = true;
+            //error selecting
+            res.status(500).json(response)
+        });
+
+    }
+    
+    return;
+}
+
+exports.checkDriver = (req, res, next) => {
+    
+    const idDriver = req.params.id;
+    const canWork = req.body.canWork;
+    const reasonCanWork = req.body.reasonCanWork;
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    
+
+    //check token to see if the user type is the same as the admin type
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido do condutor'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!idDriver) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido do condutor'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    //check if canWork is invalid
+    } else if (canWork != 0 && canWork != 1) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido do condutor'
+            }
+        }
+        //canWork is invalid
+        res.status(400).json(response);
+    } else {
+        const db = require("../sql").db();
+        var sql = `SELECT isChecked FROM driver WHERE id = ?`;
+
+        db.get(sql, [idDriver], function (err, row) {
+            if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Responder pedido do condutor'
+                    }
+                }
+                //error getting isChecked
+                res.status(500).json(response);
+            } else {
+                if (row.isChecked == 1) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'PUT',
+                            description: 'Responder pedido do condutor'
+                        }
+                    }
+                    //error because is already checked
+                    res.status(403).json(response);
+                } else {
+                    sql = `UPDATE driver SET canWork = ?, isChecked = ?, reasonCanWork = ? WHERE id = ?`;
+                    db.run(sql, [canWork, 1, reasonCanWork, idDriver], function (err) {
+                        if (err) {
+                            let response = {
+                                message: "failed",
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Responder pedido do condutor'
+                                }
+                            }
+                            //error updating
+                            res.status(500).json(response);
+                        } else {
+                            let response = {
+                                message: "success",
+                                driver: {
+                                    canWork: canWork,
+                                    reasonCanWork: reasonCanWork
+                                },
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Responder pedido do condutor'
+                                }
+                            }
+                            //update successful
+                            res.status(200).json(response);
+                        }
+                    });
+                }
+            }
+        });
+
+        db.close();
+
+    }
+    
+    return;
+}
+
+exports.checkMerchant = (req, res, next) => {
+    
+    const idMerchant = req.params.id;
+    const canWork = req.body.canWork;
+    const reasonCanWork = req.body.reasonCanWork;
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    
+
+    //check token to see if the user type is the same as the admin type
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido da empresa'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!idMerchant) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido da empresa'
+            }
+        }
+        //id is empty
+        res.status(400).json(response)
+    //check if canWork is invalid
+    } else if (canWork != 0 && canWork != 1) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Responder pedido da empresa'
+            }
+        }
+        //canWork is invalid
+        res.status(400).json(response);
+    } else {
+        const db = require("../sql").db();
+        var sql = `SELECT isChecked FROM merchant WHERE id = ?`;
+
+        db.get(sql, [idMerchant], function (err, row) {
+            if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Responder pedido da empresa'
+                    }
+                }
+                //error getting isChecked
+                res.status(500).json(response);
+            } else {
+                if (row.isChecked == 1) {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'PUT',
+                            description: 'Responder pedido da empresa'
+                        }
+                    }
+                    //error because is already checked
+                    res.status(403).json(response);
+                } else {
+                    sql = `UPDATE merchant SET canWork = ?, isChecked = ?, reasonCanWork = ? WHERE id = ?`;
+                    db.run(sql, [canWork, 1, reasonCanWork, idMerchant], function (err) {
+                        if (err) {
+                            let response = {
+                                message: "failed",
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Responder pedido da empresa'
+                                }
+                            }
+                            //error updating
+                            res.status(500).json(response);
+                        } else {
+                            let response = {
+                                message: "success",
+                                driver: {
+                                    canWork: canWork,
+                                    reasonCanWork: reasonCanWork
+                                },
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Responder pedido da empresa'
+                                }
+                            }
+                            //update successful
+                            res.status(200).json(response);
+                        }
+                    });
+                }
+            }
+        });
+
+        db.close();
+
+    }
+    
     return;
 }

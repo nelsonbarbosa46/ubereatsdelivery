@@ -79,4 +79,6 @@ router.delete('/delUserAd/:id', personValid, userController.delUserAd);
 
 router.get('/getDriversUncheck/', userController.getDriversUnchecked);
 
+router.get('/getMerchantsUncheck/', userController.getMerchantsUnchecked);
+
 module.exports = router;

@@ -1318,3 +1318,89 @@ exports.getDriversUnchecked = async (req, res, next) => {
     
     return;
 }
+
+exports.getMerchantsUnchecked = async (req, res, next) => {
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check token to see if the user type is the same as the admin type
+    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Empresas com estado pendente'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    } else {
+        var sql = `SELECT user.id, user.email, user.name, user.address, user.zipCode, user.location,
+        merchant.id AS 'idMerchant', merchant.description, merchant.nipc, merchant.contactNumber FROM user
+        INNER JOIN merchant ON user.id = merchant.idUser WHERE merchant.isChecked = ?`;
+
+
+        function getUsersSQL() {
+            return new Promise ((resolve, reject) => {
+                var db = require("../sql").db();
+                var query = [];
+
+                db.each(sql, [0], function (err, row) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        query.push(
+                            {
+                                idUser: row.id,
+                                email: row.email,
+                                name: row.name,
+                                address: row.address,
+                                zipCode: row.zipCode,
+                                location: row.location,
+                                idMerchant: row.idMerchant,
+                                description: row.description,
+                                nipc: row.nipc,
+                                contactNumber: row.contactNumber
+                            }
+                        );
+                    } 
+                }, function (err) {
+                    db.close();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(query);
+                    }
+                });
+            });
+        }
+
+        getUsersSQL().then(function (data) {
+            let response = {
+                message: "success",
+                listUsers: data,
+                request: {
+                    type: 'GET',
+                    description: 'Obter Empresas com estado pendente'
+                }
+            };
+            res.status(200).json(response);
+        //got a error 
+        }).catch(function (data) {
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'GET',
+                    description: 'Obter Empresas com estado pendente'
+                }
+            }
+            errSQL = true;
+            //error selecting
+            res.status(500).json(response)
+        });
+
+    }
+    
+    return;
+}

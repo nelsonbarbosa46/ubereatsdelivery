@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Uma projeto a ser realizado para a Computação Distribuída e Desenvolvimento Colaborativo de Software",
   "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nelsonbarbosa46/ubereatsdelivery.git"

@@ -1,14 +1,15 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const path = require('path');
+var express = require('express');
+var bodyParser = require('body-parser');
+var morgan = require('morgan');
+var path = require('path');
 
-const routeRegister = require('./routes/register');
-const routeLogin = require('./routes/login');
-const routeUser = require('./routes/user');
-const routeCheck = require('./middleware/checkToken');
-const routeProduct = require('./routes/product');
+var app = express();
+
+var routeRegister = require('./routes/register');
+var routeLogin = require('./routes/login');
+var routeUser = require('./routes/user');
+var routeCheck = require('./middleware/checkToken');
+var routeProduct = require('./routes/product');
 
 app.use(bodyParser.urlencoded({extended: false})); 
 app.use(bodyParser.json()); 
@@ -38,7 +39,7 @@ app.use('/api/product', routeProduct);
 
 //dont find the page
 app.use((req, res, next) => {
-    const err = new Error('Não Encontrado');
+    var err = new Error('Não Encontrado');
     err.status = 404;
     next(err);
 });

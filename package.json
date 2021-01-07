@@ -4,7 +4,7 @@
   "description": "Uma projeto a ser realizado para a Computação Distribuída e Desenvolvimento Colaborativo de Software",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",

@@ -267,15 +267,17 @@
             <h4>Criar Produto</h4>
             <form action="#" id="formCreateProduct">
                 <div class="col s12">
+                    <p>Não é possível criar um conjunto de produtos (menu)</p>
                     <div class="row">
                         <div class="input-field col s12 l6">
                             <input id="formCreateProductName" name="name" type="text">
                             <label for="formCreateProductName">Nome</label>
+                            <span class="helper-text">Campo obrigatório</span>
                         </div>
                         <div class="input-field col s12 l6">
                             <input id="formCreateProductPrice" name="price" type="number">
                             <label for="formCreateProductPrice">Preço</label>
-                            <span class="helper-text">Apenas coloque o valor e use ponto. Ex. "4.4"</span>
+                            <span class="helper-text">Campo obrigatório. Apenas coloque o valor e use ponto. Ex. "4.4"</span>
                         </div>
                     </div>
                 </div>
@@ -284,6 +286,7 @@
                         <div class="input-field col s12 l6">
                             <input id="formCreateProductQuantity" name="name" type="number">
                             <label for="formCreateProductQuantity">Quantidade</label>
+                            <span class="helper-text">Campo obrigatório</span>
                         </div>
                         <div class="file-field input-field col s12 m6">
                             <div class="btn grey darken-3">

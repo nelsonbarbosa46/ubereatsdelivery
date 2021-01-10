@@ -205,6 +205,5 @@ exports.createProduct = (req, res, next) => {
 exports.changeInfoProduct = (req, res, next) => {
     
     
-
     return;
 }

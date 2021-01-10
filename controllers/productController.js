@@ -352,3 +352,133 @@ exports.changeInfoProduct = (req, res, next) => {
     
     return;
 }
+
+exports.changeLogoProduct = (req, res, next) => {
+
+    var idUser = req.params.id;
+    var idProduct = req.params.idProduct;
+    var logo = req.file;
+    var fs = require('fs');
+
+    //check if empty
+    if (!logo) {
+        logo = null;
+    } else {
+        logo = req.file.path;
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check if typeUser is invalid
+    if (decoded.typeUser != 2) {
+        deleteImage(logo, fs);
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar logótipo de um produto'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    } else {
+        var db = require('../sql').db();
+        var sql = `SELECT id FROM merchant WHERE idUser = ?`;
+        
+        db.get(sql, [idUser], function (err, row) {
+            if (err) {
+                deleteImage(logo, fs);
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar logótipo de um produto'
+                    }
+                }
+                //error selecting
+                res.status(500).json(response)
+            } else {
+                if (row) {
+                    var idMerchant = row.id;
+                    sql = `SELECT image FROM product WHERE id = ? AND idMerchant = ?`;
+                    db.get(sql, [idProduct, idMerchant], function (err, row) {
+                        if (err) {
+                            deleteImage(logo, fs);
+                            let response = {
+                                message: "failed",
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Alterar logótipo de um produto'
+                                }
+                            }
+                            //error selecting
+                            res.status(500).json(response)
+                        } else {
+                            if (row) {
+                                var oldImage = row.image;
+                                sql = `UPDATE product SET image = ? WHERE id = ? AND idMerchant = ?`;
+                                db.run(sql, [logo, idProduct, idMerchant], function (err) {
+                                    if (err) {
+                                        deleteImage(logo, fs);
+                                        let response = {
+                                            message: "failed",
+                                            request: {
+                                                type: 'PUT',
+                                                description: 'Alterar logótipo de um produto'
+                                            }
+                                        }
+                                        //error updating
+                                        res.status(500).json(response)
+                                    } else {
+                                        //check if its updated
+                                        if (this.changes == 0) {
+                                            deleteImage(logo, fs);
+                                            let response = {
+                                                message: "failed",
+                                                request: {
+                                                    type: 'PUT',
+                                                    description: 'Alterar logótipo de um produto'
+                                                }
+                                            }
+                                            //error updating
+                                            res.status(500).json(response)
+                                        } else {
+                                            //delete old image
+                                            deleteImage(oldImage, fs);
+                                            let response = {
+                                                message: "success",
+                                                request: {
+                                                    type: 'PUT',
+                                                    description: 'Alterar logótipo de um produto'
+                                                }
+                                            }
+                                            //update successful
+                                            res.status(200).json(response)
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    deleteImage(logo, fs);
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'PUT',
+                            description: 'Alterar logótipo de um produto'
+                        }
+                    }
+                    //dont find any merchant
+                    res.status(500).json(response)
+                }
+            }
+        });
+
+        db.close();
+
+    }
+
+    return;
+}

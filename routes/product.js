@@ -54,4 +54,8 @@ const upload = multer({
 
 router.post('/createProduct/', upload.single('logo'), productController.createProduct);
 
+router.put('/changeInfoProduct/:id/:idProduct', productController.changeInfoProduct);
+
+router.put('/changeLogoProduct/:id/:idProduct', upload.single('logo'), productController.changeLogoProduct);
+
 module.exports = router;

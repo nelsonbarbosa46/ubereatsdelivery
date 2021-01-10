@@ -270,12 +270,12 @@
                     <p>Não é possível criar um conjunto de produtos (menu)</p>
                     <div class="row">
                         <div class="input-field col s12 l6">
-                            <input id="formCreateProductName" name="name" type="text">
+                            <input id="formCreateProductName" data-field="Nome" name="name" type="text">
                             <label for="formCreateProductName">Nome</label>
                             <span class="helper-text">Campo obrigatório</span>
                         </div>
                         <div class="input-field col s12 l6">
-                            <input id="formCreateProductPrice" name="price" type="number">
+                            <input id="formCreateProductPrice" data-field="Preço" name="price" type="number">
                             <label for="formCreateProductPrice">Preço</label>
                             <span class="helper-text">Campo obrigatório. Apenas coloque o valor e use ponto. Ex. "4.4"</span>
                         </div>
@@ -284,7 +284,7 @@
                 <div class="col s12">
                     <div class="row">
                         <div class="input-field col s12 l6">
-                            <input id="formCreateProductQuantity" name="name" type="number">
+                            <input id="formCreateProductQuantity" data-field="Quantidade" name="quantity" type="number">
                             <label for="formCreateProductQuantity">Quantidade</label>
                             <span class="helper-text">Campo obrigatório</span>
                         </div>
@@ -302,12 +302,12 @@
                 </div>
                 <div class="col s12">
                     <div class="input-field col s12">
-                        <textarea id="formCreateProductDescrition" name="description" class="materialize-textarea" data-length="120"></textarea>
-                        <label for="formCreateProductDescrition">Descrição</label>
+                        <textarea id="formCreateProductDescription" name="description" data-field="Description" class="materialize-textarea" data-length="120"></textarea>
+                        <label for="formCreateProductDescription">Descrição</label>
                     </div>
                 </div>
                 <div class="col s12">
-                    <a href="#" class="btn waves-effect green">Criar Produto</a>
+                    <button type="submit" class="btn waves-effect green">Criar Produto</button>
                     <a href="#!" class="modal-close waves-effect btn">Cancelar</a>
                 </div>
             </form>
@@ -325,7 +325,9 @@
     </footer>
 
     <script src="../../node_modules/materialize-css/dist/js/materialize.min.js"></script>
+    <script src="../js/getUrlToSub.js"></script>
     <script src="../js/generalFunc.js"></script>
+    <script src="js/verifyFields.js"></script>
     <script src="js/settings.js"></script>
     <script src="js/orders.js"></script>
     <script src="js/products.js"></script>

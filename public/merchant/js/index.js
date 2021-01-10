@@ -41,7 +41,13 @@ function continueScript() {
     $("#formChangeLogo").submit(function (e) {
         submitFormChangeLogo(e);
     });
+    //show section orders
     $("#openSectionOrders").click(toggleSectionOrders);
+    //show section products
     $("#openSectionProducts").click(toggleSectionProducts);
+    //submit form create product
+    $("#formCreateProduct").submit(function (e) {
+        submitFormCreateProduct(e);
+    });
 
 }

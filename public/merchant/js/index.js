@@ -41,5 +41,7 @@ function continueScript() {
     $("#formChangeLogo").submit(function (e) {
         submitFormChangeLogo(e);
     });
+    $("#openSectionOrders").click(toggleSectionOrders);
+    $("#openSectionProducts").click(toggleSectionProducts);
 
 }

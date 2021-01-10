@@ -33,7 +33,8 @@
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i
                         class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
-                    <!--<li><a href="mobile.html">Mobile</a></li>-->
+                    <li><a href="#" id="openSectionOrders">Encomendas</a></li>
+                    <li><a href="#" id="openSectionProducts">Produtos</a></li>
                     <li><a href="#" data-target="slide-out" class="sidenav-trigger show-on-large">Conta</a></li>
                 </ul>
             </div>
@@ -245,13 +246,71 @@
     </header>
 
     <main id="page-container">
-        <div id="content-wrap container">
-            <p>TESTE1</p>
+        <div id="content-wrap">
+            <div class="container">
+                <h2>Dashboard - Empresa</h2>
+            </div>
+            <section class="container" id="sectionOrders">
+                <h3>Ver Encomendas</h3>
+            </section>
+            <section class="container" id="sectionProducts">
+                <div class="row">
+                    <h3>Ver Produtos<a href="#modalCreateProduct" class="btn right waves-effect modal-trigger">Criar Produto</a></h3>
+                </div>
+            </section>
         </div>
-        <aside>
-
-        </aside>
     </main>
+
+    <!--Modal Create Product-->
+    <div id="modalCreateProduct" class="modal">
+        <div class="modal-content">
+            <h4>Criar Produto</h4>
+            <form action="#" id="formCreateProduct">
+                <div class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12 l6">
+                            <input id="formCreateProductName" name="name" type="text">
+                            <label for="formCreateProductName">Nome</label>
+                        </div>
+                        <div class="input-field col s12 l6">
+                            <input id="formCreateProductPrice" name="price" type="number">
+                            <label for="formCreateProductPrice">Preço</label>
+                            <span class="helper-text">Apenas coloque o valor e use ponto. Ex. "4.4"</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12 l6">
+                            <input id="formCreateProductQuantity" name="name" type="number">
+                            <label for="formCreateProductQuantity">Quantidade</label>
+                        </div>
+                        <div class="file-field input-field col s12 m6">
+                            <div class="btn grey darken-3">
+                              <span>Imagem</span>
+                              <input type="file" id="formCreateProductImage" data-field="Logótipo" name="file" accept="image/png, image/jpg, image/jpeg">
+                            </div>
+                            <div class="file-path-wrapper">
+                              <input class="file-path validate" type="text">
+                            </div>
+                            <small>Só é aceite ficheiros tipo PNG, JPEG e JPG</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <div class="input-field col s12">
+                        <textarea id="formCreateProductDescrition" name="description" class="materialize-textarea" data-length="120"></textarea>
+                        <label for="formCreateProductDescrition">Descrição</label>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <a href="#" class="btn waves-effect green">Criar Produto</a>
+                    <a href="#!" class="modal-close waves-effect btn">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+            
 
 
     <footer id="footer" class="page-footer bg-color-web-primary">
@@ -265,6 +324,8 @@
     <script src="../../node_modules/materialize-css/dist/js/materialize.min.js"></script>
     <script src="../js/generalFunc.js"></script>
     <script src="js/settings.js"></script>
+    <script src="js/orders.js"></script>
+    <script src="js/products.js"></script>
     <script src="js/index.js"></script>
     <script src="../js/logout.js"></script>
 </body>

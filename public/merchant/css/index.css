@@ -17,3 +17,11 @@
 #sectionProducts {
     display: none;
 }
+
+.iconDeleteProduct {
+    color: rgba(244, 67, 54, 1);
+}
+
+.iconDeleteProduct:hover {
+    color: rgba(244, 67, 54, 0.6) !important;
+}

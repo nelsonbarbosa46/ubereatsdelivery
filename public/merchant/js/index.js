@@ -8,6 +8,7 @@ function continueScript() {
     $('input#formChangeInfoNIF, input#formChangeInfoContactNumber').characterCounter();
 
     $('select').formSelect();
+    $('.tooltipped').tooltip();
 
     //autocomplete Field Address(County) on form to change info
     $('input.autocomplete').autocomplete({
@@ -41,6 +42,8 @@ function continueScript() {
     $("#formChangeLogo").submit(function (e) {
         submitFormChangeLogo(e);
     });
+    //get orders just once
+    $("#openSectionProducts").one("click", getProductsToShow);
     //show section orders
     $("#openSectionOrders").click(toggleSectionOrders);
     //show section products

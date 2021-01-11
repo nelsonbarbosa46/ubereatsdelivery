@@ -24,6 +24,8 @@ if (token !== '' && token !== null) {
     ajaxToken().then((data) => {
         typeUser = data.typeUser;
         idUser = data.id;
+        //create variable to use when show products
+        productsShowCount = 0;
         continueScript();
     }).catch((error) => {
         console.log(error);

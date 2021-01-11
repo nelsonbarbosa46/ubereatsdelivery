@@ -56,3 +56,23 @@ function submitFormCreateProduct(e) {
         toastErrForm(errFields);
     }
 }
+
+function getProductsToShow() {
+    var url = getUrlToSubmit();
+
+    $.ajax({
+        url: url+'/api/product/getProducts/'+idUser,
+        type: 'GET',
+        cache: false,
+        headers: {
+            "Authorization": 'Bearer ' + token
+        },
+        success: function (data) {
+            M.toast({html: 'Sucesso!'});
+        }
+        , error: function (jqXHR, textStatus, err) {
+            console.log(err,textStatus);
+            M.toast({html: 'Erro ao obter produtos!'});
+        }
+    })
+}

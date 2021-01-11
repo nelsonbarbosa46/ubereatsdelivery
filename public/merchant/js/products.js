@@ -77,7 +77,6 @@ function getProductsToShow() {
                 productsShowCount = listProducts.length;
                 
                 for (let i = 0; i < listProducts.length; i++) {
-                    console.log("qqq");
                     $("#rowShowProducts").append(showCardAndModals(listProducts[i]));
                     $(".modal").modal();
                     M.updateTextFields();
@@ -102,7 +101,7 @@ function showCardAndModals(listProducts) {
         html += '<img class="activator" src="../../'+listProducts.image+'">';
     } else {
         //dont has image
-        html += '<img class="activator" src="../img/img1.jpg">';
+        html += '<img class="activator" src="../img/produtosemimagem.svg">';
     }
     html += '</div>\
             <div class="card-content">\
@@ -260,4 +259,56 @@ function showCardAndModals(listProducts) {
 
 
     return html;
+}
+
+function submitFormChangeInfoProduct(e, idProduct, form) {
+    e.preventDefault();
+
+    var errFields = [];
+
+    var nameInput = jQuery("[name='name']", form);
+    var priceInput = jQuery("[name='price']", form);
+    var descriptionInput = jQuery("[name='description']", form);
+    var name = nameInput.val();
+    var price = priceInput.val();
+    var description = descriptionInput.val();
+
+    verifyFieldsFormChangeInfoProduct(errFields, nameInput, name, priceInput, price);
+
+    if (errFields.length === 0) {
+
+        var url = getUrlToSubmit();
+
+        $.ajax({
+            url: url+'/api/product/changeInfoProduct/'+idUser+'/'+idProduct,
+            type: 'PUT',
+            cache: false,
+            headers: {
+                "Authorization": 'Bearer ' + token
+            },
+            data: { 
+                name: name,
+                price: price,
+                description: description
+            },
+            success: function (data) {   
+                M.toast({html: 'Alterado com sucesso'});
+                //change info
+                if (data.updateInfo.description) {    
+                    $("#spanDescription"+idProduct).text(data.updateInfo.description);
+                } else {
+                    $("#spanDescription"+idProduct).text("Não existe");
+                }
+                $("#spanPrice"+idProduct).text(data.updateInfo.price+"€");
+                $("#spanName"+idProduct).text(data.updateInfo.name);
+            }, 
+            error: function (jqXHR, textStatus, err) {
+                console.log(jqXHR);
+                M.toast({html: 'Erro Ao Alterar!'});
+            }
+        })
+    } else {
+        toastErrForm(errFields);
+    }
+
 }

@@ -52,5 +52,11 @@ function continueScript() {
     $("#formCreateProduct").submit(function (e) {
         submitFormCreateProduct(e);
     });
+    //submit form change info
+    $("body").on('submit', '.formProductChangeInfo', (function (e) {
+        var id = $(this).attr('id');
+        var form = $(this);
+        submitFormChangeInfoProduct(e, id, form); 
+    }));
 
 }

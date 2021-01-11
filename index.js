@@ -15,6 +15,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json()); 
 app.use(express.static(path.join(__dirname, 'public')));
 
+//private key
+process.env.PRIVATE_KEY = '2AEsX5ygzBzm';
+
 
 //to solve CORS
 // Add headers

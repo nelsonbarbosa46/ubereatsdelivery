@@ -61,18 +61,37 @@ function getProductsToShow() {
     var url = getUrlToSubmit();
 
     $.ajax({
-        url: url+'/api/product/getProducts/'+idUser,
+        url: url+'/api/product/getProductsMe/'+idUser,
         type: 'GET',
         cache: false,
+        processData: false,
         headers: {
             "Authorization": 'Bearer ' + token
         },
         success: function (data) {
-            M.toast({html: 'Sucesso!'});
+            console.log(data);
+            if (data.listProducts.length != 0) {
+                var listProducts = data.listProducts;
+                //update how many products has
+                productsShowCount = listProducts.length;
+                
+                for (let i = 0; i < listProducts.length; i++) {
+                    $("#rowShowProducts").append(showCardAndModals(listProducts[i]));
+                    
+                }
+            }
         }
         , error: function (jqXHR, textStatus, err) {
             console.log(err,textStatus);
             M.toast({html: 'Erro ao obter produtos!'});
         }
     })
+}
+
+function showCardAndModals(listProducts) {
+    var html;
+
+    
+
+    return html;
 }

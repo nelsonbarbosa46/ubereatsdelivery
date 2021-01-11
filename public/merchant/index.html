@@ -256,9 +256,9 @@
             <section class="container" id="sectionProducts">
                 <div class="row">
                     <h3>Ver Produtos<a href="#modalCreateProduct" class="btn right waves-effect modal-trigger">Criar Produto</a></h3>
-                    <div id="showTableProducts">
-                        <div class="row">
-                            <div class="col s12 l4">
+                    <div id="showDivProducts">
+                        <div class="row" id="rowShowProducts">
+                            <div class="col s12 m4">
                                 <div class="card sticky-action small">
                                     <div class="card-image waves-effect waves-block waves-light">
                                         <img class="activator" src="../img/produtosemimagem.svg">
@@ -276,7 +276,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col s12 l4">
+                            <div class="col s12 m4">
                                 <div class="card sticky-action small">
                                     <div class="card-image waves-effect waves-block waves-light">
                                         <img class="activator" src="../img/img1.jpg">
@@ -294,7 +294,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col s12 l4">
+                            <div class="col s12 m4">
                                 <div class="card sticky-action small">
                                     <div class="card-image waves-effect waves-block waves-light">
                                         <img class="activator" src="../img/img1.jpg">
@@ -331,6 +331,85 @@
                                     </div>
                                 </div>
                             </div>
+                            <!--Card-->
+                            <div class="col s12 m4">
+                                <div class="card sticky-action small">
+                                    <div class="card-image waves-effect waves-block waves-light">
+                                        <img class="activator" src="../img/img1.jpg">
+                                    </div>
+                                    <div class="card-content">
+                                        <span class="card-title activator grey-text text-darken-4">Comida<i class="material-icons right">more_vert</i></span>
+                                        
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="#modalProductChangeQuantity" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Quantidade">
+                                            <i class="material-icons round">
+                                                add
+                                            </i>
+                                        </a>
+                                        <a href="#modalProductChangeInfo" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Informações">
+                                            <i class="material-icons round">
+                                                edit
+                                            </i>
+                                        </a>
+                                        <a href="#modalProductChangeImage" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Imagem">
+                                            <i class="material-icons round">
+                                                wallpaper
+                                            </i>
+                                        </a>
+                                        <a href="#modalProductDelete" class="right tooltipped modal-trigger" data-position="bottom" data-tooltip="Eliminar Produto">
+                                            <i class="material-icons round iconDeleteProduct red-text waves-red waves-effect">
+                                                delete
+                                            </i>
+                                        </a>
+                                    </div>
+                                    <div class="card-reveal">
+                                        <span class="card-title grey-text text-darken-4">Comida<i class="material-icons right">close</i></span>
+                                        <p>Preço: 4,4€<br>Quantidade: 10<br>Descrição: ttttt<br>ttttt</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/Card-->
+                            <!--Modal Change Quantity-->
+                            <div id="modalProductChangeQuantity" class="modal">
+                                <div class="modal-content">
+                                  <h4>Alterar Quantidade</h4>
+                                  <form action="">
+
+                                  </form>
+                                </div>
+                            </div>
+                            <!--/Modal Change Quantity-->
+                            <!--Modal Change Info-->
+                            <div id="modalProductChangeInfo" class="modal">
+                                <div class="modal-content">
+                                  <h4>Alterar Informações</h4>
+                                  <form action="">
+
+                                  </form>
+                                </div>
+                            </div>
+                            <!--/Modal Change Info-->
+                            <!--Modal Change Image-->
+                            <div id="modalProductChangeImage" class="modal">
+                                <div class="modal-content">
+                                  <h4>Alterar Imagem</h4>
+                                  <form action="">
+
+                                  </form>
+                                </div>
+                            </div>
+                            <!--/Modal Change Image-->
+                            <!--Modal Delete-->
+                            <div id="modalProductDelete" class="modal">
+                                <div class="modal-content">
+                                  <h4>Eliminar Produto</h4>
+                                  <form action="">
+
+                                  </form>
+                                </div>
+                            </div>
+                            <!--/Modal Delete-->
                         </div>
                     </div>
                 </div>

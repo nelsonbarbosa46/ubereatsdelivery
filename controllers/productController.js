@@ -482,3 +482,86 @@ exports.changeLogoProduct = (req, res, next) => {
 
     return;
 }
+
+exports.getProductsMe = (req, res, next) => {
+    
+    var idUser = req.params.id;
+    
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check if typeUser is invalid
+    if (decoded.typeUser != 2) {
+        deleteImage(logo, fs);
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter Produtos de uma empresa'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    } else { 
+
+        function getProductsSQL() {
+            return new Promise ((resolve, reject) => {
+                var db = require("../sql").db();
+                var sql = `SELECT product.id, product.description, product.image, product.name, product.price, product.quantity
+                FROM product INNER JOIN merchant ON product.idMerchant = merchant.id WHERE merchant.idUser = ?`;
+                var query = [];
+
+                db.each(sql, [idUser], function (err, row) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        query.push(
+                            {
+                                id: row.id,
+                                description: row.description,
+                                image: row.image,
+                                name: row.name,
+                                price: row.price,
+                                quantity: row.quantity
+                            }
+                        );
+                    } 
+                }, function (err) {
+                    db.close();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(query);
+                    }
+                });
+            });
+        }
+
+        getProductsSQL().then(function (data) {
+            let response = {
+                message: "success",
+                listProducts: data,
+                request: {
+                    type: 'GET',
+                    description: 'Obter Produtos de uma empresa'
+                }
+            };
+            //successful
+            res.status(200).json(response);
+        //got a error 
+        }).catch(function () {
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'GET',
+                    description: 'Obter Produtos de uma empresa'
+                }
+            }
+            //error selecting
+            res.status(500).json(response)
+        });
+
+    }
+    
+    return;
+}

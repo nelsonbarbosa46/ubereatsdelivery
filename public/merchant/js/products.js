@@ -7,6 +7,7 @@ function toggleSectionProducts() {
 }
 
 function submitFormCreateProduct(e) {
+    
     e.preventDefault();
 
     var errFields = [];

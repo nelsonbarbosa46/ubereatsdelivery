@@ -105,7 +105,7 @@ function showCardAndModals(listProducts) {
     }
     html += '</div>\
             <div class="card-content">\
-                <span class="card-title activator grey-text text-darken-4">'+listProducts.name+'<i class="material-icons right">more_vert</i></span>\
+                <span class="card-title activator grey-text text-darken-4" id="span1NameProduct'+listProducts.id+'">'+listProducts.name+'<i class="material-icons right">more_vert</i></span>\
             </div>\
             <div class="card-action">\
                 <a href="#modalProductChangeQuantity'+listProducts.id+'" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Quantidade">\
@@ -130,7 +130,7 @@ function showCardAndModals(listProducts) {
                 </a>\
             </div>\
             <div class="card-reveal">\
-                <span class="card-title grey-text text-darken-4">'+listProducts.name+'<i class="material-icons right">close</i></span>\
+                <span class="card-title grey-text text-darken-4" id="span2NameProduct'+listProducts.id+'">'+listProducts.name+'<i class="material-icons right">close</i></span>\
                 <p><b>Preço: </b><span id="spanPrice'+listProducts.id+'">'+listProducts.price+'€</span><br><b>Quantidade: </b>\
                 <span id="spanQuantity'+listProducts.id+'">'+listProducts.quantity+'</span><br>\ ';
     if (listProducts.description) {
@@ -300,7 +300,8 @@ function submitFormChangeInfoProduct(e, idProduct, form) {
                     $("#spanDescription"+idProduct).text("Não existe");
                 }
                 $("#spanPrice"+idProduct).text(data.updateInfo.price+"€");
-                $("#spanName"+idProduct).text(data.updateInfo.name);
+                $("#span1NameProduct"+idProduct).text(data.updateInfo.name);
+                $("#span2NameProduct"+idProduct).text(data.updateInfo.name);
             }, 
             error: function (jqXHR, textStatus, err) {
                 console.log(jqXHR);

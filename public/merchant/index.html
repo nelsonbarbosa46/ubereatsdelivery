@@ -33,7 +33,8 @@
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i
                         class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
-                    <!--<li><a href="mobile.html">Mobile</a></li>-->
+                    <li><a href="#" id="openSectionOrders">Encomendas</a></li>
+                    <li><a href="#" id="openSectionProducts">Produtos</a></li>
                     <li><a href="#" data-target="slide-out" class="sidenav-trigger show-on-large">Conta</a></li>
                 </ul>
             </div>
@@ -245,13 +246,151 @@
     </header>
 
     <main id="page-container">
-        <div id="content-wrap container">
-            <p>TESTE1</p>
+        <div id="content-wrap">
+            <div class="container">
+                <h2>Dashboard - Empresa</h2>
+            </div>
+            <section class="container" id="sectionOrders">
+                <h3>Ver Encomendas</h3>
+            </section>
+            <section class="container" id="sectionProducts">
+                <div class="row">
+                    <h3>Ver Produtos<a href="#modalCreateProduct" class="btn right waves-effect modal-trigger">Criar Produto</a></h3>
+                    <div id="showTableProducts">
+                        <div class="row">
+                            <div class="col s12 l4">
+                                <div class="card sticky-action small">
+                                    <div class="card-image waves-effect waves-block waves-light">
+                                        <img class="activator" src="../img/produtosemimagem.svg">
+                                    </div>
+                                    <div class="card-content">
+                                        <span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
+                                        <p><a href="#">QQQ</a></p>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="#">Comprar</a>
+                                    </div>
+                                    <div class="card-reveal">
+                                        <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                                        <p>Here is some more information about this product that is only revealed once clicked on.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s12 l4">
+                                <div class="card sticky-action small">
+                                    <div class="card-image waves-effect waves-block waves-light">
+                                        <img class="activator" src="../img/img1.jpg">
+                                    </div>
+                                    <div class="card-content">
+                                        <span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
+                                        <p><a href="#">QQQ</a></p>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="#">Comprar</a>
+                                    </div>
+                                    <div class="card-reveal">
+                                        <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                                        <p>Here is some more information about this product that is only revealed once clicked on.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s12 l4">
+                                <div class="card sticky-action small">
+                                    <div class="card-image waves-effect waves-block waves-light">
+                                        <img class="activator" src="../img/img1.jpg">
+                                    </div>
+                                    <div class="card-content">
+                                        <span class="card-title activator grey-text text-darken-4">Comida<i class="material-icons right">more_vert</i></span>
+                                        
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="#" class="tooltipped" data-position="bottom" data-tooltip="Alterar Quantidade">
+                                            <i class="material-icons round">
+                                                add
+                                            </i>
+                                        </a>
+                                        <a href="#" class="tooltipped" data-position="bottom" data-tooltip="Alterar Informações">
+                                            <i class="material-icons round">
+                                                edit
+                                            </i>
+                                        </a>
+                                        <a href="#" class="tooltipped" data-position="bottom" data-tooltip="Alterar Imagem">
+                                            <i class="material-icons round">
+                                                wallpaper
+                                            </i>
+                                        </a>
+                                        <a href="#" class="right tooltipped" data-position="bottom" data-tooltip="Eliminar Produto">
+                                            <i class="material-icons round iconDeleteProduct red-text waves-red waves-effect">
+                                                delete
+                                            </i>
+                                        </a>
+                                    </div>
+                                    <div class="card-reveal">
+                                        <span class="card-title grey-text text-darken-4">Comida<i class="material-icons right">close</i></span>
+                                        <p>Preço: 4,4€<br>Quantidade: 10<br>Descrição: ttttt<br>ttttt</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
-        <aside>
-
-        </aside>
     </main>
+
+    <!--Modal Create Product-->
+    <div id="modalCreateProduct" class="modal">
+        <div class="modal-content">
+            <h4>Criar Produto</h4>
+            <form action="#" id="formCreateProduct">
+                <div class="col s12">
+                    <p>Não é possível criar um conjunto de produtos (menu)</p>
+                    <div class="row">
+                        <div class="input-field col s12 l6">
+                            <input id="formCreateProductName" data-field="Nome" name="name" type="text">
+                            <label for="formCreateProductName">Nome</label>
+                            <span class="helper-text">Campo obrigatório</span>
+                        </div>
+                        <div class="input-field col s12 l6">
+                            <input id="formCreateProductPrice" data-field="Preço" name="price" type="number">
+                            <label for="formCreateProductPrice">Preço</label>
+                            <span class="helper-text">Campo obrigatório. Apenas coloque o valor e use ponto. Ex. "4.4"</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12 l6">
+                            <input id="formCreateProductQuantity" data-field="Quantidade" name="quantity" type="number">
+                            <label for="formCreateProductQuantity">Quantidade</label>
+                            <span class="helper-text">Campo obrigatório</span>
+                        </div>
+                        <div class="file-field input-field col s12 m6">
+                            <div class="btn grey darken-3">
+                              <span>Imagem</span>
+                              <input type="file" id="formCreateProductImage" data-field="Logótipo" name="file" accept="image/png, image/jpg, image/jpeg">
+                            </div>
+                            <div class="file-path-wrapper">
+                              <input class="file-path validate" type="text">
+                            </div>
+                            <small>Só é aceite ficheiros tipo PNG, JPEG e JPG</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <div class="input-field col s12">
+                        <textarea id="formCreateProductDescription" name="description" data-field="Description" class="materialize-textarea" data-length="120"></textarea>
+                        <label for="formCreateProductDescription">Descrição</label>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <button type="submit" class="btn waves-effect green">Criar Produto</button>
+                    <a href="#!" class="modal-close waves-effect btn">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+            
 
 
     <footer id="footer" class="page-footer bg-color-web-primary">
@@ -263,8 +402,12 @@
     </footer>
 
     <script src="../../node_modules/materialize-css/dist/js/materialize.min.js"></script>
+    <script src="../js/getUrlToSub.js"></script>
     <script src="../js/generalFunc.js"></script>
+    <script src="js/verifyFields.js"></script>
     <script src="js/settings.js"></script>
+    <script src="js/orders.js"></script>
+    <script src="js/products.js"></script>
     <script src="js/index.js"></script>
     <script src="../js/logout.js"></script>
 </body>

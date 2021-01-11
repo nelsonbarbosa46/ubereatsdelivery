@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
 const multer = require('multer');
+const personValid = require('../middleware/checkPersonValid');
 
 //handling with upload image (on createMerchant)
 const storage = multer.diskStorage({
@@ -57,5 +58,7 @@ router.post('/createProduct/', upload.single('logo'), productController.createPr
 router.put('/changeInfoProduct/:id/:idProduct', productController.changeInfoProduct);
 
 router.put('/changeLogoProduct/:id/:idProduct', upload.single('logo'), productController.changeLogoProduct);
+
+router.get('/getProductsMe/:id', personValid, productController.getProductsMe);
 
 module.exports = router;

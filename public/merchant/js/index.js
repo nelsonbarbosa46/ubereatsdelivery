@@ -43,11 +43,11 @@ function continueScript() {
         submitFormChangeLogo(e);
     });
     //get orders just once
-    $("#openSectionProducts").one("click", getProductsToShow);
+    $(".openSectionProducts").one("click", getProductsToShow);
     //show section orders
-    $("#openSectionOrders").click(toggleSectionOrders);
+    $(".openSectionOrders").click(toggleSectionOrders);
     //show section products
-    $("#openSectionProducts").click(toggleSectionProducts);
+    $(".openSectionProducts").click(toggleSectionProducts);
     //submit form create product
     $("#formCreateProduct").submit(function (e) {
         submitFormCreateProduct(e);

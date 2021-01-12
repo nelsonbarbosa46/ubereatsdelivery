@@ -98,10 +98,10 @@ function showCardAndModals(listProducts) {
         <div class="card sticky-action small">\
             <div class="card-image waves-effect waves-block waves-light">\ ';
     if (listProducts.image) {
-        html += '<img class="activator" src="../../'+listProducts.image+'">';
+        html += '<img class="activator" id="imgProduct'+listProducts.id+'" src="../../'+listProducts.image+'">';
     } else {
         //dont has image
-        html += '<img class="activator" src="../img/produtosemimagem.svg">';
+        html += '<img class="activator" id="imgProduct'+listProducts.id+'" src="../img/produtosemimagem.svg">';
     }
     html += '</div>\
             <div class="card-content">\
@@ -217,19 +217,20 @@ function showCardAndModals(listProducts) {
                             <input type="file" id="formChangeProductImage'+listProducts.id+'" data-field="Logótipo" name="file" accept="image/png, image/jpg, image/jpeg">\
                         </div>\
                         <div class="file-path-wrapper">\
-                            <input class="file-path validate" type="text">\
+                            <input class="file-path" name="textFile" type="text">\
                         </div>\
                         <small>Só é aceite ficheiros tipo PNG, JPEG e JPG</small>\
                     </div>\
-                    <div class="col s12 l6">';
-    
+                    <div class="col s12 l6">\
+                        <div id="divImgChangeProduct'+listProducts.id+'">';
+                    
     if (listProducts.image) {
         html += '<p>Imagem Atual: </p><img width="100%" src="../../'+listProducts.image+'">';
     } else {
         html += '<p>Não tem imagem no momento</p>';
     }
-
-    html += '       </div>\
+    html += '           </div>\
+                    </div>\
                 </div>\
                 <div class="col s12 mb-2">\
                     <button type="submit" class="btn waves-effect waves-orange orange lighten-2">Alterar Imagem</button>\
@@ -311,5 +312,57 @@ function submitFormChangeInfoProduct(e, idProduct, form) {
     } else {
         toastErrForm(errFields);
     }
+}
 
+function submitFormChangeImageProduct(e, idProduct, form) {
+    e.preventDefault();
+
+    var errFields = [];
+
+    var inputFile = jQuery("[name='file']", form);
+    var inputTextFile = jQuery("[name='textFile']", form);
+    var file = inputFile[0].files[0];
+
+    //handling file
+    var fd = new FormData();
+
+    if (errFields.length === 0) {
+        fd.append('logo', file);
+
+        var url = getUrlToSubmit();
+
+        $.ajax({
+            url: url+'/api/product/changeLogoProduct/'+idUser+'/'+idProduct,
+            type: 'PUT',
+            cache: false,
+            data: fd,
+            contentType: false,
+            processData: false,
+            headers: {
+                "Authorization": 'Bearer ' + token
+            },
+            success: function (data) {
+                M.toast({html: 'Alterado com sucesso!'});
+                if (data.newImage) {
+                    inputFile.replaceWith( inputFile.val('').clone( true ) );
+                    $(inputTextFile).val("");
+                    $("#imgProduct"+idProduct).attr('src', '../../'+data.newImage);
+                    $("#divImgChangeProduct"+idProduct).empty();
+                    var appendNewImg = '<p>Imagem Atual: </p><img width="100%" src="../../'+data.newImage+'">';
+                    $("#divImgChangeProduct"+idProduct).append(appendNewImg);
+                } else {
+                    $("#imgProduct"+idProduct).attr('src', '../img/produtosemimagem.svg');
+                    $("#divImgChangeProduct"+idProduct).empty();
+                    $("#divImgChangeProduct"+idProduct).append('<p>Não tem imagem no momento</p>');
+                }
+            }
+            , error: function (jqXHR, textStatus, err) {
+                console.log(err,textStatus);
+                M.toast({html: 'Erro ao Alterar!'});
+            }
+        })
+
+    } else {
+        
+    }
 }

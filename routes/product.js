@@ -61,4 +61,6 @@ router.put('/changeLogoProduct/:id/:idProduct', upload.single('logo'), productCo
 
 router.get('/getProductsMe/:id', personValid, productController.getProductsMe);
 
+router.delete('/deleteProduct/:id', productController.deleteProduct);
+
 module.exports = router;

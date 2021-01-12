@@ -43,14 +43,26 @@ function continueScript() {
         submitFormChangeLogo(e);
     });
     //get orders just once
-    $("#openSectionProducts").one("click", getProductsToShow);
+    $(".openSectionProducts").one("click", getProductsToShow);
     //show section orders
-    $("#openSectionOrders").click(toggleSectionOrders);
+    $(".openSectionOrders").click(toggleSectionOrders);
     //show section products
-    $("#openSectionProducts").click(toggleSectionProducts);
+    $(".openSectionProducts").click(toggleSectionProducts);
     //submit form create product
     $("#formCreateProduct").submit(function (e) {
         submitFormCreateProduct(e);
     });
+    //submit form change info
+    $("body").on('submit', '.formProductChangeInfo', (function (e) {
+        var id = $(this).attr('id');
+        var form = $(this);
+        submitFormChangeInfoProduct(e, id, form); 
+    }));
+    //submit form change info
+    $("body").on('submit', '.formProductChangeImage', (function (e) {
+        var id = $(this).attr('id');
+        var form = $(this);
+        submitFormChangeImageProduct(e, id, form); 
+    }));
 
 }

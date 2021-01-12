@@ -448,6 +448,7 @@ exports.changeLogoProduct = (req, res, next) => {
                                             deleteImage(oldImage, fs);
                                             let response = {
                                                 message: "success",
+                                                newImage: logo,
                                                 request: {
                                                     type: 'PUT',
                                                     description: 'Alterar logótipo de um produto'

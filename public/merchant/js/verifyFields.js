@@ -72,3 +72,16 @@ function verifyFieldsFormCreateProduct(errFields, name, price, quantity, file) {
         }
     }
 }
+
+function verifyFieldsFormChangeInfoProduct(errFields, nameInput, name, priceInput, price) {
+    //check if its empty
+    if (!name) errFields.push({"error": "empty", "field": $(nameInput).data("field")});
+    //check if its empty
+    if (!price) {
+        errFields.push({"error": "empty", "field": $(priceInput).data("field")});
+    //check if price is invalid
+    } else if (isNaN(price) || price < 0) {
+        errFields.push({"error": "invalid", "field": $(priceInput).data("field")});
+    }
+}
+

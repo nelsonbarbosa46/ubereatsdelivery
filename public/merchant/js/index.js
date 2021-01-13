@@ -53,8 +53,8 @@ function continueScript() {
         submitFormCreateProduct(e);
     });
     //submit delete product
-    $("#formDeleteProduct").submit(function (e){
-        deleteProduct(e);
+    $("body").on('submit', '.formProductDelete', function () {
+        deleteProduct(this.id);
     });
     //submit form change info
     $("body").on('submit', '.formProductChangeInfo', (function (e) {

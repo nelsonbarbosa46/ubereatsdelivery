@@ -59,6 +59,7 @@ function submitFormCreateProduct(e) {
 }
 
 function deleteProduct(id) {
+    var url = getUrlToSubmit();
     
     $.ajax({
         url: url+'/api/product/deleteProduct/'+id,
@@ -66,6 +67,9 @@ function deleteProduct(id) {
         cache: false,
         contentType: false,
         processData: false,
+        success: function () {
+            console.log("Produto eliminado com sucesso");
+        }
     })
 }
 
@@ -261,7 +265,7 @@ function showCardAndModals(listProducts) {
                 <div class="row">\
                     <div class="col s12">\
                         <p>Pretende mesmo eliminar o produto?</p>\
-                        <button type="submit" class="btn waves-effect waves-red red">Eliminar Produto</button>\
+                        <button id="formDeleteProduct" type="submit" class="btn waves-effect waves-red red">Eliminar Produto</button>\
                         <a href="#!" class="modal-close waves-effect btn">Cancelar</a>\
                     </div>\
                 </div>\

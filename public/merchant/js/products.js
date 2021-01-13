@@ -58,10 +58,10 @@ function submitFormCreateProduct(e) {
     }
 }
 
-function deleteProduct(e) {
+function deleteProduct(id) {
     
     $.ajax({
-        url: url+'/api/product/deleteProduct/',
+        url: url+'/api/product/deleteProduct/'+id,
         type: 'DELETE',
         cache: false,
         contentType: false,

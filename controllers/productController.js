@@ -202,6 +202,31 @@ exports.createProduct = (req, res, next) => {
     return;
 }
 
+exports.deleteProduct = (req, res, next) => {
+    var id = req.params.id;
+    var idUser = req.params.idUser;
+
+    var db = require("../sql").db();
+    var sql = 'DELETE FROM product WHERE id = ?';
+
+    db.run(sql, [id], function (err){
+        if (err){
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'DELETE',
+                    description: 'Eliminar Produto'
+                }
+            }
+            res.status(500).json(response)
+        } else {
+            res.status(204).json()
+        }
+        db.close();
+    });
+    return;
+}
+
 exports.changeInfoProduct = (req, res, next) => {
     
     var idUser = req.params.id;

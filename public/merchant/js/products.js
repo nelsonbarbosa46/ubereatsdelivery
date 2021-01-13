@@ -58,6 +58,17 @@ function submitFormCreateProduct(e) {
     }
 }
 
+function deleteProduct(e) {
+    
+    $.ajax({
+        url: url+'/api/product/deleteProduct/',
+        type: 'DELETE',
+        cache: false,
+        contentType: false,
+        processData: false,
+    })
+}
+
 function getProductsToShow() {
     var url = getUrlToSubmit();
 

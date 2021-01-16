@@ -46,7 +46,7 @@ Na base de dados, cada tipo é representado por um número:
     * **Sucesso** <br />
         **Código HTTP:** 200 <br /><br/>
         **Resposta:** <br />
-     ```diff
+     ```json
     {
         "message": "success",
         "login": {
@@ -64,7 +64,7 @@ Na base de dados, cada tipo é representado por um número:
     * **Erro** <br />
         **Código HTTP:** 400/500 <br /><br/>
      **Resposta:** <br />
-     ```diff
+     ```json
     {
         "message": "failed",
         "request": {
@@ -75,7 +75,7 @@ Na base de dados, cada tipo é representado por um número:
      ```
 
 * **Exemplo Submissão (Postman)**
-    ```diff
+    ```json
     {
         "email": "cliente33@email.com",
         "password": "Password1"
@@ -119,7 +119,7 @@ Na base de dados, cada tipo é representado por um número:
     * **Sucesso** <br />
         **Código HTTP:** 201 <br /><br/>
         **Resposta:** <br />
-        ```diff
+        ```json
         {
             "message": "success",
             "userCreated": {
@@ -139,7 +139,7 @@ Na base de dados, cada tipo é representado por um número:
     * **Erro** <br />
         **Código HTTP:** 400/500 <br /><br/>
         **Resposta:** <br />
-        ```diff
+        ```json
         {
             "message": "failed",
             "request": {
@@ -149,7 +149,7 @@ Na base de dados, cada tipo é representado por um número:
         }
         ```
 * **Exemplo Submissão (Postman)**
-    ```diff
+    ```json
     {
         "email": "cliente33@email.com",
         "password": "Password1",
@@ -208,7 +208,7 @@ Na base de dados, cada tipo é representado por um número:
     * **Sucesso** <br />
         **Código HTTP:** 201 <br /><br/>
         **Resposta:** <br />
-        ```diff
+        ```json
         {
             "message": "success",
             "userCreated": {
@@ -228,7 +228,7 @@ Na base de dados, cada tipo é representado por um número:
     * **Erro** <br />
         **Código HTTP:** 400/500 <br /><br/>
         **Resposta:** <br />
-        ```diff
+        ```json
         {
             "message": "failed",
             "request": {
@@ -238,7 +238,7 @@ Na base de dados, cada tipo é representado por um número:
         }
         ```
 * **Exemplo Submissão (Postman)**
-    ```diff
+    ```javascript
     fd.append('name', name);
     fd.append('email', email);
     fd.append('password', password);
@@ -300,7 +300,7 @@ Só pode criar um administrador um super administrador.
     * **Sucesso** <br />
         **Código HTTP:** 201 <br /><br/>
         **Resposta:** <br />
-        ```diff
+        ```json
         {
             "message": "success",
             "userCreated": {
@@ -320,7 +320,7 @@ Só pode criar um administrador um super administrador.
     * **Erro** <br />
         **Código HTTP:** 400/500 <br /><br/>
         **Resposta:** <br />
-        ```diff
+        ```json
         {
             "message": "failed",
             "request": {
@@ -330,7 +330,7 @@ Só pode criar um administrador um super administrador.
         }
         ```
 * **Exemplo Submissão (Postman)**
-    ```diff
+    ```json
     {
         "email": "admin1@mail.com",
         "password": "Password1",

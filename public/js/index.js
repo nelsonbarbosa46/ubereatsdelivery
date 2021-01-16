@@ -147,8 +147,9 @@ $(document).ready(function(){
         verifyFieldsLogin(errFields, email, password);
 
         if (errFields.length === 0) {
+            var urlOrigin = getUrlToSubmit();
             $.ajax({
-                url: 'http://localhost:3000/api/login/',
+                url: urlOrigin+'/api/login/',
                 type: 'POST',
                 cache: false,
                 data: { 
@@ -159,16 +160,10 @@ $(document).ready(function(){
                     console.log(data);
                     let token = data.login.token;
                     let url = data.login.url;
-                    sessionStorage.setItem("tokenSession", token);
-                    //current url page
-                    var urlPage = window.location.href;
-                    //change to !delete because after is going to delete everything after a "!delete"
-                    urlPage = urlPage.replace("/index.html", "!delete");
-                    //Remove everything after a "!delete"
-                    urlPage = urlPage.replace(/\!delete.*/, "");
-                    //redirect to right page
-                    window.location.replace(urlPage + url + "index.html");
-                    
+                    setCookie("tokenSession", token, 1);
+                    var urlRedirect = urlOrigin + url;
+                    //redirect
+                    window.location.replace(urlRedirect + "index.html");   
                 }, 
                 error: function (jqXHR, textStatus, err) {
                     console.log(jqXHR);
@@ -210,9 +205,10 @@ $(document).ready(function(){
 
         console.log(errFields);
         if (errFields.length === 0) {
+            var urlOrigin = getUrlToSubmit();
             if (isDriver) {
                 $.ajax({
-                    url: 'http://localhost:3000/api/register/signupClientDriver',
+                    url: urlOrigin+'/api/register/signupClientDriver',
                     type: 'POST',
                     cache: false,
                     data: { 
@@ -231,15 +227,10 @@ $(document).ready(function(){
                     success: function (data) {
                         let token = data.login.token;
                         let url = data.login.url;
-                        sessionStorage.setItem("tokenSession", token);
-                        //current url page
-                        var urlPage = window.location.href;
-                        //change to !delete because after is going to delete everything after a "!delete"
-                        urlPage = urlPage.replace("/index.html", "!delete");
-                        //Remove everything after a "!delete"
-                        urlPage = urlPage.replace(/\!delete.*/, "");
-                        //redirect to right page
-                        window.location.replace(urlPage + url + "index.html");
+                        setCookie("tokenSession", token, 1);
+                        var urlRedirect = urlOrigin + url;
+                        //redirect
+                        window.location.replace(urlRedirect + "index.html");
     
                     }, 
                     error: function (jqXHR, textStatus, err) {
@@ -250,7 +241,7 @@ $(document).ready(function(){
                 })
             } else {
                 $.ajax({
-                    url: 'http://localhost:3000/api/register/signupClientDriver',
+                    url: urlOrigin+'/api/register/signupClientDriver',
                     type: 'POST',
                     cache: false,
                     data: {
@@ -268,18 +259,13 @@ $(document).ready(function(){
                     success: function (data) {
                         let token = data.login.token;
                         let url = data.login.url;
-                        sessionStorage.setItem("tokenSession", token);
-                        //current url page
-                        var urlPage = window.location.href;
-                        //change to !delete because after is going to delete everything after a "!delete"
-                        urlPage = urlPage.replace("/index.html", "!delete");
-                        //Remove everything after a "!delete"
-                        urlPage = urlPage.replace(/\!delete.*/, "");
-                        //redirect to right page
-                        window.location.replace(urlPage + url + "index.html");
+                        setCookie("tokenSession", token, 1);
+                        var urlRedirect = urlOrigin + url;
+                        //redirect
+                        window.location.replace(urlRedirect + "index.html");
     
-                    }
-                    , error: function (jqXHR, textStatus, err) {
+                    }, 
+                    error: function (jqXHR, textStatus, err) {
                         console.log(err,textStatus);
                         M.toast({html: 'Erro Ao Registar!'});
                     }
@@ -329,8 +315,10 @@ $(document).ready(function(){
             fd.append('contactNumber', contactNumber);
             fd.append('logo', file);
 
+            var urlOrigin = getUrlToSubmit();
+
             $.ajax({
-                url: 'http://localhost:3000/api/register/signupMerchant',
+                url: urlOrigin+'/api/register/signupMerchant',
                 type: 'POST',
                 cache: false,
                 data: fd,
@@ -339,15 +327,10 @@ $(document).ready(function(){
                 success: function (data) {
                     let token = data.login.token;
                     let url = data.login.url;
-                    sessionStorage.setItem("tokenSession", token);
-                    //current url page
-                    var urlPage = window.location.href;
-                    //change to !delete because after is going to delete everything after a "!delete"
-                    urlPage = urlPage.replace("/index.html", "!delete");
-                    //Remove everything after a "!delete"
-                    urlPage = urlPage.replace(/\!delete.*/, "");
-                    //redirect to right page
-                    window.location.replace(urlPage + url + "index.html");
+                    setCookie("tokenSession", token, 1);
+                    var urlRedirect = urlOrigin + url;
+                    //redirect
+                    window.location.replace(urlRedirect + "index.html");
 
                 }
                 , error: function (jqXHR, textStatus, err) {

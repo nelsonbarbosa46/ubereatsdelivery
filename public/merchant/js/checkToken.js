@@ -1,10 +1,11 @@
-var token = sessionStorage.getItem("tokenSession");
+var token = getCookie("tokenSession");
 
 function ajaxToken() {
     return new Promise((resolve, reject) => {
+        var url = getUrlToSubmit();
         $.ajax({
             //2=merchant 
-            url: 'http://localhost:3000/api/check/checkToken/2',
+            url: url+'/api/check/checkToken/2',
             type: 'GET',
             cache: false,
             headers: {
@@ -30,23 +31,16 @@ if (token !== '' && token !== null) {
     }).catch((error) => {
         console.log(error);
         alert(error);
-        sessionStorage.removeItem("tokenSession");
-        //get current url
-        var urlPage = window.location.href;
-        //remove merchant/index.html
-        //change to !delete because after is going to delete everything after a "!delete"
-        urlPage = urlPage.replace("/merchant/index.html", "!delete");
-        //Remove everything after a "!delete" and after add "/index.html"
-        urlPage = urlPage.replace(/\!delete.*/, "/index.html");
-        location.replace(urlPage);
+        delCookie("tokenSession");
+        //get origin url
+        var urlOrigin = getUrlToSubmit();
+        //redirect
+        window.location.replace(urlOrigin+'/index.html');
     })
 } else {
-    //get current url
-    var urlPage = window.location.href;
-    //remove merchant/index.html
-    //change to !delete because after is going to delete everything after a "!delete"
-    urlPage = urlPage.replace("/merchant/index.html", "!delete");
-    //Remove everything after a "!delete" and after add "/index.html"
-    urlPage = urlPage.replace(/\!delete.*/, "/index.html");
-    location.replace(urlPage);
+    delCookie("tokenSession");
+    //get origin url
+    var urlOrigin = getUrlToSubmit();
+    //redirect
+    window.location.replace(urlOrigin+'/index.html');
 }

@@ -52,6 +52,10 @@ function continueScript() {
     $("#formCreateProduct").submit(function (e) {
         submitFormCreateProduct(e);
     });
+    //submit delete product
+    $("body").on('submit', '.formProductDelete', function () {
+        deleteProduct(this.id);
+    });
     //submit form change info
     $("body").on('submit', '.formProductChangeInfo', (function (e) {
         var id = $(this).attr('id');

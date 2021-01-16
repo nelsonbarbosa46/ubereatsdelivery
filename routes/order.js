@@ -5,4 +5,6 @@ const personValid = require('../middleware/checkPersonValid');
 
 router.post('/newReservation', orderController.newReservation);
 
+router.delete('/deleteReservation/:id/:idOrder', personValid, orderController.deleteReservation);
+
 module.exports = router;

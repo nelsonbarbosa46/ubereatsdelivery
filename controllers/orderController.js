@@ -121,3 +121,63 @@ exports.newReservation = (req, res, next) => {
 
     return;
 }
+
+exports.deleteReservation = (req, res, next) => {
+
+    var id = req.params.id;
+    var idOrder = req.params.idOrder;
+
+    var db = require('../sql').db();
+    var sql = `SELECT id FROM client WHERE idUser = ?`;
+    
+    db.get(sql, [id], function (err, row) {
+       if (err) {
+            let response = {
+                message: "failed",
+                typeError: "Erro na BD",
+                request: {
+                    type: 'DELETE',
+                    description: 'Eliminar uma reserva'
+                }
+            }
+            res.status(500).json(response);
+       } else {
+            var idClient = row.id;
+            var itsPaid = 0;
+            sql = `DELETE FROM orderReservation WHERE id = ? AND idClient = ? AND itsPaid = ?`;
+            db.run(sql, [idOrder, idClient, itsPaid], function (err) {
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        typeError: "Erro na BD",
+                        request: {
+                            type: 'DELETE',
+                            description: 'Eliminar uma reserva'
+                        }
+                    }
+                    res.status(500).json(response);
+                } else {
+                    if (this.changes == 1) {
+                        res.status(204).json();   
+                    } else {
+                        let response = {
+                            message: "failed",
+                            typeError: "ID Cliente não é igual ao que está na reserva ou a reserva já está paga",
+                            request: {
+                                type: 'DELETE',
+                                description: 'Eliminar uma reserva'
+                            }
+                        }
+                        res.status(400).json(response);
+                    }
+                }
+            });
+       } 
+    });
+
+    
+
+    db.close();
+
+    return;
+}

@@ -10,6 +10,7 @@ var routeLogin = require('./routes/login');
 var routeUser = require('./routes/user');
 var routeCheck = require('./middleware/checkToken');
 var routeProduct = require('./routes/product');
+var routeOrder = require('./routes/order');
 
 app.use(bodyParser.urlencoded({extended: false})); 
 app.use(bodyParser.json()); 
@@ -39,6 +40,7 @@ app.use('/api/login', routeLogin);
 app.use('/api/user', routeUser);
 app.use('/api/check', routeCheck);
 app.use('/api/product', routeProduct);
+app.use('/api/order', routeOrder);
 
 //dont find the page
 app.use((req, res, next) => {

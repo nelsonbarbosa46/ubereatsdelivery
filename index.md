@@ -31,7 +31,7 @@ Na base de dados, cada tipo é representado por um número:
 ### Login
 
 * **URL** <br>
-  <_/api/login_>
+  /api/login
   
 * **Método** <br>
   `POST`
@@ -85,7 +85,7 @@ Na base de dados, cada tipo é representado por um número:
 ### Registar Cliente/Condutor
 
 * **URL** <br>
-    <_/api/signupClientDriver_/>
+    /api/signupClientDriver
   
 * **Método** <br>
     `POST`
@@ -169,7 +169,7 @@ Na base de dados, cada tipo é representado por um número:
 ### Registar Empresa
 
 * **URL** <br>
-    <_/api/signupMerchant_/>
+    /api/signupMerchant 
   
 * **Método** <br>
     `POST`
@@ -275,7 +275,7 @@ Na base de dados, cada tipo é representado por um número:
 Só pode criar um administrador um super administrador.
 
 * **URL** <br>
-    <_/api/signupAdmin_/>
+    /api/signupAdmin 
   
 * **Método** <br>
     `POST`

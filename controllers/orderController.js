@@ -16,7 +16,7 @@ exports.newReservation = (req, res, next) => {
         if (err) {
             let response = {
                 message: "failed",
-                typeError: "Erro na BD1",
+                typeError: "Erro na BD",
                 request: {
                     type: 'POST',
                     description: 'Criar uma reserva'
@@ -30,7 +30,7 @@ exports.newReservation = (req, res, next) => {
                 if (err) {
                     let response = {
                         message: "failed",
-                        typeError: "Erro na BD2",
+                        typeError: "Erro na BD",
                         request: {
                             type: 'POST',
                             description: 'Criar uma reserva'
@@ -69,8 +69,7 @@ exports.newReservation = (req, res, next) => {
                             if (err) {
                                 let response = {
                                     message: "failed",
-                                    typeError: "Erro na BD3",
-                                    err: err.message,
+                                    typeError: "Erro na BD",
                                     request: {
                                         type: 'POST',
                                         description: 'Criar uma reserva'
@@ -79,21 +78,37 @@ exports.newReservation = (req, res, next) => {
                                 res.status(500).json(response);
                             } else {
                                 var idOrder = this.lastID;
-                                let response = {
-                                    message: "success",
-                                    reservation: {
-                                        idOrder: idOrder,
-                                        idClient: idClient,
-                                        idMerchant: idMerchant,
-                                        price: priceOrder,
-                                        itsPaid: itsPaid
-                                    },
-                                    request: {
-                                        type: 'POST',
-                                        description: 'Criar uma reserva'
+                                var newQuantity = quantityAvai - quantity;
+                                sql = `UPDATE product SET quantity = ? WHERE id = ?`;
+                                db.run(sql, [newQuantity, idProduct], function (err) {
+                                    if (err) {
+                                        let response = {
+                                            message: "failed",
+                                            typeError: "Erro na BD",
+                                            request: {
+                                                type: 'POST',
+                                                description: 'Criar uma reserva'
+                                            }
+                                        }
+                                        res.status(500).json(response);
+                                    } else {
+                                        let response = {
+                                            message: "success",
+                                            reservation: {
+                                                idOrder: idOrder,
+                                                idClient: idClient,
+                                                idMerchant: idMerchant,
+                                                price: priceOrder,
+                                                itsPaid: itsPaid
+                                            },
+                                            request: {
+                                                type: 'POST',
+                                                description: 'Criar uma reserva'
+                                            }
+                                        }
+                                        res.status(201).json(response);
                                     }
-                                }
-                                res.status(201).json(response);
+                                });
                             }
                         })
                     }
@@ -101,6 +116,8 @@ exports.newReservation = (req, res, next) => {
             });
         }
     });
+
+    db.close();
 
     return;
 }

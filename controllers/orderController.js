@@ -312,3 +312,84 @@ exports.payReservation = (req, res, next) => {
 
     return;
 }
+
+exports.doneOrder = (req, res, next) => {
+
+    var db = require('../sql').db();
+
+    var idOrder = req.params.idOrder;
+    var idUser = req.params.id;
+    var itsDone = req.body.itsDone;
+
+    var sql = `SELECT id FROM merchant WHERE idUser = ?`;
+    db.get(sql, [idUser], function (err, row) {
+        if (err) {
+            let response = {
+                message: "failed",
+                typeError: "Erro na BD",
+                request: {
+                    type: 'PUT',
+                    description: 'Concluir uma encomenda'
+                }
+            }
+            res.status(500).json(response);
+        } else {
+            //check if its defined
+            if (row) {
+                var idMerchant = row.id;
+                sql = `UPDATE orderReservation SET itsDone = ? WHERE id = ? AND idMerchant = ?`;
+                db.run(sql, [itsDone, idOrder, idMerchant], function (err) {
+                    if (err) {
+                        let response = {
+                            message: "failed",
+                            typeError: "Erro na BD",
+                            request: {
+                                type: 'PUT',
+                                description: 'Concluir uma encomenda'
+                            }
+                        }
+                        res.status(500).json(response);
+                    } else {
+                        if (this.changes == 1) {
+                            let response = {
+                                message: "success",
+                                order: {
+                                    itsDone: itsDone
+                                },
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Concluir uma encomenda'
+                                }
+                            }
+                            res.status(200).json(response);
+                        } else {
+                            let response = {
+                                message: "failed",
+                                typeError: "Poderá ter posto ID da encomenda/reserva errado",
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Concluir uma encomenda'
+                                }
+                            }
+                            res.status(400).json(response);
+                        }
+                    }
+                });
+            } else {
+                let response = {
+                    message: "failed",
+                    typeError: "Não encontrou com esse ID de utilizador",
+                    request: {
+                        type: 'PUT',
+                        description: 'Concluir uma encomenda'
+                    }
+                }
+                res.status(400).json(response);
+            }
+        }
+    });
+    
+    db.close();
+
+    return;
+}

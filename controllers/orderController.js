@@ -164,7 +164,6 @@ exports.deleteReservation = (req, res, next) => {
                         var quantity = row.quantity;
                         var quantityAvai = row.quantityAvai;
                         var idProduct = row.idProduct;
-                        console.log(quantityAvai, quantity);
                         sql = `DELETE FROM orderReservation WHERE id = ? AND idClient = ? AND itsPaid = ?`;
                         db.run(sql, [idOrder, idClient, itsPaid], function (err) {
                             if (err) {
@@ -179,9 +178,7 @@ exports.deleteReservation = (req, res, next) => {
                                 res.status(500).json(response);
                             } else {
                                 if (this.changes == 1) {
-                                    console.log(quantityAvai, quantity);
                                     var newQuantity = quantityAvai + quantity;
-                                    console.log(newQuantity);
                                     sql = `UPDATE product SET quantity = ? WHERE id = ?`;
                                     db.run(sql, [newQuantity, idProduct], function (err) {
                                         if (err) {
@@ -229,6 +226,87 @@ exports.deleteReservation = (req, res, next) => {
     });
 
     
+
+    db.close();
+
+    return;
+}
+
+exports.payReservation = (req, res, next) => {
+
+    var db = require('../sql').db();
+
+    var id = req.params.id;
+    var idOrder = req.params.idOrder;
+    var itsPaid = req.body.itsPaid;
+
+    var sql = `SELECT id FROM client WHERE idUser = ?`;
+    db.get(sql, [id], function (err, row) {
+        if (err) {
+            let response = {
+                message: "failed",
+                typeError: "Erro na BD",
+                request: {
+                    type: 'PUT',
+                    description: 'Pagar uma reserva'
+                }
+            }
+            res.status(500).json(response);
+        } else {
+            //check if defined
+            if (row) {
+                var idClient = row.id;
+                sql = `UPDATE orderReservation SET itsPaid = ? WHERE id = ? AND idClient = ?`;
+                db.run(sql, [itsPaid, idOrder, idClient], function (err) {
+                    if (err) {
+                        let response = {
+                            message: "failed",
+                            typeError: "Erro na BD",
+                            request: {
+                                type: 'PUT',
+                                description: 'Pagar uma reserva'
+                            }
+                        }
+                        res.status(500).json(response);
+                    } else {
+                        if (this.changes == 1) {
+                            let response = {
+                                message: "success",
+                                order: {
+                                    itsPaid: itsPaid
+                                },
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Pagar uma reserva'
+                                }
+                            }
+                            res.status(200).json(response);
+                        } else {
+                            let response = {
+                                message: "failed",
+                                typeError: "Poderá ter posto ID da encomenda/reserva errado",
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Pagar uma reserva'
+                                }
+                            }
+                            res.status(400).json(response);
+                        }
+                    }
+                });
+            } else {
+                let response = {
+                    message: "failed",
+                    typeError: "Não encontrou com esse ID",
+                    request: {
+                        type: 'PUT',
+                        description: 'Pagar uma reserva'
+                    }
+                }
+                res.status(400).json(response);
+            }
+        }
+    });
 
     db.close();
 

@@ -7,4 +7,6 @@ router.post('/newReservation', orderController.newReservation);
 
 router.delete('/deleteReservation/:id/:idOrder', personValid, orderController.deleteReservation);
 
+router.put('/payReservation/:id/:idOrder', personValid, orderController.payReservation)
+
 module.exports = router;

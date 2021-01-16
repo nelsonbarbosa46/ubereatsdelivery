@@ -131,7 +131,7 @@ exports.deleteReservation = (req, res, next) => {
     var sql = `SELECT id FROM client WHERE idUser = ?`;
     
     db.get(sql, [id], function (err, row) {
-       if (err) {
+        if (err) {
             let response = {
                 message: "failed",
                 typeError: "Erro na BD",
@@ -141,11 +141,13 @@ exports.deleteReservation = (req, res, next) => {
                 }
             }
             res.status(500).json(response);
-       } else {
+        } else {
             var idClient = row.id;
             var itsPaid = 0;
-            sql = `DELETE FROM orderReservation WHERE id = ? AND idClient = ? AND itsPaid = ?`;
-            db.run(sql, [idOrder, idClient, itsPaid], function (err) {
+            sql = `SELECT orderReservation.quantity, orderReservation.idProduct, product.quantity AS "quantityAvai" 
+            FROM orderReservation 
+            INNER JOIN product ON orderReservation.idProduct=product.id WHERE orderReservation.id = ?`;
+            db.get(sql, [idOrder], function (err, row) {
                 if (err) {
                     let response = {
                         message: "failed",
@@ -157,22 +159,73 @@ exports.deleteReservation = (req, res, next) => {
                     }
                     res.status(500).json(response);
                 } else {
-                    if (this.changes == 1) {
-                        res.status(204).json();   
+                    //check if its defined
+                    if (row) {
+                        var quantity = row.quantity;
+                        var quantityAvai = row.quantityAvai;
+                        var idProduct = row.idProduct;
+                        console.log(quantityAvai, quantity);
+                        sql = `DELETE FROM orderReservation WHERE id = ? AND idClient = ? AND itsPaid = ?`;
+                        db.run(sql, [idOrder, idClient, itsPaid], function (err) {
+                            if (err) {
+                                let response = {
+                                    message: "failed",
+                                    typeError: "Erro na BD",
+                                    request: {
+                                        type: 'DELETE',
+                                        description: 'Eliminar uma reserva'
+                                    }
+                                }
+                                res.status(500).json(response);
+                            } else {
+                                if (this.changes == 1) {
+                                    console.log(quantityAvai, quantity);
+                                    var newQuantity = quantityAvai + quantity;
+                                    console.log(newQuantity);
+                                    sql = `UPDATE product SET quantity = ? WHERE id = ?`;
+                                    db.run(sql, [newQuantity, idProduct], function (err) {
+                                        if (err) {
+                                            let response = {
+                                                message: "failed",
+                                                typeError: "Erro na BD4",
+                                                request: {
+                                                    type: 'DELETE',
+                                                    description: 'Eliminar uma reserva'
+                                                }
+                                            }
+                                            res.status(500).json(response);
+                                        } else {
+                                            res.status(204).json(); 
+                                        }
+                                    });  
+                                } else {
+                                    let response = {
+                                        message: "failed",
+                                        typeError: "ID Cliente não é igual ao que está na reserva ou a reserva já está paga",
+                                        request: {
+                                            type: 'DELETE',
+                                            description: 'Eliminar uma reserva'
+                                        }
+                                    }
+                                    res.status(400).json(response);
+                                }
+                            }
+                        });
                     } else {
                         let response = {
                             message: "failed",
-                            typeError: "ID Cliente não é igual ao que está na reserva ou a reserva já está paga",
+                            typeError: "Erro na BD",
                             request: {
                                 type: 'DELETE',
                                 description: 'Eliminar uma reserva'
                             }
                         }
-                        res.status(400).json(response);
+                        res.status(500).json(response);
                     }
+                    
                 }
             });
-       } 
+        } 
     });
 
     

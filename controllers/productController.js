@@ -591,3 +591,99 @@ exports.getProductsMe = (req, res, next) => {
     
     return;
 }
+
+exports.changeQuantityProduct = (req, res, next) => {
+
+    var idUser = req.params.id;
+    var idProduct = req.params.idProduct;
+    var quantity=req.body.quantity;
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    //check if typeUser is invalid
+    if (decoded.typeUser != 2) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'PUT',
+                description: 'Alterar quantidade do produto'
+            }
+        }
+        //typeUser is invalid
+        res.status(401).json(response)
+    } else {
+        var db = require('../sql').db();
+        var sql = `SELECT id FROM merchant WHERE idUser = ?`;
+        
+        db.get(sql, [idUser], function (err, row) {
+            if (err) {
+                let response = {
+                    message: "failed",
+                    request: {
+                        type: 'PUT',
+                        description: 'Alterar quantidade do produto'
+                    }
+                }
+                //error selecting
+                res.status(500).json(response)
+            } else {
+                if (row) {
+                    var idMerchant = row.id;
+                    sql = `UPDATE product SET quantity = ? WHERE id = ? AND idMerchant = ?`;
+                    db.run(sql, [quantity, idProduct, idMerchant], function (err) {
+                        if (err) {
+                            let response = {
+                                message: "failed",
+                                request: {
+                                    type: 'PUT',
+                                    description: 'Alterar Quantidade do produto'
+                                }
+                            }
+                            //error updating
+                            res.status(500).json(response)
+                        } else {
+                            //check if its updated
+                            if (this.changes == 0) {
+                                let response = {
+                                    message: "failed",
+                                    request: {
+                                        type: 'PUT',
+                                        description: 'Alterar quantidade do produto'
+                                    }
+                                }
+                                //error updating
+                                res.status(500).json(response)
+                            } else {
+                                let response = {
+                                    message: "success",
+                                    newQuantity: quantity,
+                                    request: {
+                                        type: 'PUT',
+                                        description: 'Alterar quantidade do produto'
+                                    }
+                                }
+                                //update successful
+                                res.status(200).json(response)
+                            }
+                        }
+                    });
+                } else {
+                    let response = {
+                        message: "failed",
+                        request: {
+                            type: 'PUT',
+                            description: 'Alterar quantidade do produto'
+                        }
+                    }
+                    //dont find any merchant
+                    res.status(500).json(response)
+                }
+            }
+        });
+
+        db.close();
+
+    }
+
+    return;
+}

@@ -63,4 +63,6 @@ router.get('/getProductsMe/:id', personValid, productController.getProductsMe);
 
 router.delete('/deleteProduct/:id', productController.deleteProduct);
 
+router.put('/changeQuantityProduct/:id/:idProduct', productController.changeQuantityProduct);
+
 module.exports = router;

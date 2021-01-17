@@ -5,4 +5,6 @@ const personValid = require('../middleware/checkPersonValid');
 
 router.post('/newDelivery', deliveryController.newDelivery);
 
+router.put('/doneDelivery/:id/:idOrder', personValid, deliveryController.doneDelivery);
+
 module.exports = router;

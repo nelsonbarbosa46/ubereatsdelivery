@@ -88,13 +88,80 @@ exports.newDelivery = (req, res, next) => {
                     typeError: "ID inválido",
                     request: {
                         type: 'POST',
-                        description: 'Criar uma reserva'
+                        description: 'Fazer uma entrega'
                     }
                 }
                 res.status(500).json(response);
             }
         }
     });
+
+    db.close();
+
+    return;
+}
+
+exports.doneDelivery = (req, res, next) => {
+
+    var db = require('../sql').db();
+    var idOrder = req.params.idOrder;
+    var id = req.params.id;
+    var itsDelivered = req.body.itsDelivered;
+    var canWork = 1;
+
+    var sql = `SELECT driver.id AS "id" FROM driver INNER JOIN client ON driver.idClient = client.id WHERE client.idUser = ?
+    AND driver.canWork = ?`;
+    db.get(sql, [id, canWork], function (err, row) {
+        if (err) {
+            let response = {
+                message: "failed",
+                typeError: "Erro na BD",
+                request: {
+                    type: 'POST',
+                    description: 'Concluir uma entrega'
+                }
+            }
+            res.status(500).json(response);
+        } else {
+            if (row) {
+                sql = `UPDATE delivery SET itsDelivered = ? WHERE idOrder = ?`;
+                db.run(sql, [itsDelivered, idOrder], function (err) {
+                    if (err) {
+                        let response = {
+                            message: "failed",
+                            typeError: "Erro na BD",
+                            request: {
+                                type: 'POST',
+                                description: 'Concluir uma entrega'
+                            }
+                        }
+                        res.status(500).json(response);
+                    } else {
+                        let response = {
+                            message: "success",
+                            typeSuccess: "Concluída com sucesso",
+                            request: {
+                                type: 'POST',
+                                description: 'Concluir uma entrega'
+                            }
+                        }
+                        res.status(200).json(response);
+                    }
+                });
+            } else {
+                let response = {
+                    message: "failed",
+                    typeError: "Erro na BD",
+                    request: {
+                        type: 'POST',
+                        description: 'Concluir uma entrega'
+                    }
+                }
+                res.status(500).json(response);
+            }
+        }
+    });
+
 
     db.close();
 

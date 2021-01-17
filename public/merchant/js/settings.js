@@ -36,6 +36,8 @@ function submitFormChangeInfo(e) {
                 category: category
             },
             success: function () {   
+                setCookie("name", name, 1);
+                $("#pageNameUser").text(name);
                 M.toast({html: 'Alterado com sucesso'});
             }, 
             error: function (jqXHR, textStatus, err) {

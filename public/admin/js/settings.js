@@ -32,7 +32,9 @@ function submitFormChangeInfo(e) {
                 zipCode: zipCode,
                 location: location
             },
-            success: function () {   
+            success: function () {
+                setCookie("name", name, 1);
+                $("#pageNameUser").text(name);   
                 M.toast({html: 'Alterado com sucesso'});
             }, 
             error: function (jqXHR, textStatus, err) {

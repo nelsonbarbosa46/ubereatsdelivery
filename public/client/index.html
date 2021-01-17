@@ -178,17 +178,40 @@
             <h4>Condutor</h4>
             <div class="row">
               <div class="col s12">
-
+                <form action="#">
+                  <div class="input-field col s12 m6">
+                    <p class="left-align">
+                      <label>
+                          <input type="checkbox" name="isDriver" id="formChangeDriver" />
+                          <span>Condutor</span>
+                      </label>
+                    </p>
+                  </div>
+                  <div id="formIsDriver">
+                    <div class="input-field col s12 m6">
+                        <select id="formIsDriverTypeVehicle" data-field="Tipo de Veículo">
+                            <option value="" disabled selected>Escolher a opção</option>
+                            <option value="1">Carro</option>
+                            <option value="2">Mota</option>
+                            <option value="3">Bicicleta</option>
+                        </select>
+                        <label>Tipo de veículo</label>
+                    </div>
+                    <div class="col s12">
+                        <p class="left-align"><small>Para poder trabalhar como condutor, tem que aguardar que um administrador o aceite</small></p>
+                    </div>
+                  </div>
+                  <div class="col s12">
+                    <button id="formSubmitDriver" type="submit" class="waves-effect waves-orange btn orange lighten-2">Alterar</button>
+                    <a href="#!" class="modal-close waves-effect btn">Cancelar</a>
+                  </div>
+                </form>
               </div>
-
             </div>
           </div>
         </div>
 
-
-
-
-
+        
     </header>
 
 

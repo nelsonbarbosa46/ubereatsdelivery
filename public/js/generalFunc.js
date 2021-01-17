@@ -3,8 +3,9 @@ var arrCountiesLowerCase = ["águeda","albergaria-a-velha","anadia","arouca","av
 //get values for the form to change info
 function getValuesFormChangeInfo() {
     
+    var url = getUrlToSubmit();
     $.ajax({
-        url: 'http://localhost:3000/api/user/infoUser/'+idUser,
+        url: url+'/api/user/infoUser/'+idUser,
         type: 'GET',
         cache: false,
         headers: {
@@ -74,8 +75,9 @@ function submitFormChangeEP(e) {
     var email = $("#formChangeEPEmail").val();
     var password = $("#formChangeEPPassword").val();
     var repeatPassword = $("#formChangeEPRepeatPassword").val();
+    var url = getUrlToSubmit();
     $.ajax({
-        url: 'http://localhost:3000/api/user/changeEP/'+idUser,
+        url: url+'/api/user/changeEP/'+idUser,
         type: 'PUT',
         cache: false,
         headers: {

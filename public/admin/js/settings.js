@@ -19,8 +19,9 @@ function submitFormChangeInfo(e) {
     verifyFieldsChangeInfo(errFields, name, address, zipCode, location);
 
     if (errFields.length === 0) {
+        var url = getUrlToSubmit();
         $.ajax({
-            url: 'http://localhost:3000/api/user/changeInfoAd/'+idUser,
+            url: url+'/api/user/changeInfoAd/'+idUser,
             type: 'PUT',
             cache: false,
             headers: {
@@ -89,7 +90,7 @@ function submitFormRegisterAdmin(e) {
     if (errFields.length === 0) {
         
         $.ajax({
-            url: 'http://localhost:3000/api/register/signupAdmin/',
+            url: url+'/api/register/signupAdmin/',
             type: 'POST',
             cache: false,
             headers: {

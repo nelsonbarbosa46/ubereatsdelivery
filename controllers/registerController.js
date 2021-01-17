@@ -549,6 +549,25 @@ exports.createMerchant = async (req, res, next) => {
     var isChecked = 0;
     var logoPath;
 
+    const fs = require('fs');
+
+    if (logo) {
+        logoPath = req.file.path;
+    } else {
+        logoPath = null;
+    }
+
+    function deleteLogo(fs, logoPath) {
+        if (logoPath) {
+            //delete new image because was error on insert
+            fs.unlink(logoPath, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            })
+        }
+    }
+
     //check if any field is empty
     if (!email || !password || !repeatPassword || !address || !zipCode || 
         !location || !name || !category || !nipc || !description ||
@@ -561,6 +580,7 @@ exports.createMerchant = async (req, res, next) => {
                 description: 'Criar uma empresa'
             }
         }
+        deleteLogo(fs, logoPath);
         //some field is empty
         res.status(400).json(response);
     //check if email invalid
@@ -572,6 +592,7 @@ exports.createMerchant = async (req, res, next) => {
                 description: 'Criar uma empresa'
             }
         }
+        deleteLogo(fs, logoPath);
         //email invalid
         res.status(400).json(response);
     //check if password is invalid
@@ -589,6 +610,7 @@ exports.createMerchant = async (req, res, next) => {
                 description: 'Criar uma empresa'
             }
         }
+        deleteLogo(fs, logoPath);
         //password invalid
         res.status(400).json(response)
     //check if password is not equal to repeatPassword
@@ -600,6 +622,7 @@ exports.createMerchant = async (req, res, next) => {
                 description: 'Criar uma empresa'
             }
         }
+        deleteLogo(fs, logoPath);
         //password is not equal to repeatPassword
         res.status(400).json(response)
     //check if zipCode is invalid
@@ -611,6 +634,7 @@ exports.createMerchant = async (req, res, next) => {
                 description: 'Criar uma empresa'
             }
         }
+        deleteLogo(fs, logoPath);
         //zipCode invalid
         res.status(400).json(response)
     //check if location is invalid
@@ -622,10 +646,10 @@ exports.createMerchant = async (req, res, next) => {
                 description: 'Criar uma empresa'
             }
         }
+        deleteLogo(fs, logoPath);
         //location invalid
         res.status(400).json(response)
     } else {
-        logoPath = req.file.path;
         var db = require("../sql").db();
 
         const hash = await bcrypt.hashSync(password, 10);
@@ -641,9 +665,10 @@ exports.createMerchant = async (req, res, next) => {
                         message: "failed",
                         request: {
                             type: 'POST',
-                            description: 'Criar uma empresa'
+                            description: 'Criar uma empresa1'
                         }
                     }
+                    deleteLogo(fs, logoPath);
                     //error inserting on table user
                     res.status(500).json(response)
                 } else {
@@ -657,9 +682,10 @@ exports.createMerchant = async (req, res, next) => {
                                     message: "failed",
                                     request: {
                                         type: 'POST',
-                                        description: 'Criar uma empresa'
+                                        description: 'Criar uma empresa2'
                                     }
                                 }
+                                deleteLogo(fs, logoPath);
                                 //error inserting on table merchant
                                 res.status(500).json(response)
                             } else {

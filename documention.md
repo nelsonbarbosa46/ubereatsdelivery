@@ -1,6 +1,5 @@
 ---
-theme: jekyll-theme-minimal
-title: Infood
+theme: default
 ---
 
 ## Documentação API

@@ -26,6 +26,8 @@ function continueScript() {
     } else {
         $("#begin div h2").append("Administrador");
     }
+        //get values for the form to change info
+        $("#openFormChangeInfo").one("click", getValuesFormChangeInfo);
     //verify if on change input on form change email/password is empty or not, if its empty disabled button
     //to submit, if not, button is enabled
     $(document).on('change', '#formChangeEP input', verifyInputsFormEP);

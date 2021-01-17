@@ -171,3 +171,28 @@ function verifyFieldsRegisterClient(errFields, name, email, password, repeatPass
         errFields.push({"error": "invalid", "field": $("#formRegisterAdminLocation").data("field")});
     }
 }
+
+//get values for the form to change info
+function getValuesFormChangeInfo() {
+    
+    var url = getUrlToSubmit();
+    $.ajax({
+        url: url+'/api/user/getInfoAd/'+idUser,
+        type: 'GET',
+        cache: false,
+        headers: {
+            "Authorization": 'Bearer ' + token
+        },
+        success: function (data) {
+            $("#formChangeInfoName").val(data.user.name);
+            $("#formChangeInfoAddress").val(data.user.address);
+            $("#formChangeInfoZipCode").val(data.user.zipCode);
+            $("#formChangeInfoLocation").val(data.user.location);
+            M.updateTextFields();
+        }, 
+        error: function (jqXHR, textStatus, err) {
+            console.log(jqXHR);
+            M.toast({html: 'Erro a obter os dados!'});
+        }
+    });
+}

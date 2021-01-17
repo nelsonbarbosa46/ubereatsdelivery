@@ -21,6 +21,21 @@ function ajaxToken() {
     })
 }
 
+function ajaxGetImage() {
+    var url = getUrlToSubmit();
+    $.ajax({
+        url: url+'/api/user/getLogoMe/'+idUser,
+        type: 'GET',
+        cache: false,
+        headers: {
+            "Authorization": 'Bearer ' + token
+        }, 
+        success: function (data) {
+            $()
+        }
+    });
+}
+
 if (token !== '' && token !== null) {
     ajaxToken().then((data) => {
         typeUser = data.typeUser;

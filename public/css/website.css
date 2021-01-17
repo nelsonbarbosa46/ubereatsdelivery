@@ -92,3 +92,7 @@ select option {
     font-size: 60px;
     color: #212121;
 }
+
+#pageNameUser {
+    margin-top: 0 !important;
+}

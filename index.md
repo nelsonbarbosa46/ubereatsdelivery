@@ -27,7 +27,7 @@ Na base de dados, cada tipo é representado por um número:
 |Super Administrador|4     |
 
 ## Documentação da API
-
+[Link](documention.md)
 ### Login
 
 * **URL** <br>

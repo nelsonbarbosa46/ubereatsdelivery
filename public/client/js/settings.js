@@ -17,8 +17,9 @@ function submitFormChangeInfo(e) {
     verifyFieldsEmpty(errFields, name, address, zipCode, location, nif, contactNumber);
 
     if (errFields.length === 0) {
+        var url = getUrlToSubmit();
         $.ajax({
-            url: 'http://localhost:3000/api/user/changeInfoCl/'+idUser,
+            url: url+'/api/user/changeInfoCl/'+idUser,
             type: 'PUT',
             cache: false,
             headers: {

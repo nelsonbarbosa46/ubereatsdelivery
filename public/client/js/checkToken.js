@@ -21,12 +21,29 @@ function ajaxToken() {
     })
 }
 
+function ajaxNameEmail() {
+    return new Promise((resolve, reject) => {
+        url = getUrlToSubmit();
+
+        $.ajax({
+            url: url+'',
+            type: 'GET',
+            cache: false,
+            headers: {
+                "Authorization": 'Bearer ' + token
+            }, success: function (data) {
+                resolve(data);     
+            }
+        });
+    });
+}
+
 if (token) {
     ajaxToken().then((data) => {
+        nameUser = getCookie("name");
+        emailUser = getCookie("email");
         typeUser = data.typeUser;
         idUser = data.id;
-        nameUser = data.name;
-        emailUser = data.email;
         //continueScript is on file index.js
         continueScript();
     }).catch((error) => {

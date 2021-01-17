@@ -85,6 +85,4 @@ router.put('/checkDriver/:id', userController.checkDriver);
 
 router.put('/checkMerchant/:id', userController.checkMerchant);
 
-router.get('/getInfoToMenu/:id', personValid, userController.getInfoToMenu);
-
 module.exports = router;

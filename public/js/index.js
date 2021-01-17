@@ -160,7 +160,11 @@ $(document).ready(function(){
                     console.log(data);
                     let token = data.login.token;
                     let url = data.login.url;
+                    let name = data.login.name;
+                    let email = data.login.email;
                     setCookie("tokenSession", token, 1);
+                    setCookie("name", name, 1);
+                    setCookie("email", email, 1);
                     var urlRedirect = urlOrigin + url;
                     //redirect
                     window.location.replace(urlRedirect + "index.html");   
@@ -227,7 +231,11 @@ $(document).ready(function(){
                     success: function (data) {
                         let token = data.login.token;
                         let url = data.login.url;
+                        let name = data.userCreated.name;
+                        let email = data.userCreated.email;
                         setCookie("tokenSession", token, 1);
+                        setCookie("name", name, 1);
+                        setCookie("email", email, 1);
                         var urlRedirect = urlOrigin + url;
                         //redirect
                         window.location.replace(urlRedirect + "index.html");
@@ -327,7 +335,11 @@ $(document).ready(function(){
                 success: function (data) {
                     let token = data.login.token;
                     let url = data.login.url;
+                    let name = data.userCreated.name;
+                    let email = data.userCreated.email;
                     setCookie("tokenSession", token, 1);
+                    setCookie("name", name, 1);
+                    setCookie("email", email, 1);
                     var urlRedirect = urlOrigin + url;
                     //redirect
                     window.location.replace(urlRedirect + "index.html");

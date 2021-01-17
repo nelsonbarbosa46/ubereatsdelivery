@@ -74,6 +74,7 @@ exports.login = (req, res, next) => {
                         var typeUser = row.typeUser;
                         var id = row.id;
                         var name = row.name;
+                        var email = row.email;
 
                         var token = jwt.sign({
                             typeUser: typeUser,
@@ -93,6 +94,7 @@ exports.login = (req, res, next) => {
                         let response = {
                             message: "success",
                             login: {
+                                name: name,
                                 email: email,
                                 typeUser: typeUser,
                                 token: token,

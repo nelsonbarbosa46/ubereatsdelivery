@@ -1619,6 +1619,45 @@ exports.checkMerchant = (req, res, next) => {
         db.close();
 
     }
+
+    return;
+}
+
+exports.getInfoToMenu = (req, res, next) => {
+
+    var id = req.params.id;
+
+    if (!id || id < 0) {
+        let response = {
+            message: "failed",
+            request: {
+                type: 'GET',
+                description: 'Obter informação para o menu (email/nome)'
+            }
+        }
+        //id empty or invalid
+        res.status(400).json(response);
+    } else {
+        var db = require('../sql').db();
+        var sql = `SELECT name, email FROM user WHERE id = ?`;
+        
+        db.get(sql, [id], function (err, row) {
+            let response = {
+                message: "success",
+                info: {
+                    name: row.name,
+                    email: row.email
+                },
+                request: {
+                    type: 'GET',
+                    description: 'Obter informação para o menu (email/nome)'
+                }
+            }
+            res.status(200).json(response);
+        });
+
+        db.close();
+    }
     
     return;
 }

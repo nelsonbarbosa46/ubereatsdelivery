@@ -1,4 +1,4 @@
-
+const jwt = require('jsonwebtoken');
 
 exports.newReservation = (req, res, next) => {
 
@@ -6,27 +6,60 @@ exports.newReservation = (req, res, next) => {
     var idMerchant = req.body.idMerchant;
     var idProduct = req.body.idProduct;
     var quantity = req.body.quantity;
+    var parseQuantity = parseInt(quantity);
     var itsPaid = 0;
     var itsDone = 0;
 
-    var db = require('../sql').db();
+    //check if fields are valid
+    
+    const tokenUnsplited = req.headers.authorization;
+    if (!tokenUnsplited) {
+        let response = {
+            "message": "failed",
+            "description": "You don't have permissions!"
+        };
+        res.status(401).json(response);
+    } else {
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
 
-    var sql = `SELECT id FROM client WHERE idUser = ?`;
-    db.get(sql, [idUser], function (err, row) {
-        if (err) {
+        //check if typeUser is equal to 0/1 (type Client) and if idMerchant is equal to id inside a token
+        if ((decoded.typeUser != 0 && decoded.typeUser != 1) || decoded.id != idUser) {
             let response = {
                 message: "failed",
-                typeError: "Erro na BD",
+                "typeError": "Token inválido ou ID inválido",
                 request: {
                     type: 'POST',
                     description: 'Criar uma reserva'
                 }
             }
-            res.status(500).json(response);
+            //typeUser or id is invalid
+            res.status(401).json(response)
+        } else if (!idProduct || !quantity || !parseQuantity || !idMerchant){
+            let response = {
+                message: "failed",
+                typeError: "Algum campo está vazio",
+                request: {
+                    type: 'POST',
+                    description: 'Criar uma reserva'
+                }
+            }
+            res.status(400).json(response)
+        } else if (idMerchant < 0 || idProduct < 0 || !parseQuantity || quantity < 0) {
+            let response = {
+                message: "failed",
+                typeError: "Algum campo está inválido",
+                request: {
+                    type: 'POST',
+                    description: 'Criar uma reserva'
+                }
+            }
+            res.status(400).json(response)
         } else {
-            var idClient = row.id;
-            sql = `SELECT quantity, price, idMerchant FROM product WHERE id = ?`;
-            db.get(sql, [idProduct], function (err, row) {
+            var db = require('../sql').db();
+
+            var sql = `SELECT id FROM client WHERE idUser = ?`;
+            db.get(sql, [idUser], function (err, row) {
                 if (err) {
                     let response = {
                         message: "failed",
@@ -37,87 +70,116 @@ exports.newReservation = (req, res, next) => {
                         }
                     }
                     res.status(500).json(response);
-                } else if (idMerchant != row.idMerchant) {
-                    let response = {
-                        message: "failed",
-                        "typeError": "ID da Empresa recebido não coincide com o ID da empresa relacionado com o produto",
-                        request: {
-                            type: 'POST',
-                            description: 'Criar uma reserva'
-                        }
-                    }
-                    res.status(400).json(response);
                 } else {
-                    var quantityAvai = row.quantity;
-                    var price = row.price;
-                    //check if quantity insert is bigger then the quantity available
-                    if (quantityAvai < quantity) {
-                        let response = {
-                            message: "failed",            
-                            "typeError": "Não existe stock suficiente",
-                            request: {
-                                type: 'POST',
-                                description: 'Criar uma reserva'
+                    var idClient = row.id;
+                    sql = `SELECT quantity, price, idMerchant FROM product WHERE id = ?`;
+                    db.get(sql, [idProduct], function (err, row) {
+                        if (err) {
+                            let response = {
+                                message: "failed",
+                                typeError: "Erro na BD",
+                                request: {
+                                    type: 'POST',
+                                    description: 'Criar uma reserva'
+                                }
                             }
-                        }
-                        res.status(400).json(response);
-                    } else {
-                        //calculate price
-                        var priceOrder = price * quantity;
-                        sql = `INSERT INTO orderReservation(idClient, idMerchant, idProduct, quantity, price, itsPaid, itsDone) VALUES (?,?,?,?,?,?,?)`;
-                        db.run(sql, [idClient, idMerchant, idProduct, quantity, priceOrder, itsPaid, itsDone], function (err) {
-                            if (err) {
+                            res.status(500).json(response);
+                        } else {
+                            //check if its empty
+                            if (!row) {
                                 let response = {
                                     message: "failed",
-                                    typeError: "Erro na BD",
+                                    typeError: "Não encontrou com o ID Product que colocou",
                                     request: {
                                         type: 'POST',
                                         description: 'Criar uma reserva'
                                     }
                                 }
-                                res.status(500).json(response);
-                            } else {
-                                var idOrder = this.lastID;
-                                var newQuantity = quantityAvai - quantity;
-                                sql = `UPDATE product SET quantity = ? WHERE id = ?`;
-                                db.run(sql, [newQuantity, idProduct], function (err) {
-                                    if (err) {
-                                        let response = {
-                                            message: "failed",
-                                            typeError: "Erro na BD",
-                                            request: {
-                                                type: 'POST',
-                                                description: 'Criar uma reserva'
-                                            }
-                                        }
-                                        res.status(500).json(response);
-                                    } else {
-                                        let response = {
-                                            message: "success",
-                                            reservation: {
-                                                idOrder: idOrder,
-                                                idClient: idClient,
-                                                idMerchant: idMerchant,
-                                                price: priceOrder,
-                                                itsPaid: itsPaid
-                                            },
-                                            request: {
-                                                type: 'POST',
-                                                description: 'Criar uma reserva'
-                                            }
-                                        }
-                                        res.status(201).json(response);
+                                res.status(400).json(response);
+                            } else if (idMerchant != row.idMerchant) {
+                                let response = {
+                                    message: "failed",
+                                    "typeError": "ID da Empresa recebido não coincide com o ID da empresa relacionado com o produto",
+                                    request: {
+                                        type: 'POST',
+                                        description: 'Criar uma reserva'
                                     }
-                                });
+                                }
+                                res.status(400).json(response);
+                            } else {
+                                var quantityAvai = row.quantity;
+                                var price = row.price;
+                                //check if quantity insert is bigger then the quantity available
+                                if (quantityAvai < quantity) {
+                                    let response = {
+                                        message: "failed",            
+                                        "typeError": "Não existe stock suficiente",
+                                        request: {
+                                            type: 'POST',
+                                            description: 'Criar uma reserva'
+                                        }
+                                    }
+                                    res.status(400).json(response);
+                                } else {
+                                    //calculate price
+                                    var priceOrder = price * quantity;
+                                    sql = `INSERT INTO orderReservation(idClient, idMerchant, idProduct, quantity, price, itsPaid, itsDone) VALUES (?,?,?,?,?,?,?)`;
+                                    db.run(sql, [idClient, idMerchant, idProduct, quantity, priceOrder, itsPaid, itsDone], function (err) {
+                                        if (err) {
+                                            let response = {
+                                                message: "failed",
+                                                typeError: "Erro na BD",
+                                                request: {
+                                                    type: 'POST',
+                                                    description: 'Criar uma reserva'
+                                                }
+                                            }
+                                            res.status(500).json(response);
+                                        } else {
+                                            var idOrder = this.lastID;
+                                            var newQuantity = quantityAvai - quantity;
+                                            sql = `UPDATE product SET quantity = ? WHERE id = ?`;
+                                            db.run(sql, [newQuantity, idProduct], function (err) {
+                                                if (err) {
+                                                    let response = {
+                                                        message: "failed",
+                                                        typeError: "Erro na BD",
+                                                        request: {
+                                                            type: 'POST',
+                                                            description: 'Criar uma reserva'
+                                                        }
+                                                    }
+                                                    res.status(500).json(response);
+                                                } else {
+                                                    let response = {
+                                                        message: "success",
+                                                        reservation: {
+                                                            idOrder: idOrder,
+                                                            idClient: idClient,
+                                                            idMerchant: idMerchant,
+                                                            price: priceOrder,
+                                                            itsPaid: itsPaid
+                                                        },
+                                                        request: {
+                                                            type: 'POST',
+                                                            description: 'Criar uma reserva'
+                                                        }
+                                                    }
+                                                    res.status(201).json(response);
+                                                }
+                                            });
+                                        }
+                                    })
+                                }
                             }
-                        })
-                    }
+                        }
+                    });
                 }
             });
+        
+            db.close();
         }
-    });
-
-    db.close();
+    }
 
     return;
 }

@@ -86,7 +86,13 @@ function submitFormChangeEP(e) {
             password: password,
             repeatPassword: repeatPassword
         },
-        success: function () {
+        success: function (data) {
+            console.log(data);
+            console.log(data.email);
+            if (data.email) {
+                setCookie("email", data.email, 1);
+                $("#pageEmailUser").text(data.email);
+            }
             //clean fields and change button to disabled
             $("#formChangeEPEmail").val('');
             $("#formChangeEPEmail").removeClass('valid');

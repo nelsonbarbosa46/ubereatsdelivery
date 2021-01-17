@@ -161,7 +161,7 @@ exports.changeEmailPassword = (req, res, next) => {
             } else {
                 let response = {
                     message: "success",
-                    newEmail: email,
+                    email: email,
                     idUser: id,
                     request: {
                         type: 'PUT',

@@ -25,6 +25,8 @@ if (token !== '' && token !== null) {
     ajaxToken().then((data) => {
         typeUser = data.typeUser;
         idUser = data.id;
+        nameUser = getCookie("name");
+        emailUser = getCookie("email");
         //create variable to use when show products
         productsShowCount = 0;
         continueScript();

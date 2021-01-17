@@ -18,7 +18,7 @@ function submitFormChangeInfo(e) {
 
     if (errFields.length === 0) {
         $.ajax({
-            url: 'http://localhost:3000/api/user/changeEP/'+idUser,
+            url: 'http://localhost:3000/api/user/changeInfoCl/'+idUser,
             type: 'PUT',
             cache: false,
             headers: {
@@ -33,6 +33,8 @@ function submitFormChangeInfo(e) {
                 contactNumber: contactNumber
             },
             success: function () {   
+                setCookie("name", name, 1);
+                $("#pageNameUser").text(name);
                 M.toast({html: 'Alterado com sucesso'});
             }, 
             error: function (jqXHR, textStatus, err) {

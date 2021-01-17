@@ -273,7 +273,7 @@ exports.changeInfoCl = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
 
     //check if typeUser is incorrect
-    if (decoded.typeUser != 3 && decoded.typeUser != 4) {
+    if (decoded.typeUser != 0 && decoded.typeUser != 1) {
         let response = {
             message: "failed",
             request: {

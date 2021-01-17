@@ -93,3 +93,30 @@ function verifyFieldsEmpty(errFields, name, address, zipCode, location, nif, con
         errFields.push({"error": "invalid", "field": $("#formChangeInfoContactNumber").data("field")});
     }
 }
+
+//get values for the form to change info
+function getValuesFormChangeInfo() {
+    
+    var url = getUrlToSubmit();
+    $.ajax({
+        url: url+'/api/user/getInfoCl/'+idUser,
+        type: 'GET',
+        cache: false,
+        headers: {
+            "Authorization": 'Bearer ' + token
+        },
+        success: function (data) {
+            $("#formChangeInfoName").val(data.user.name);
+            $("#formChangeInfoAddress").val(data.user.address);
+            $("#formChangeInfoZipCode").val(data.user.zipCode);
+            $("#formChangeInfoLocation").val(data.user.location);
+            $("#formChangeInfoNIF").val(data.user.nif);
+            $("#formChangeInfoContactNumber").val(data.user.contactNumber);
+            M.updateTextFields();
+        }, 
+        error: function (jqXHR, textStatus, err) {
+            console.log(jqXHR);
+            M.toast({html: 'Erro a obter os dados!'});
+        }
+    });
+}

@@ -7,4 +7,6 @@ router.post('/newDelivery', deliveryController.newDelivery);
 
 router.put('/doneDelivery/:id/:idOrder', personValid, deliveryController.doneDelivery);
 
+router.get('/getDeliveriesCl/:id', personValid, deliveryController.getDeliveriesClient);
+
 module.exports = router;

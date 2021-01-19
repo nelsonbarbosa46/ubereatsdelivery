@@ -229,3 +229,87 @@ exports.doneDelivery = (req, res, next) => {
 
     return;
 }
+
+exports.getDeliveriesClient = (req, res, next) => {
+
+    var id = req.params.id;
+
+    const token = req.headers.authorization.split(' ')[1];
+    var decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    //check it typeUser is incorrect
+    if (decoded.typeUser != 0 && decoded.typeUser != 1) {
+        let response = {
+            message: "failed",
+            typeError: "Token inválido",
+            request: {
+                type: 'GET',
+                description: 'Obter entregas de um cliente'
+            }
+        }
+        //typeUser is incorrect
+        res.status(401).json(response)
+    //check if its empty
+    } else {
+
+        function getDeliveriesClientSQL() {
+            return new Promise ((resolve, reject) => {
+                var db = require("../sql").db();
+                var itsDone = 1;
+                var sql = `SELECT delivery.id, delivery.idOrder, delivery.itsDelivered FROM delivery 
+                INNER JOIN orderReservation ON delivery.idOrder = orderReservation.id 
+                INNER JOIN client ON orderReservation.idClient = client.id 
+                WHERE client.idUser = ? AND orderReservation.itsDone = ?`;
+
+                var query = [];
+
+                db.each(sql, [id, itsDone], function (err, row) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        query.push(
+                            {
+                                idDelivery: row.id,
+                                idOrder: row.idOrder,
+                                itsDelivered: row.itsDelivered
+                            }
+                        );
+                    } 
+                }, function (err) {
+                    db.close();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(query);
+                    }
+                });
+            });
+        }
+
+        getDeliveriesClientSQL().then(function (data) {
+            let response = {
+                message: "success",
+                listDeliveries: data,
+                request: {
+                    type: 'GET',
+                    description: 'Obter entregas de um cliente'
+                }
+            };
+            //successful
+            res.status(200).json(response);
+        //got a error 
+        }).catch(function () {
+            let response = {
+                message: "failed",
+                typeError: "Erro na BD",
+                request: {
+                    type: 'GET',
+                    description: 'Obter entregas de um cliente'
+                }
+            }
+            //error selecting
+            res.status(500).json(response)
+        });
+    }
+
+    return;
+}

@@ -9,4 +9,6 @@ router.put('/doneDelivery/:id/:idOrder', personValid, deliveryController.doneDel
 
 router.get('/getDeliveriesCl/:id', personValid, deliveryController.getDeliveriesClient);
 
+router.get('/getDeliveriesMe/:id', personValid, deliveryController.getDeliveriesMerchant);
+
 module.exports = router;

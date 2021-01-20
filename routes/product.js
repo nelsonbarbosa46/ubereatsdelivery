@@ -63,4 +63,11 @@ router.get('/getProductsMe/:id', personValid, productController.getProductsMe);
 
 router.delete('/deleteProduct/:id', productController.deleteProduct);
 
+<<<<<<< Updated upstream
+=======
+router.put('/changeQuantityProduct/:id/:idProduct', productController.changeQuantityProduct);
+
+router.get('/showProducts/:idMerchant', productController.showProducts);
+
+>>>>>>> Stashed changes
 module.exports = router;

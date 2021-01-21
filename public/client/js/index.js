@@ -49,5 +49,7 @@ function continueScript() {
         $("#formChangeInfo").submit(function (e) {
             submitFormChangeInfo(e);
         });
+        //get values for the form to change info
+        $("#openFormDriver").one("click", getDriverInfo);
     });
 }

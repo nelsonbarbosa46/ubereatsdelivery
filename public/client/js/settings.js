@@ -17,8 +17,9 @@ function submitFormChangeInfo(e) {
     verifyFieldsEmpty(errFields, name, address, zipCode, location, nif, contactNumber);
 
     if (errFields.length === 0) {
+        var url = getUrlToSubmit();
         $.ajax({
-            url: 'http://localhost:3000/api/user/changeEP/'+idUser,
+            url: url+'/api/user/changeInfoCl/'+idUser,
             type: 'PUT',
             cache: false,
             headers: {
@@ -33,6 +34,8 @@ function submitFormChangeInfo(e) {
                 contactNumber: contactNumber
             },
             success: function () {   
+                setCookie("name", name, 1);
+                $("#pageNameUser").text(name);
                 M.toast({html: 'Alterado com sucesso'});
             }, 
             error: function (jqXHR, textStatus, err) {
@@ -64,7 +67,7 @@ function verifyFieldsEmpty(errFields, name, address, zipCode, location, nif, con
     if (!location) {
         errFields.push({"error": "empty", "field": $("#formChangeInfoLocation").data("field")});
     //check if county is correct
-    } else if (jQuery.inArray(location, arrCountiesLowerCase) == -1) {
+    } else if (jQuery.inArray(location.toLowerCase(), arrCountiesLowerCase) == -1) {
         errFields.push({"error": "invalid", "field": $("#formChangeInfoLocation").data("field")});
     }
     
@@ -89,4 +92,31 @@ function verifyFieldsEmpty(errFields, name, address, zipCode, location, nif, con
     } else if (!contactNumber.match('[2,3,9]{1}[0-9]{8}')) {
         errFields.push({"error": "invalid", "field": $("#formChangeInfoContactNumber").data("field")});
     }
+}
+
+//get values for the form to change info
+function getValuesFormChangeInfo() {
+    
+    var url = getUrlToSubmit();
+    $.ajax({
+        url: url+'/api/user/getInfoCl/'+idUser,
+        type: 'GET',
+        cache: false,
+        headers: {
+            "Authorization": 'Bearer ' + token
+        },
+        success: function (data) {
+            $("#formChangeInfoName").val(data.user.name);
+            $("#formChangeInfoAddress").val(data.user.address);
+            $("#formChangeInfoZipCode").val(data.user.zipCode);
+            $("#formChangeInfoLocation").val(data.user.location);
+            $("#formChangeInfoNIF").val(data.user.nif);
+            $("#formChangeInfoContactNumber").val(data.user.contactNumber);
+            M.updateTextFields();
+        }, 
+        error: function (jqXHR, textStatus, err) {
+            console.log(jqXHR);
+            M.toast({html: 'Erro a obter os dados!'});
+        }
+    });
 }

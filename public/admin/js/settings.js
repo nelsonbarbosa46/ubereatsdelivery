@@ -19,8 +19,9 @@ function submitFormChangeInfo(e) {
     verifyFieldsChangeInfo(errFields, name, address, zipCode, location);
 
     if (errFields.length === 0) {
+        var url = getUrlToSubmit();
         $.ajax({
-            url: 'http://localhost:3000/api/user/changeInfoAd/'+idUser,
+            url: url+'/api/user/changeInfoAd/'+idUser,
             type: 'PUT',
             cache: false,
             headers: {
@@ -32,7 +33,9 @@ function submitFormChangeInfo(e) {
                 zipCode: zipCode,
                 location: location
             },
-            success: function () {   
+            success: function () {
+                setCookie("name", name, 1);
+                $("#pageNameUser").text(name);   
                 M.toast({html: 'Alterado com sucesso'});
             }, 
             error: function (jqXHR, textStatus, err) {
@@ -87,7 +90,7 @@ function submitFormRegisterAdmin(e) {
     if (errFields.length === 0) {
         
         $.ajax({
-            url: 'http://localhost:3000/api/register/signupAdmin/',
+            url: url+'/api/register/signupAdmin/',
             type: 'POST',
             cache: false,
             headers: {
@@ -167,4 +170,29 @@ function verifyFieldsRegisterClient(errFields, name, email, password, repeatPass
     } else if (jQuery.inArray(location.toLowerCase(), arrCountiesLowerCase) == -1) {
         errFields.push({"error": "invalid", "field": $("#formRegisterAdminLocation").data("field")});
     }
+}
+
+//get values for the form to change info
+function getValuesFormChangeInfo() {
+    
+    var url = getUrlToSubmit();
+    $.ajax({
+        url: url+'/api/user/getInfoAd/'+idUser,
+        type: 'GET',
+        cache: false,
+        headers: {
+            "Authorization": 'Bearer ' + token
+        },
+        success: function (data) {
+            $("#formChangeInfoName").val(data.user.name);
+            $("#formChangeInfoAddress").val(data.user.address);
+            $("#formChangeInfoZipCode").val(data.user.zipCode);
+            $("#formChangeInfoLocation").val(data.user.location);
+            M.updateTextFields();
+        }, 
+        error: function (jqXHR, textStatus, err) {
+            console.log(jqXHR);
+            M.toast({html: 'Erro a obter os dados!'});
+        }
+    });
 }

@@ -36,6 +36,8 @@ function submitFormChangeInfo(e) {
                 category: category
             },
             success: function () {   
+                setCookie("name", name, 1);
+                $("#pageNameUser").text(name);
                 M.toast({html: 'Alterado com sucesso'});
             }, 
             error: function (jqXHR, textStatus, err) {
@@ -90,4 +92,33 @@ function submitFormChangeLogo(e) {
         toastErrForm(errFields);
     }
 
+}
+
+//get values for the form to change info
+function getValuesFormChangeInfo() {
+    
+    var url = getUrlToSubmit();
+    $.ajax({
+        url: url+'/api/user/getInfoMe/'+idUser,
+        type: 'GET',
+        cache: false,
+        headers: {
+            "Authorization": 'Bearer ' + token
+        },
+        success: function (data) {
+            $("#formChangeInfoName").val(data.user.name);
+            $("#formChangeInfoAddress").val(data.user.address);
+            $("#formChangeInfoZipCode").val(data.user.zipCode);
+            $("#formChangeInfoLocation").val(data.user.location);
+            $("#formChangeInfoNIPC").val(data.user.nipc);
+            $("#formChangeInfoContactNumber").val(data.user.contactNumber);
+            $("#formChangeInfoDescription").val(data.user.description);
+            $("#formChangeInfoCategory").val(data.user.category);
+            M.updateTextFields();
+        }, 
+        error: function (jqXHR, textStatus, err) {
+            console.log(jqXHR);
+            M.toast({html: 'Erro a obter os dados!'});
+        }
+    });
 }

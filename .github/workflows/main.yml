@@ -19,8 +19,9 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
                  cd app
-                 rm *
+                 rm -rf *
                  git clone "https://github.com/nelsonbarbosa46/infood.git"
+                 cd infood
                  docker stop infoodapp
                  docker rm infoodapp
                  docker rmi infood/node-web-app

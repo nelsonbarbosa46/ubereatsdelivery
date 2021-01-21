@@ -18,4 +18,12 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-                 ls -la
+                 cd app
+                 rm -rf *
+                 git clone "https://github.com/nelsonbarbosa46/infood.git"
+                 cd infood
+                 docker stop infoodapp
+                 docker rm infoodapp
+                 docker rmi infood/node-web-app
+                 docker build -t infood/node-web-app .
+                 docker run -p 80:8080 --name infoodapp -d infood/node-web-app 

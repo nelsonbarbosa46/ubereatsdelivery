@@ -1,10 +1,11 @@
-var token = sessionStorage.getItem("tokenSession");
+var token = getCookie("tokenSession");
 
 function ajaxToken() {
     return new Promise((resolve, reject) => {
+        url = getUrlToSubmit();
         $.ajax({
             //0=client (on backend is going to check if token has typeUser=0 or typeUser=1)
-            url: 'http://localhost:3000/api/check/checkToken/0',
+            url: url+'/api/check/checkToken/0',
             type: 'GET',
             cache: false,
             headers: {
@@ -20,33 +21,43 @@ function ajaxToken() {
     })
 }
 
+function ajaxNameEmail() {
+    return new Promise((resolve, reject) => {
+        url = getUrlToSubmit();
+
+        $.ajax({
+            url: url+'',
+            type: 'GET',
+            cache: false,
+            headers: {
+                "Authorization": 'Bearer ' + token
+            }, success: function (data) {
+                resolve(data);     
+            }
+        });
+    });
+}
+
 if (token) {
     ajaxToken().then((data) => {
+        nameUser = getCookie("name");
+        emailUser = getCookie("email");
         typeUser = data.typeUser;
         idUser = data.id;
-        nameUser = data.name;
-        emailUser = data.email;
         //continueScript is on file index.js
         continueScript();
     }).catch((error) => {
         console.log(error);
-        sessionStorage.removeItem("tokenSession");
-        //get current url
-        var urlPage = window.location.href;
-        //remove client/index.html
-        //change to !delete because after is going to delete everything after a "!delete"
-        urlPage = urlPage.replace("/client/index.html", "!delete");
-        //Remove everything after a "!delete" and after add "/index.html"
-        urlPage = urlPage.replace(/\!delete.*/, "/index.html");
-        location.replace(urlPage);
+        delCookie("tokenSession");
+        //get origin url
+        var urlOrigin = getUrlToSubmit();
+        //redirect
+        window.location.replace(urlOrigin+'/index.html');
     })
 } else {
-    //get current url
-    var urlPage = window.location.href;
-    //remove client/index.html
-    //change to !delete because after is going to delete everything after a "!delete"
-    urlPage = urlPage.replace("/client/index.html", "!delete");
-    //Remove everything after a "!delete" and after add "/index.html"
-    urlPage = urlPage.replace(/\!delete.*/, "/index.html");
-    location.replace(urlPage);
+    delCookie("tokenSession");
+    //get origin url
+    var urlOrigin = getUrlToSubmit();
+    //redirect
+    window.location.replace(urlOrigin+'/index.html');
 }

@@ -184,6 +184,135 @@ exports.newReservation = (req, res, next) => {
     return;
 }
 
+exports.clientReservation = (req, res, next) => {
+    var idClient = req.params.idClient;
+
+    var db = require('../sql').db();
+    var sql = `SELECT * FROM orderReservation WHERE idClient = ?`;
+
+    db.all(sql, [idClient], function(err, rows){
+        if(err){
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'GET',
+                    description: 'RESERVAS DE UM CLIENTE'
+                }
+            }
+            res.status(500).json(response);
+        } else {
+            let response = {
+                message: "success",
+                result: rows,
+                request: {
+                    type: 'GET',
+                    description: 'RESERVAS DE UM CLIENTE'
+                }
+            }
+            res.status(200).json(response);
+        }
+        db.close();
+    });
+    return;
+}
+
+exports.clientReservationDone = (req, res, next) => {
+    var idClient = req.params.idClient;
+    var itsDone = 1;
+
+    var db = require('../sql').db();
+    var sql = `SELECT * FROM orderReservation WHERE idClient = ? AND itsDone = ?`;
+
+    db.all(sql, [idClient, itsDone], function(err, rows){
+        if(err){
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'GET',
+                    description: 'RESERVAS DE UM CLIENTE'
+                }
+            }
+            res.status(500).json(response);
+        } else {
+            let response = {
+                message: "success",
+                result: rows,
+                request: {
+                    type: 'GET',
+                    description: 'RESERVAS DE UM CLIENTE'
+                }
+            }
+            res.status(200).json(response);
+        }
+        db.close();
+    });
+    return;
+}
+
+exports.showOrderDone = (req, res, next) => {
+    var itsDone = 1;
+
+    var db = require('../sql').db();
+    var sql = `SELECT * FROM orderReservation WHERE itsDone = ?`;
+
+    db.all(sql, [itsDone], function(err, rows){
+        if(err){
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'GET',
+                    description: 'SELECIONAR ENCOMENDAS PRONTAS'
+                }
+            }
+            res.status(500).json(response);
+        } else {
+            let response = {
+                message: "success",
+                result: rows,
+                request: {
+                    type: 'GET',
+                    description: 'SELECIONAR ENCOMENDAS PRONTAS'
+                }
+            }
+            res.status(200).json(response);
+        }
+        db.close();
+    });
+    return;
+}
+
+exports.merchantOrders = (req, res, next) => {
+    var idMerchant = req.params.idMerchant;
+
+    var db = require('../sql').db();
+    var sql = `SELECT * FROM orderReservation WHERE idMerchant = ?`;
+
+    db.all(sql, [idMerchant], function(err, rows){
+        if(err){
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'GET',
+                    description: 'SELECIONAR ENCOMENDAS RECEBIDAS'
+                }
+            }
+            res.status(500).json(response);
+        } else {
+            let response = {
+                message: "success",
+                result: rows,
+                request: {
+                    type: 'GET',
+                    description: 'SELECIONAR ENCOMENDAS RECEBIDAS'
+                }
+            }
+            res.status(200).json(response);
+        }
+        db.close();
+    });
+    return;
+}
+
 exports.deleteReservation = (req, res, next) => {
 
     var id = req.params.id;

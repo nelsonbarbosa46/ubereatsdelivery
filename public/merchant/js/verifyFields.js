@@ -16,7 +16,7 @@ function verifyFieldsChangeInfo(errFields, name, address, zipCode, location, nip
     if (!location) {
         errFields.push({"error": "empty", "field": $("#formChangeInfoLocation").data("field")});
     //check if location is invalid
-    } else if (jQuery.inArray(location, arrCountiesLowerCase) == -1) {
+    } else if (jQuery.inArray(location.toLowerCase(), arrCountiesLowerCase) == -1) {
         errFields.push({"error": "invalid", "field": $("#formChangeInfoLocation").data("field")});
     }
     //check if its empty

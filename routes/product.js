@@ -8,7 +8,7 @@ const personValid = require('../middleware/checkPersonValid');
 const storage = multer.diskStorage({
     //destination to upload
     destination: function (req, file, cb) {
-        cb(null, './upload/');
+        cb(null, './public/upload/');
     },
     //filename destination
     filename: function (req, file, cb) {
@@ -64,5 +64,7 @@ router.get('/getProductsMe/:id', personValid, productController.getProductsMe);
 router.delete('/deleteProduct/:id', productController.deleteProduct);
 
 router.put('/changeQuantityProduct/:id/:idProduct', productController.changeQuantityProduct);
+
+router.get('/showProducts/:idMerchant', productController.showProducts);
 
 module.exports = router;

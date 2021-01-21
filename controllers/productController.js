@@ -509,6 +509,38 @@ exports.changeLogoProduct = (req, res, next) => {
     return;
 }
 
+exports.showProducts = (req, res, next) =>{
+    var idMerchant = req.params.idMerchant;
+
+    var db = require("../sql").db();
+    var sql = `SELECT * FROM product WHERE idMerchant = ?`;
+
+    db.all(sql, [idMerchant], function(err, rows){
+        if(err){
+            let response = {
+                message: "failed",
+                request: {
+                    type: 'GET',
+                    description: 'SELECIONAR PRODUTO'
+                }
+            }
+            res.status(500).json(response);
+        } else {
+            let response = {
+                message: "success",
+                result: rows,
+                request: {
+                    type: 'GET',
+                    description: 'SELECIONAR PRODUTO'
+                }
+            }
+            res.status(200).json(response);
+        }
+        db.close();
+    });
+    return;
+}
+
 exports.getProductsMe = (req, res, next) => {
     
     var idUser = req.params.id;

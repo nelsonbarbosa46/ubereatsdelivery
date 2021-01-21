@@ -540,10 +540,27 @@ exports.changeLogoMe = (req, res, next) => {
     var id = req.params.id;
     var logo = req.file;
     const fs = require('fs');
+    var logoPath;
+    if (logo) {
+        logoPath = req.file.path;
+    } else {
+        logoPath = null;
+    }
 
     //get token and decoded
     const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+    function deleteLogo(fs, logoPath) {
+        if (logoPath) {
+            //delete new image because was error on insert
+            fs.unlink(logoPath, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            })
+        }
+    }
 
     //check if typeUser is invalid
     if (decoded.typeUser != 2) {
@@ -554,6 +571,7 @@ exports.changeLogoMe = (req, res, next) => {
                 description: 'Alterar Logótipo da Empresa'
             }
         }
+        deleteLogo(fs, logoPath)
         //some field is empty
         res.status(401).json(response);
     //check if any field is empty
@@ -565,6 +583,7 @@ exports.changeLogoMe = (req, res, next) => {
                 description: 'Alterar Logótipo da Empresa'
             }
         }
+        deleteLogo(fs, logoPath)
         //some field is empty
         res.status(400).json(response);
     } else {
@@ -577,12 +596,7 @@ exports.changeLogoMe = (req, res, next) => {
         db.get(sql, [id], 
             function (err, row) {
                 if (err) {
-                    //delete new image because was error on update
-                    fs.unlink(logoPath, (err) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                    })
+                    deleteLogo(fs, logoPath)
                     let response = {
                         message: "failed",
                         request: {
@@ -598,12 +612,7 @@ exports.changeLogoMe = (req, res, next) => {
                     db.run(sql, [logoPath, id], 
                         function (err) {
                             if (err) {
-                                //delete new image because was error on update
-                                fs.unlink(logoPath, (err) => {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-                                })
+                                deleteLogo(fs, logoPath)
                                 let response = {
                                     message: "failed",
                                     request: {

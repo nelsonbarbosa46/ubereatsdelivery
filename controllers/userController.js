@@ -1176,6 +1176,7 @@ exports.checkDriver = (req, res, next) => {
     if (decoded.typeUser != 3 && decoded.typeUser != 4) {
         let response = {
             message: "failed",
+            tpyeError: "Token inválido",
             request: {
                 type: 'PUT',
                 description: 'Responder pedido do condutor'
@@ -1184,9 +1185,10 @@ exports.checkDriver = (req, res, next) => {
         //typeUser is invalid
         res.status(401).json(response)
     //check if its empty
-    } else if (!idDriver) {
+    } else if (!idDriver || !canWork) {
         let response = {
             message: "failed",
+            tpyeError: "Algum campo está vazio",
             request: {
                 type: 'PUT',
                 description: 'Responder pedido do condutor'
@@ -1198,6 +1200,7 @@ exports.checkDriver = (req, res, next) => {
     } else if (canWork != 0 && canWork != 1) {
         let response = {
             message: "failed",
+            tpyeError: "Campo 'canWork' inválido",
             request: {
                 type: 'PUT',
                 description: 'Responder pedido do condutor'
@@ -1213,6 +1216,7 @@ exports.checkDriver = (req, res, next) => {
             if (err) {
                 let response = {
                     message: "failed",
+                    typeError: "Erro na BD",
                     request: {
                         type: 'PUT',
                         description: 'Responder pedido do condutor'
@@ -1220,10 +1224,11 @@ exports.checkDriver = (req, res, next) => {
                 }
                 //error getting isChecked
                 res.status(500).json(response);
-            } else {
+            } else if (row) {
                 if (row.isChecked == 1) {
                     let response = {
                         message: "failed",
+                        typeError: "Já verificado",
                         request: {
                             type: 'PUT',
                             description: 'Responder pedido do condutor'
@@ -1237,6 +1242,7 @@ exports.checkDriver = (req, res, next) => {
                         if (err) {
                             let response = {
                                 message: "failed",
+                                typeError: "Erro na BD",
                                 request: {
                                     type: 'PUT',
                                     description: 'Responder pedido do condutor'
@@ -1261,6 +1267,17 @@ exports.checkDriver = (req, res, next) => {
                         }
                     });
                 }
+            } else {
+                let response = {
+                    message: "failed",
+                    typeError: "Erro na BD",
+                    request: {
+                        type: 'PUT',
+                        description: 'Responder pedido do condutor'
+                    }
+                }
+                //error updating
+                res.status(500).json(response);
             }
         });
 
@@ -1322,6 +1339,7 @@ exports.checkMerchant = (req, res, next) => {
             if (err) {
                 let response = {
                     message: "failed",
+                    typeError: "Erro na BD",
                     request: {
                         type: 'PUT',
                         description: 'Responder pedido da empresa'
@@ -1333,6 +1351,7 @@ exports.checkMerchant = (req, res, next) => {
                 if (row.isChecked == 1) {
                     let response = {
                         message: "failed",
+                        typeError: "Erro na BD",
                         request: {
                             type: 'PUT',
                             description: 'Responder pedido da empresa'
@@ -1346,6 +1365,7 @@ exports.checkMerchant = (req, res, next) => {
                         if (err) {
                             let response = {
                                 message: "failed",
+                                typeError: "Erro na BD",
                                 request: {
                                     type: 'PUT',
                                     description: 'Responder pedido da empresa'

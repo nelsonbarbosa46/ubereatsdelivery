@@ -667,83 +667,98 @@ exports.getProductsMe = (req, res, next) => {
     
     var idUser = req.params.id;
     
-    const token = req.headers.authorization.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
-
-    //check if typeUser is invalid
-    if (decoded.typeUser != 2) {
+    const tokenUnsplited = req.headers.authorization;
+    //check if token is empty
+    if (!tokenUnsplited) {
+        deleteImage(logo, fs);
         let response = {
             message: "failed",
-            typeError: "Token inválido",
+            typeError: "Não existe token",
             request: {
-                type: 'GET',
-                description: 'Obter Produtos de uma empresa'
+                type: 'POST',
+                description: 'Criar um produto'
             }
         }
-        //typeUser is invalid
+        //token empty
         res.status(401).json(response)
-    } else { 
-
-        function getProductsSQL() {
-            return new Promise ((resolve, reject) => {
-                var db = require("../sql").db();
-                var sql = `SELECT product.id, product.description, product.image, product.name, product.price, product.quantity
-                FROM product INNER JOIN merchant ON product.idMerchant = merchant.id WHERE merchant.idUser = ?`;
-                var query = [];
-
-                db.each(sql, [idUser], function (err, row) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        query.push(
-                            {
-                                id: row.id,
-                                description: row.description,
-                                image: row.image,
-                                name: row.name,
-                                price: row.price,
-                                quantity: row.quantity
-                            }
-                        );
-                    } 
-                }, function (err) {
-                    db.close();
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(query);
-                    }
-                });
-            });
-        }
-
-        getProductsSQL().then(function (data) {
-            let response = {
-                message: "success",
-                listProducts: data,
-                request: {
-                    type: 'GET',
-                    description: 'Obter Produtos de uma empresa'
-                }
-            };
-            //successful
-            res.status(200).json(response);
-        //got a error 
-        }).catch(function () {
+    } else {
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    
+        //check if typeUser is invalid
+        if (decoded.typeUser != 2) {
             let response = {
                 message: "failed",
-                typeError: "Erro na BD",
+                typeError: "Token inválido",
                 request: {
                     type: 'GET',
                     description: 'Obter Produtos de uma empresa'
                 }
             }
-            //error selecting
-            res.status(500).json(response)
-        });
-
-    }
+            //typeUser is invalid
+            res.status(401).json(response)
+        } else { 
     
+            function getProductsSQL() {
+                return new Promise ((resolve, reject) => {
+                    var db = require("../sql").db();
+                    var sql = `SELECT product.id, product.description, product.image, product.name, product.price, product.quantity
+                    FROM product INNER JOIN merchant ON product.idMerchant = merchant.id WHERE merchant.idUser = ?`;
+                    var query = [];
+    
+                    db.each(sql, [idUser], function (err, row) {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            query.push(
+                                {
+                                    id: row.id,
+                                    description: row.description,
+                                    image: row.image,
+                                    name: row.name,
+                                    price: row.price,
+                                    quantity: row.quantity
+                                }
+                            );
+                        } 
+                    }, function (err) {
+                        db.close();
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(query);
+                        }
+                    });
+                });
+            }
+    
+            getProductsSQL().then(function (data) {
+                let response = {
+                    message: "success",
+                    listProducts: data,
+                    request: {
+                        type: 'GET',
+                        description: 'Obter Produtos de uma empresa'
+                    }
+                };
+                //successful
+                res.status(200).json(response);
+            //got a error 
+            }).catch(function () {
+                let response = {
+                    message: "failed",
+                    typeError: "Erro na BD",
+                    request: {
+                        type: 'GET',
+                        description: 'Obter Produtos de uma empresa'
+                    }
+                }
+                //error selecting
+                res.status(500).json(response)
+            });
+    
+        }
+    }
     return;
 }
 
@@ -752,98 +767,136 @@ exports.changeQuantityProduct = (req, res, next) => {
     var idUser = req.params.id;
     var idProduct = req.params.idProduct;
     var quantity=req.body.quantity;
-    const token = req.headers.authorization.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    var parseQuantity = parseInt(quantity);
 
-    //check if typeUser is invalid
-    if (decoded.typeUser != 2) {
+    const tokenUnsplited = req.headers.authorization;
+    //check if token is empty
+    if (!tokenUnsplited) {
         let response = {
             message: "failed",
-            typeError: "Token inválido",
+            typeError: "Não existe token",
             request: {
                 type: 'PUT',
                 description: 'Alterar quantidade do produto'
             }
         }
-        //typeUser is invalid
+        //token empty
         res.status(401).json(response)
-    } else {
-        var db = require('../sql').db();
-        var sql = `SELECT id FROM merchant WHERE idUser = ?`;
-        
-        db.get(sql, [idUser], function (err, row) {
-            if (err) {
-                let response = {
-                    message: "failed",
-                    typeError: "Erro na BD",
-                    request: {
-                        type: 'PUT',
-                        description: 'Alterar quantidade do produto'
-                    }
+    } else { 
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+        //check if typeUser is invalid
+        if (decoded.typeUser != 2) {
+            let response = {
+                message: "failed",
+                typeError: "Token inválido",
+                request: {
+                    type: 'PUT',
+                    description: 'Alterar quantidade do produto'
                 }
-                //error selecting
-                res.status(500).json(response)
-            } else {
-                if (row) {
-                    var idMerchant = row.id;
-                    sql = `UPDATE product SET quantity = ? WHERE id = ? AND idMerchant = ?`;
-                    db.run(sql, [quantity, idProduct, idMerchant], function (err) {
-                        if (err) {
-                            let response = {
-                                message: "failed",
-                                typeError: "Erro na BD",
-                                request: {
-                                    type: 'PUT',
-                                    description: 'Alterar Quantidade do produto'
-                                }
-                            }
-                            //error updating
-                            res.status(500).json(response)
-                        } else {
-                            //check if its updated
-                            if (this.changes == 0) {
-                                let response = {
-                                    message: "failed",
-                                    typeError: "Não alterou",
-                                    request: {
-                                        type: 'PUT',
-                                        description: 'Alterar quantidade do produto'
-                                    }
-                                }
-                                //error updating
-                                res.status(500).json(response)
-                            } else {
-                                let response = {
-                                    message: "success",
-                                    newQuantity: quantity,
-                                    request: {
-                                        type: 'PUT',
-                                        description: 'Alterar quantidade do produto'
-                                    }
-                                }
-                                //update successful
-                                res.status(200).json(response)
-                            }
-                        }
-                    });
-                } else {
+            }
+            //typeUser is invalid
+            res.status(401).json(response)
+        } else if (!quantity) {
+            let response = {
+                message: "failed",
+                typeError: "Campo vazio",
+                request: {
+                    type: 'PUT',
+                    description: 'Alterar quantidade do produto'
+                }
+            }
+            res.status(400).json(response);
+        } else if (!parseQuantity || quantity < 0) {
+            let response = {
+                message: "failed",
+                typeError: "Quantidade inválida",
+                request: {
+                    type: 'PUT',
+                    description: 'Alterar quantidade do produto'
+                }
+            }
+            res.status(400).json(response);
+        } else {
+            var db = require('../sql').db();
+            var sql = `SELECT id FROM merchant WHERE idUser = ?`;
+            
+            db.get(sql, [idUser], function (err, row) {
+                if (err) {
                     let response = {
                         message: "failed",
-                        typeError: "Não encontrou a empresa",
+                        typeError: "Erro na BD",
                         request: {
                             type: 'PUT',
                             description: 'Alterar quantidade do produto'
                         }
                     }
-                    //dont find any merchant
+                    //error selecting
                     res.status(500).json(response)
+                } else {
+                    if (row) {
+                        var idMerchant = row.id;
+                        sql = `UPDATE product SET quantity = ? WHERE id = ? AND idMerchant = ?`;
+                        db.run(sql, [quantity, idProduct, idMerchant], function (err) {
+                            if (err) {
+                                let response = {
+                                    message: "failed",
+                                    typeError: "Erro na BD",
+                                    request: {
+                                        type: 'PUT',
+                                        description: 'Alterar Quantidade do produto'
+                                    }
+                                }
+                                //error updating
+                                res.status(500).json(response)
+                            } else {
+                                //check if its updated
+                                if (this.changes == 0) {
+                                    let response = {
+                                        message: "failed",
+                                        typeError: "Não alterou",
+                                        request: {
+                                            type: 'PUT',
+                                            description: 'Alterar quantidade do produto'
+                                        }
+                                    }
+                                    //error updating
+                                    res.status(500).json(response)
+                                } else {
+                                    let response = {
+                                        message: "success",
+                                        newQuantity: quantity,
+                                        request: {
+                                            type: 'PUT',
+                                            description: 'Alterar quantidade do produto'
+                                        }
+                                    }
+                                    //update successful
+                                    res.status(200).json(response)
+                                }
+                            }
+                        });
+                    } else {
+                        let response = {
+                            message: "failed",
+                            typeError: "Não encontrou a empresa",
+                            request: {
+                                type: 'PUT',
+                                description: 'Alterar quantidade do produto'
+                            }
+                        }
+                        //dont find any merchant
+                        res.status(500).json(response)
+                    }
                 }
-            }
-        });
+            });
 
-        db.close();
+            db.close();
 
+        }
     }
+    
 
     return;
 }

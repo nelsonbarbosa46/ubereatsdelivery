@@ -673,6 +673,7 @@ exports.changeInfoAd = (req, res, next) => {
     if (decoded.typeUser != 3 && decoded.typeUser != 4) {
         let response = {
             message: "failed",
+            typeError: "Token inválido",
             request: {
                 type: 'PUT',
                 description: 'Alterar Informações do Administrador'
@@ -684,6 +685,7 @@ exports.changeInfoAd = (req, res, next) => {
     } else if (!id || !name || !address || !zipCode || !location) {
         let response = {
             message: "failed",
+            typeError: "Algum campo está vazio",
             request: {
                 type: 'PUT',
                 description: 'Alterar Informações do Administrador'
@@ -695,6 +697,7 @@ exports.changeInfoAd = (req, res, next) => {
     } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
         let response = {
             message: "failed",
+            typeError: "Código postal inválido",
             request: {
                 type: 'PUT',
                 description: 'Alterar Informações do Administrador'
@@ -706,6 +709,7 @@ exports.changeInfoAd = (req, res, next) => {
     } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
         let response = {
             message: "failed",
+            typeError: "Localidade inválida",
             request: {
                 type: 'PUT',
                 description: 'Alterar Informações do Administrador'
@@ -721,6 +725,7 @@ exports.changeInfoAd = (req, res, next) => {
             if (err) {
                 let response = {
                     message: "failed",
+                    typeError: "Erro na BD",
                     request: {
                         type: 'PUT',
                         description: 'Alterar Informações do Administrador'
@@ -731,6 +736,12 @@ exports.changeInfoAd = (req, res, next) => {
             } else {
                 let response = {
                     message: "success",
+                    newInfo: {
+                        name: name,
+                        address: address,
+                        zipCode: zipCode,
+                        location: location.toLowerCase()
+                    },
                     request: {
                         type: 'PUT',
                         description: 'Alterar Informações do Administrador'

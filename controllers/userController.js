@@ -20,6 +20,7 @@ exports.changeEmailPassword = (req, res, next) => {
     if (!email && !password && !repeatPassword) {
         let response = {
             message: "failed",
+            typeError: "Campos estão vazios",
             request: {
                 type: 'PUT',
                 description: 'Alterar o e-mail/palavra passe'
@@ -42,6 +43,7 @@ exports.changeEmailPassword = (req, res, next) => {
         ) {
             let response = {
                 message: "failed",
+                typeError: "Palavra-passe insuficiente ou email inválido",
                 request: {
                     type: 'PUT',
                     description: 'Alterar o e-mail/palavra passe'
@@ -71,6 +73,7 @@ exports.changeEmailPassword = (req, res, next) => {
                 ) {
                 let response = {
                     message: "failed",
+                    typeError: "Palavra-passe insuficiente",
                     request: {
                         type: 'PUT',
                         description: 'Alterar o e-mail/palavra passe'
@@ -89,6 +92,7 @@ exports.changeEmailPassword = (req, res, next) => {
             if (!validateEmail(email)) {
                 let response = {
                     message: "failed",
+                    typeError: "Email inválido",
                     request: {
                         type: 'PUT',
                         description: 'Alterar o e-mail/palavra passe'
@@ -114,6 +118,7 @@ exports.changeEmailPassword = (req, res, next) => {
             if (err) {
                 let response = {
                     message: "failed",
+                    typeError: "Erro na BD",
                     request: {
                         type: 'PUT',
                         description: 'Alterar o e-mail/palavra passe'
@@ -152,6 +157,7 @@ exports.changeEmailPassword = (req, res, next) => {
            if (err) {
                 let response = {
                     message: "failed",
+                    typeError: "Erro na BD",
                     request: {
                         type: 'PUT',
                         description: 'Alterar o e-mail/palavra passe'
@@ -191,6 +197,7 @@ exports.changeEmailPassword = (req, res, next) => {
            if (err) {
                 let response = {
                     message: "failed",
+                    typeError: "Erro na BD",
                     request: {
                         type: 'PUT',
                         description: 'Alterar o e-mail/palavra passe'

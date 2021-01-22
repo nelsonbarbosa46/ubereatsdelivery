@@ -347,6 +347,12 @@ exports.changeInfoCl = (req, res, next) => {
                     } else {
                         let response = {
                             message: "success",
+                            newInfo: {
+                                name: name,
+                                address: address,
+                                zipCode: zipCode,
+                                location: location
+                            },
                             request: {
                                 type: 'PUT',
                                 description: 'Alterar Informações do Cliente/Condutor'
@@ -385,6 +391,7 @@ exports.changeInfoMe = (req, res, next) => {
     if (decoded.typeUser != 2) {
         let response = {
             message: "failed",
+            typeError: "Token inválido",
             request: {
                 type: 'PUT',
                 description: 'Alterar Informações da Empresa'
@@ -397,6 +404,7 @@ exports.changeInfoMe = (req, res, next) => {
         !name || !address || !zipCode || !location || !nipc || !contactNumber || !description || !category) {
         let response = {
             message: "failed",
+            typeError: "Algum campo está vazio",
             request: {
                 type: 'PUT',
                 description: 'Alterar Informações da Empresa'
@@ -408,6 +416,7 @@ exports.changeInfoMe = (req, res, next) => {
     } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
         let response = {
             message: "failed",
+            typeError: "Código-postal inválido",
             request: {
                 type: 'PUT',
                 description: 'Alterar Informações da Empresa'
@@ -419,6 +428,7 @@ exports.changeInfoMe = (req, res, next) => {
     } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
         let response = {
             message: "failed",
+            typeError: "Localidade inválida",
             request: {
                 type: 'PUT',
                 description: 'Alterar Informações da Empresa'
@@ -430,6 +440,7 @@ exports.changeInfoMe = (req, res, next) => {
     } else if (!nipc.match('[2,3,5]{1}[0-9]{8}')) {
         let response = {
             message: "failed",
+            typeError: "NIPC inválido",
             request: {
                 type: 'PUT',
                 description: 'Alterar Informações da Empresa'
@@ -441,6 +452,7 @@ exports.changeInfoMe = (req, res, next) => {
     } else if (!contactNumber.match('[2,3,9]{1}[0-9]{8}')) {
         let response = {
             message: "failed",
+            typeError: "Número de contacto inválido",
             request: {
                 type: 'PUT',
                 description: 'Alterar Informações da Empresa'
@@ -452,6 +464,7 @@ exports.changeInfoMe = (req, res, next) => {
     } else if (category < 1 || category > 5) {
         let response = {
             message: "failed",
+            typeError: "Categoria inválida",
             request: {
                 type: 'PUT',
                 description: 'Alterar Informações da Empresa'
@@ -483,6 +496,7 @@ exports.changeInfoMe = (req, res, next) => {
                             if (err) {
                                 let response = {
                                     message: "failed",
+                                    typeError: "Erro na BD",
                                     request: {
                                         type: 'PUT',
                                         description: 'Alterar Informações da Empresa'
@@ -493,6 +507,16 @@ exports.changeInfoMe = (req, res, next) => {
                             } else {
                                 let response = {
                                     message: "success",
+                                    newInfo: {
+                                        name: name,
+                                        address: address,
+                                        zipCode: zipCode,
+                                        location: location,
+                                        category: category,
+                                        nipc: nipc,
+                                        description: description,
+                                        contactNumber: contactNumber
+                                    },
                                     request: {
                                         type: 'PUT',
                                         description: 'Alterar Informações da Empresa'
@@ -544,6 +568,7 @@ exports.changeLogoMe = (req, res, next) => {
     if (decoded.typeUser != 2) {
         let response = {
             message: "failed",
+            typeError: "Token inválido",
             request: {
                 type: 'PUT',
                 description: 'Alterar Logótipo da Empresa'
@@ -556,6 +581,7 @@ exports.changeLogoMe = (req, res, next) => {
     } else if (!id || !logo) {
         let response = {
             message: "failed",
+            typeError: "Algum campo está vazio",
             request: {
                 type: 'PUT',
                 description: 'Alterar Logótipo da Empresa'
@@ -577,6 +603,7 @@ exports.changeLogoMe = (req, res, next) => {
                     deleteLogo(fs, logoPath)
                     let response = {
                         message: "failed",
+                        typeError: "Erro na BD",
                         request: {
                             type: 'PUT',
                             description: 'Alterar Logótipo da Empresa'
@@ -593,6 +620,7 @@ exports.changeLogoMe = (req, res, next) => {
                                 deleteLogo(fs, logoPath)
                                 let response = {
                                     message: "failed",
+                                    typeError: "Erro na BD",
                                     request: {
                                         type: 'PUT',
                                         description: 'Alterar Logótipo da Empresa'

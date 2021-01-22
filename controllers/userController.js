@@ -993,6 +993,7 @@ exports.getDriversUnchecked = async (req, res, next) => {
     if (decoded.typeUser != 3 && decoded.typeUser != 4) {
         let response = {
             message: "failed",
+            typeError: "Token inválido",
             request: {
                 type: 'GET',
                 description: 'Obter Condutores com estado pendente'
@@ -1057,6 +1058,7 @@ exports.getDriversUnchecked = async (req, res, next) => {
         }).catch(function (data) {
             let response = {
                 message: "failed",
+                typeError: "Erro na BD",
                 request: {
                     type: 'GET',
                     description: 'Obter Condutores com estado pendente'
@@ -1081,6 +1083,7 @@ exports.getMerchantsUnchecked = async (req, res, next) => {
     if (decoded.typeUser != 3 && decoded.typeUser != 4) {
         let response = {
             message: "failed",
+            typeError: "Token inválido",
             request: {
                 type: 'GET',
                 description: 'Obter Empresas com estado pendente'
@@ -1143,6 +1146,7 @@ exports.getMerchantsUnchecked = async (req, res, next) => {
         }).catch(function (data) {
             let response = {
                 message: "failed",
+                typeError: "Erro na BD",
                 request: {
                     type: 'GET',
                     description: 'Obter Empresas com estado pendente'

@@ -310,8 +310,8 @@ exports.changeInfoProduct = (req, res, next) => {
             message: "failed",
             typeError: "Não existe token",
             request: {
-                type: 'POST',
-                description: 'Criar um produto'
+                type: 'PUT',
+                description: 'Alterar informações de um produto'
             }
         }
         //token empty
@@ -491,8 +491,8 @@ exports.changeLogoProduct = (req, res, next) => {
             message: "failed",
             typeError: "Não existe token",
             request: {
-                type: 'POST',
-                description: 'Criar um produto'
+                type: 'PUT',
+                description: 'Alterar logótipo de um produto'
             }
         }
         //token empty
@@ -675,8 +675,8 @@ exports.getProductsMe = (req, res, next) => {
             message: "failed",
             typeError: "Não existe token",
             request: {
-                type: 'POST',
-                description: 'Criar um produto'
+                type: 'GET',
+                description: 'Obter Produtos de uma empresa'
             }
         }
         //token empty

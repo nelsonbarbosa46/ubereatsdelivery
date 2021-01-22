@@ -64,6 +64,7 @@ exports.createAdmin = async (req, res, next) => {
         console.log("deu empty");
         let response = {
             message: "failed",
+            typeError: "Algum campo está vazio",
             request: {
                 type: 'POST',
                 description: 'Criar um administrador'
@@ -75,6 +76,7 @@ exports.createAdmin = async (req, res, next) => {
     } else if (!validateEmail(email)) {
         let response = {
             message: "failed",
+            typeError: "Email inválido",
             request: {
                 type: 'POST',
                 description: 'Criar um administrador'
@@ -92,6 +94,7 @@ exports.createAdmin = async (req, res, next) => {
     ) {
         let response = {
             message: "failed",
+            typeError: "Palavra-passe insuficiente",
             request: {
                 type: 'POST',
                 description: 'Criar um administrador'
@@ -103,6 +106,7 @@ exports.createAdmin = async (req, res, next) => {
     } else if (password != repeatPassword) {
         let response = {
             message: "failed",
+            typeError: "Repetir palavra-passe não coincide com a palavra-passe",
             request: {
                 type: 'POST',
                 description: 'Criar um administrador'
@@ -114,6 +118,7 @@ exports.createAdmin = async (req, res, next) => {
     } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
         let response = {
             message: "failed",
+            typeError: "Código postal inválido",
             request: {
                 type: 'POST',
                 description: 'Criar um administrador'
@@ -125,6 +130,7 @@ exports.createAdmin = async (req, res, next) => {
     } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
         let response = {
             message: "failed",
+            typeError: "Localidade inválida",
             request: {
                 type: 'POST',
                 description: 'Criar um administrador'
@@ -146,6 +152,7 @@ exports.createAdmin = async (req, res, next) => {
                 if (err) {
                     let response = {
                         message: "failed",
+                        typeError: "Erro na BD",
                         request: {
                             type: 'POST',
                             description: 'Criar um administrador'
@@ -160,6 +167,7 @@ exports.createAdmin = async (req, res, next) => {
                         if (err) {
                             let response = {
                                 message: "failed",
+                                typeError: "Erro na BD",
                                 request: {
                                     type: 'POST',
                                     description: 'Criar um administrador'
@@ -176,7 +184,7 @@ exports.createAdmin = async (req, res, next) => {
                             process.env.PRIVATE_KEY, 
                             {
                                 algorithm:'HS256',
-                                expiresIn:'1d'
+                                expiresIn:'7d'
                             })
 
                             //get url to redirect
@@ -239,6 +247,7 @@ exports.createClientDriver = async (req, res, next) => {
         !location || !name || !nif || !contactNumber) {
         let response = {
             message: "failed",
+            typeError: "Algum campo está vazio",
             request: {
                 type: 'POST',
                 description: 'Criar um cliente/condutor'
@@ -250,6 +259,7 @@ exports.createClientDriver = async (req, res, next) => {
     } else if (!validateEmail(email)) {
         let response = {
             message: "failed",
+            typeError: "Campo email inválido",
             request: {
                 type: 'POST',
                 description: 'Criar um cliente/condutor'
@@ -267,6 +277,7 @@ exports.createClientDriver = async (req, res, next) => {
     ) {
         let response = {
             message: "failed",
+            typeError: "Palavra-passe insuficiente",
             request: {
                 type: 'POST',
                 description: 'Criar um cliente/condutor'
@@ -278,6 +289,7 @@ exports.createClientDriver = async (req, res, next) => {
     } else if (password != repeatPassword) {
         let response = {
             message: "failed",
+            typeError: "Repetir palavra-passe não coincide com a palavra-passe",
             request: {
                 type: 'POST',
                 description: 'Criar um cliente/condutor'
@@ -289,6 +301,7 @@ exports.createClientDriver = async (req, res, next) => {
     } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
         let response = {
             message: "failed",
+            typeError: "Código postal inválido",
             request: {
                 type: 'POST',
                 description: 'Criar um cliente/condutor'
@@ -300,6 +313,7 @@ exports.createClientDriver = async (req, res, next) => {
     } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
         let response = {
             message: "failed",
+            typeError: "Localidade inválida",
             request: {
                 type: 'POST',
                 description: 'Criar um cliente/condutor'
@@ -314,6 +328,7 @@ exports.createClientDriver = async (req, res, next) => {
         if (!typeVehicle) {
             let response = {
                 message: "failed",
+                typeError: "Tipo de veículo vazio",
                 request: {
                     type: 'POST',
                     description: 'Criar um cliente/condutor'
@@ -325,6 +340,7 @@ exports.createClientDriver = async (req, res, next) => {
         } else if (typeVehicle < 1 || typeVehicle > 3) {
             let response = {
                 message: "failed",
+                typeError: "Tipo de veículo inválido",
                 request: {
                     type: 'POST',
                     description: 'Criar um cliente/condutor'
@@ -358,6 +374,7 @@ exports.createClientDriver = async (req, res, next) => {
                 if (err) {
                     let response = {
                         message: "failed",
+                        typeError: "Erro na BD",
                         request: {
                             type: 'POST',
                             description: 'Criar um cliente/condutor'
@@ -374,6 +391,7 @@ exports.createClientDriver = async (req, res, next) => {
                             if (err) {
                                 let response = {
                                     message: "failed",
+                                    typeError: "Erro na BD",
                                     request: {
                                         type: 'POST',
                                         description: 'Criar um cliente/condutor'
@@ -391,7 +409,7 @@ exports.createClientDriver = async (req, res, next) => {
                                 process.env.PRIVATE_KEY, 
                                 {
                                     algorithm:'HS256',
-                                    expiresIn:'1d'
+                                    expiresIn:'7d'
                                 })
 
                                 //get url to redirect
@@ -441,6 +459,7 @@ exports.createClientDriver = async (req, res, next) => {
                 if (err) {
                     let response = {
                         message: "failed",
+                        typeError: "Erro na BD",
                         request: {
                             type: 'POST',
                             description: 'Criar um cliente/condutor'
@@ -457,6 +476,7 @@ exports.createClientDriver = async (req, res, next) => {
                             if (err) {
                                 let response = {
                                     message: "failed",
+                                    typeError: "Erro na BD",
                                     request: {
                                         type: 'POST',
                                         description: 'Criar um cliente/condutor'
@@ -472,6 +492,7 @@ exports.createClientDriver = async (req, res, next) => {
                                         if (err) {
                                             let response = {
                                                 message: "failed",
+                                                typeError: "Erro na BD",
                                                 request: {
                                                     type: 'POST',
                                                     description: 'Criar um cliente/condutor'
@@ -489,7 +510,7 @@ exports.createClientDriver = async (req, res, next) => {
                                             process.env.PRIVATE_KEY, 
                                             {
                                                 algorithm:'HS256',
-                                                expiresIn:'1d'
+                                                expiresIn:'7d'
                                             })
 
                                             //get url to redirect
@@ -575,6 +596,7 @@ exports.createMerchant = async (req, res, next) => {
         ) {
         let response = {
             message: "failed",
+            typeError: "Algum campo está vazio",
             request: {
                 type: 'POST',
                 description: 'Criar uma empresa'
@@ -587,6 +609,7 @@ exports.createMerchant = async (req, res, next) => {
     } else if (!validateEmail(email)) {
         let response = {
             message: "failed",
+            typeError: "Campo email inválido",
             request: {
                 type: 'POST',
                 description: 'Criar uma empresa'
@@ -605,6 +628,7 @@ exports.createMerchant = async (req, res, next) => {
     ) {
         let response = {
             message: "failed",
+            typeError: "Palavra-passse insuficiente",
             request: {
                 type: 'POST',
                 description: 'Criar uma empresa'
@@ -617,6 +641,7 @@ exports.createMerchant = async (req, res, next) => {
     } else if (password != repeatPassword) {
         let response = {
             message: "failed",
+            typeError: "Repetir palavra passe não coincide com a palavra passe",
             request: {
                 type: 'POST',
                 description: 'Criar uma empresa'
@@ -629,6 +654,7 @@ exports.createMerchant = async (req, res, next) => {
     } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
         let response = {
             message: "failed",
+            typeError: "Código postal inválido",
             request: {
                 type: 'POST',
                 description: 'Criar uma empresa'
@@ -641,6 +667,7 @@ exports.createMerchant = async (req, res, next) => {
     } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
         let response = {
             message: "failed",
+            typeError: "Localidade inválida",
             request: {
                 type: 'POST',
                 description: 'Criar uma empresa'
@@ -663,9 +690,10 @@ exports.createMerchant = async (req, res, next) => {
                 if (err) {
                     let response = {
                         message: "failed",
+                        typeError: "Erro na BD",
                         request: {
                             type: 'POST',
-                            description: 'Criar uma empresa1'
+                            description: 'Criar uma empresa'
                         }
                     }
                     deleteLogo(fs, logoPath);
@@ -680,9 +708,10 @@ exports.createMerchant = async (req, res, next) => {
                             if (err) {
                                 let response = {
                                     message: "failed",
+                                    typeError: "Erro na BD",
                                     request: {
                                         type: 'POST',
-                                        description: 'Criar uma empresa2'
+                                        description: 'Criar uma empresa'
                                     }
                                 }
                                 deleteLogo(fs, logoPath);
@@ -697,7 +726,7 @@ exports.createMerchant = async (req, res, next) => {
                                 process.env.PRIVATE_KEY, 
                                 {
                                     algorithm:'HS256',
-                                    expiresIn:'1d'
+                                    expiresIn:'7d'
                                 })
 
                                 //get url to redirect

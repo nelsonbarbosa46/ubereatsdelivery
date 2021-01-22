@@ -53,8 +53,6 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-router.get('/', userController.getUsers);
-
 router.put('/changeEP/:id', personValid, userController.changeEmailPassword);
 
 router.put('/changeInfoCl/:id', personValid, userController.changeInfoCl);
@@ -70,12 +68,6 @@ router.get('/getInfoCl/:id', personValid, userController.getInfoUserCl);
 router.get('/getInfoMe/:id', personValid, userController.getInfoUserMe);
 
 router.get('/getInfoAd/:id', personValid, userController.getInfoUserAd);
-
-router.delete('/delUserCl/:id', personValid, userController.delUserCl);
-
-router.delete('/delUserMe/:id', personValid, userController.delUserMe);
-
-router.delete('/delUserAd/:id', personValid, userController.delUserAd);
 
 router.get('/getDriversUncheck/', userController.getDriversUnchecked);
 

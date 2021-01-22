@@ -15,7 +15,7 @@ router.get('/checkTokenInitialPage', (req, res, next) => {
                     "message": "success",
                     "pageRedirect": "/client/",
                     "request": {
-                        "type": 'POST',
+                        "type": 'GET',
                         "description": 'Verificar o Token na página inicial'
                     }
                 }
@@ -28,7 +28,7 @@ router.get('/checkTokenInitialPage', (req, res, next) => {
                     "message": "success",
                     "pageRedirect": "/client/",
                     "request": {
-                        "type": 'POST',
+                        "type": 'GET',
                         "description": 'Verificar o Token na página inicial'
                     }
                 }
@@ -41,7 +41,7 @@ router.get('/checkTokenInitialPage', (req, res, next) => {
                     "message": "success",
                     "pageRedirect": "/merchant/",
                     "request": {
-                        "type": 'POST',
+                        "type": 'GET',
                         "description": 'Verificar o Token na página inicial'
                     }
                 }
@@ -53,7 +53,7 @@ router.get('/checkTokenInitialPage', (req, res, next) => {
                     "message": "success",
                     "pageRedirect": "/admin/",
                     "request": {
-                        "type": 'POST',
+                        "type": 'GET',
                         "description": 'Verificar o Token na página inicial'
                     }
                 }
@@ -65,7 +65,7 @@ router.get('/checkTokenInitialPage', (req, res, next) => {
                     "message": "success",
                     "pageRedirect": "/admin/",
                     "request": {
-                        "type": 'POST',
+                        "type": 'GET',
                         "description": 'Verificar o Token na página inicial'
                     }
                 }
@@ -75,7 +75,7 @@ router.get('/checkTokenInitialPage', (req, res, next) => {
                 response = {
                     "message": "failed",
                     "request": {
-                        "type": "POST",
+                        "type": "GET",
                         "description": "Verificar o Token na página inicial"
                     }
                 }
@@ -86,7 +86,7 @@ router.get('/checkTokenInitialPage', (req, res, next) => {
         let response = {
             "message": "failed",
             "request": {
-                "type": "POST",
+                "type": "GET",
                 "description": "Verificar o Token na página inicial"
             }
         }
@@ -211,7 +211,7 @@ router.get('/checkToken/:id', (req, res, next) => {
                     "message": "failed",
                     "request": {
                         "type": "GET",
-                        "description": "Verificar o Token na página inicial"
+                        "description": "Verificar o Token numa Página Reservada"
                     }
                 }
                 res.status(401).json(response);
@@ -222,7 +222,7 @@ router.get('/checkToken/:id', (req, res, next) => {
             "message": "failed",
             "request": {
                 "type": "GET",
-                "description": "Verificar o Token na página inicial"
+                "description": "Verificar o Token numa Página Reservada"
             }
         }
         res.status(401).json(response);

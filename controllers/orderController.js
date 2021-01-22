@@ -375,7 +375,7 @@ exports.deleteReservation = (req, res, next) => {
                                         if (err) {
                                             let response = {
                                                 message: "failed",
-                                                typeError: "Erro na BD4",
+                                                typeError: "Erro na BD",
                                                 request: {
                                                     type: 'DELETE',
                                                     description: 'Eliminar uma reserva'

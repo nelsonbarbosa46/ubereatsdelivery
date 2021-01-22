@@ -53,8 +53,6 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-router.get('/', userController.getUsers);
-
 router.put('/changeEP/:id', personValid, userController.changeEmailPassword);
 
 router.put('/changeInfoCl/:id', personValid, userController.changeInfoCl);

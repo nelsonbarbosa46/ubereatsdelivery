@@ -69,12 +69,6 @@ router.get('/getInfoMe/:id', personValid, userController.getInfoUserMe);
 
 router.get('/getInfoAd/:id', personValid, userController.getInfoUserAd);
 
-router.delete('/delUserCl/:id', personValid, userController.delUserCl);
-
-router.delete('/delUserMe/:id', personValid, userController.delUserMe);
-
-router.delete('/delUserAd/:id', personValid, userController.delUserAd);
-
 router.get('/getDriversUncheck/', userController.getDriversUnchecked);
 
 router.get('/getMerchantsUncheck/', userController.getMerchantsUnchecked);

@@ -728,6 +728,7 @@ exports.getInfoUserCl = (req, res, next) => {
     if (decoded.typeUser != 0 && decoded.typeUser != 1) {
         let response = {
             message: "failed",
+            typeError: "Token inválido",
             request: {
                 type: 'GET',
                 description: 'Obter Informação do Cliente/Condutor'
@@ -739,6 +740,7 @@ exports.getInfoUserCl = (req, res, next) => {
     } else if (!id) {
         let response = {
             message: "failed",
+            typeError: "Campo vazio",
             request: {
                 type: 'GET',
                 description: 'Obter Informação do Cliente/Condutor'
@@ -755,6 +757,7 @@ exports.getInfoUserCl = (req, res, next) => {
                 if (err) {
                     let response = {
                         message: "failed",
+                        typeError: "Erro na BD",
                         request: {
                             type: 'GET',
                             description: 'Obter Informações do Cliente/Condutor'
@@ -800,6 +803,7 @@ exports.getInfoUserMe = (req, res, next) => {
     if (decoded.typeUser != 2) {
         let response = {
             message: "failed",
+            typeError: "Token inválido",
             request: {
                 type: 'GET',
                 description: 'Obter Informação da Empresa'
@@ -811,6 +815,7 @@ exports.getInfoUserMe = (req, res, next) => {
     } else if (!id) { 
         let response = {
             message: "failed",
+            typeError: "Campo vazio",
             request: {
                 type: 'GET',
                 description: 'Obter Informações da Empresa'
@@ -829,6 +834,7 @@ exports.getInfoUserMe = (req, res, next) => {
                 if (err) {
                     let response = {
                         message: "failed",
+                        typeError: "Erro na BD",
                         request: {
                             type: 'GET',
                             description: 'Obter Informações da Empresa'
@@ -876,6 +882,7 @@ exports.getInfoUserAd = (req, res, next) => {
     if (decoded.typeUser != 3 && decoded.typeUser != 4) {
         let response = {
             message: "failed",
+            typeError: "Token inválido",
             request: {
                 type: 'GET',
                 description: 'Obter Informação do Administrador'
@@ -887,6 +894,7 @@ exports.getInfoUserAd = (req, res, next) => {
     } else if (!id) {
         let response = {
             message: "failed",
+            typeError: "Campo vazio",
             request: {
                 type: 'GET',
                 description: 'Obter Informação do Administrador'
@@ -902,6 +910,7 @@ exports.getInfoUserAd = (req, res, next) => {
                 if (err) {
                     let response = {
                         message: "failed",
+                        typeError: "Erro na BD",
                         request: {
                             type: 'GET',
                             description: 'Obter Informações do Administrador'

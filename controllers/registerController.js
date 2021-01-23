@@ -58,164 +58,186 @@ exports.createAdmin = async (req, res, next) => {
 
     //typeUser Client=0, Driver=1, Merchant=2, Admin=3 
     var typeUser = 3;
-    
-    //check if any field are empty
-    if (!email || !password || !repeatPassword || !address || !zipCode || !location || !name) {
-        console.log("deu empty");
+
+    const tokenUnsplited = req.headers.authorization;
+    if (!tokenUnsplited) {
         let response = {
-            message: "failed",
-            typeError: "Algum campo está vazio",
-            request: {
-                type: 'POST',
-                description: 'Criar um administrador'
-            }
+            "message": "failed",
+            "description": "You don't have permissions!"
         };
-        //some field is empty
-        res.status(400).json(response);
-    //check if password is invalid
-    } else if (!validateEmail(email)) {
-        let response = {
-            message: "failed",
-            typeError: "Email inválido",
-            request: {
-                type: 'POST',
-                description: 'Criar um administrador'
-            }
-        };
-        //email invalid
-        res.status(400).json(response);
-    //check if password is invalid
-    } else if (
-        password.match(/[a-z]/g) === null || 
-        password.match(/[A-Z]/g) === null || 
-        password.match(/[0-9]/g) === null || 
-        password.length < 8 ||
-        password.length > 15
-    ) {
-        let response = {
-            message: "failed",
-            typeError: "Palavra-passe insuficiente",
-            request: {
-                type: 'POST',
-                description: 'Criar um administrador'
-            }
-        };
-        //password invalid
-        res.status(400).json(response);
-    //check if password is not equal to repeatPassword
-    } else if (password != repeatPassword) {
-        let response = {
-            message: "failed",
-            typeError: "Repetir palavra-passe não coincide com a palavra-passe",
-            request: {
-                type: 'POST',
-                description: 'Criar um administrador'
-            }
-        };
-        //password not equal to repeatPassword
-        res.status(400).json(response);
-    //check if zipCode is invalid
-    } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
-        let response = {
-            message: "failed",
-            typeError: "Código postal inválido",
-            request: {
-                type: 'POST',
-                description: 'Criar um administrador'
-            }
-        };
-        //zipCode invalid
-        res.status(400).json(response);
-    //check if location is invalid
-    } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
-        let response = {
-            message: "failed",
-            typeError: "Localidade inválida",
-            request: {
-                type: 'POST',
-                description: 'Criar um administrador'
-            }
-        };
-        //location invalid
-        res.status(400).json(response);
+        res.status(401).json(response);
     } else {
-        var db = require('../sql').db();
 
-        //create hash
-        const hash = await bcrypt.hashSync(password, 10);
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
 
-        var sql = `INSERT INTO user(email, password, name, address, zipCode, location, typeUser)
-        VALUES (?, ?, ?, ?, ?, ?, ?)`;
-
-        db.run(sql, [email, hash, name, address, zipCode, location, typeUser], 
-            function (err) {
-                if (err) {
-                    let response = {
-                        message: "failed",
-                        typeError: "Erro na BD",
-                        request: {
-                            type: 'POST',
-                            description: 'Criar um administrador'
-                        }
-                    }
-                    //error inserting on table user
-                    res.status(500).json(response);
-                } else {
-                    let id = this.lastID;
-                    sql = `INSERT INTO admin(idUser) VALUES (?)`;
-                    db.run(sql, [id], function (err) {
-                        if (err) {
-                            let response = {
-                                message: "failed",
-                                typeError: "Erro na BD",
-                                request: {
-                                    type: 'POST',
-                                    description: 'Criar um administrador'
-                                }
-                            }
-                            //error inserting on table admin
-                            res.status(500).json(response);
-                        } else {
-                           //create token
-                            var token = jwt.sign({
-                                typeUser: typeUser,
-                                id: id
-                            }, 
-                            process.env.PRIVATE_KEY, 
-                            {
-                                algorithm:'HS256',
-                                expiresIn:'7d'
-                            })
-
-                            //get url to redirect
-                            var url = getRedirectURL(typeUser);
-
-                            let response = {
-                                message: "success",
-                                userCreated: {
-                                    email: email,
-                                    name: name
-                                },
-                                login: {
-                                    token: token,
-                                    url: url
-                                },
-                                request: {
-                                    type: 'POST',
-                                    description: 'Criar um administrador'
-                                }
-                            }
-                            //status 201 because was inserted in both of the tables
-                            res.status(201).json(response);
-                        } 
-                    });
+        if (decoded.typeUser != 4) {
+            let response = {
+                message: "failed",
+                typeError: "Token inválido",
+                request: {
+                    type: 'POST',
+                    description: 'Criar um administrador'
                 }
             }
-        );
-
-        db.close();
+            res.status(401).json(response);
+        //check if any field are empty
+        } else if (!email || !password || !repeatPassword || !address || !zipCode || !location || !name) {
+            let response = {
+                message: "failed",
+                typeError: "Algum campo está vazio",
+                request: {
+                    type: 'POST',
+                    description: 'Criar um administrador'
+                }
+            };
+            //some field is empty
+            res.status(400).json(response);
+        //check if password is invalid
+        } else if (!validateEmail(email)) {
+            let response = {
+                message: "failed",
+                typeError: "Email inválido",
+                request: {
+                    type: 'POST',
+                    description: 'Criar um administrador'
+                }
+            };
+            //email invalid
+            res.status(400).json(response);
+        //check if password is invalid
+        } else if (
+            password.match(/[a-z]/g) === null || 
+            password.match(/[A-Z]/g) === null || 
+            password.match(/[0-9]/g) === null || 
+            password.length < 8 ||
+            password.length > 15
+        ) {
+            let response = {
+                message: "failed",
+                typeError: "Palavra-passe insuficiente",
+                request: {
+                    type: 'POST',
+                    description: 'Criar um administrador'
+                }
+            };
+            //password invalid
+            res.status(400).json(response);
+        //check if password is not equal to repeatPassword
+        } else if (password != repeatPassword) {
+            let response = {
+                message: "failed",
+                typeError: "Repetir palavra-passe não coincide com a palavra-passe",
+                request: {
+                    type: 'POST',
+                    description: 'Criar um administrador'
+                }
+            };
+            //password not equal to repeatPassword
+            res.status(400).json(response);
+        //check if zipCode is invalid
+        } else if (!zipCode.match('[0-9]{4}[-]{1}[0-9]{3}')) {
+            let response = {
+                message: "failed",
+                typeError: "Código postal inválido",
+                request: {
+                    type: 'POST',
+                    description: 'Criar um administrador'
+                }
+            };
+            //zipCode invalid
+            res.status(400).json(response);
+        //check if location is invalid
+        } else if (arrCountiesLowerCase.indexOf(location.toLowerCase()) == -1) {
+            let response = {
+                message: "failed",
+                typeError: "Localidade inválida",
+                request: {
+                    type: 'POST',
+                    description: 'Criar um administrador'
+                }
+            };
+            //location invalid
+            res.status(400).json(response);
+        } else {
+            var db = require('../sql').db();
+    
+            //create hash
+            const hash = await bcrypt.hashSync(password, 10);
+    
+            var sql = `INSERT INTO user(email, password, name, address, zipCode, location, typeUser)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    
+            db.run(sql, [email, hash, name, address, zipCode, location, typeUser], 
+                function (err) {
+                    if (err) {
+                        let response = {
+                            message: "failed",
+                            typeError: "Erro na BD",
+                            request: {
+                                type: 'POST',
+                                description: 'Criar um administrador'
+                            }
+                        }
+                        //error inserting on table user
+                        res.status(500).json(response);
+                    } else {
+                        let id = this.lastID;
+                        sql = `INSERT INTO admin(idUser) VALUES (?)`;
+                        db.run(sql, [id], function (err) {
+                            if (err) {
+                                let response = {
+                                    message: "failed",
+                                    typeError: "Erro na BD",
+                                    request: {
+                                        type: 'POST',
+                                        description: 'Criar um administrador'
+                                    }
+                                }
+                                //error inserting on table admin
+                                res.status(500).json(response);
+                            } else {
+                               //create token
+                                var token = jwt.sign({
+                                    typeUser: typeUser,
+                                    id: id
+                                }, 
+                                process.env.PRIVATE_KEY, 
+                                {
+                                    algorithm:'HS256',
+                                    expiresIn:'1d'
+                                })
+    
+                                //get url to redirect
+                                var url = getRedirectURL(typeUser);
+    
+                                let response = {
+                                    message: "success",
+                                    userCreated: {
+                                        email: email,
+                                        name: name
+                                    },
+                                    login: {
+                                        token: token,
+                                        url: url
+                                    },
+                                    request: {
+                                        type: 'POST',
+                                        description: 'Criar um administrador'
+                                    }
+                                }
+                                //status 201 because was inserted in both of the tables
+                                res.status(201).json(response);
+                            } 
+                        });
+                    }
+                }
+            );
+    
+            db.close();
+        }
     }
-
+    
     return;
 }
 

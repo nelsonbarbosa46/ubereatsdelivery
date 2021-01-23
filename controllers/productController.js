@@ -180,7 +180,7 @@ exports.createProduct = (req, res, next) => {
                                                 },
                                                 request: {
                                                     type: 'POST',
-                                                    description: 'Criar uma empresa'
+                                                    description: 'Criar um produto'
                                                 }
                                             }
                                             res.status(201).json(response)
@@ -213,7 +213,7 @@ exports.createProduct = (req, res, next) => {
 
 exports.deleteProduct = (req, res, next) => {
     var idProduct = req.params.idProduct;
-    var idUser = req.params.idUser;
+    var idUser = req.params.id;
 
     const tokenUnsplited = req.headers.authorization;
     //check if token is empty

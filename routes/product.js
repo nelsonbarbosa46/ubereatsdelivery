@@ -3,6 +3,7 @@ const router = express.Router();
 const productController = require('../controllers/productController');
 const multer = require('multer');
 const personValid = require('../middleware/checkPersonValid');
+const merchantValid = require('../middleware/checkMerchantValid');
 
 //handling with upload image (on createMerchant)
 const storage = multer.diskStorage({
@@ -53,17 +54,17 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-router.post('/createProduct/', upload.single('logo'), productController.createProduct);
+router.post('/createProduct/', upload.single('logo'), merchantValid, productController.createProduct);
 
-router.put('/changeInfoProduct/:id/:idProduct', productController.changeInfoProduct);
+router.put('/changeInfoProduct/:id/:idProduct', merchantValid, productController.changeInfoProduct);
 
-router.put('/changeLogoProduct/:id/:idProduct', upload.single('logo'), productController.changeLogoProduct);
+router.put('/changeLogoProduct/:id/:idProduct', merchantValid, upload.single('logo'), productController.changeLogoProduct);
 
-router.get('/getProductsMe/:id', personValid, productController.getProductsMe);
+router.get('/getProductsMe/:id', personValid, merchantValid, productController.getProductsMe);
 
-router.delete('/deleteProduct/:id', productController.deleteProduct);
+router.delete('/deleteProduct/:id/:idProduct', merchantValid, productController.deleteProduct);
 
-router.put('/changeQuantityProduct/:id/:idProduct', productController.changeQuantityProduct);
+router.put('/changeQuantityProduct/:id/:idProduct', merchantValid, productController.changeQuantityProduct);
 
 router.get('/showProducts/:idMerchant', productController.showProducts);
 

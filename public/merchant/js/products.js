@@ -100,6 +100,7 @@ function getProductsToShow() {
         }
         , error: function (jqXHR, textStatus, err) {
             console.log(err,textStatus);
+            console.log(jqXHR);
             M.toast({html: 'Erro ao obter produtos!'});
         }
     })

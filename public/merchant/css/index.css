@@ -29,3 +29,8 @@
 .sidenav .user-view {
     padding: 0 32px 0;
 }
+
+.divErrorCanWork {
+    padding: 10px;
+    border-radius: 5px;
+}

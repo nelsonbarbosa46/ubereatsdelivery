@@ -59,16 +59,29 @@ function continueScript() {
     });
     //get drivers
     getDriversUnchecked();
-    //submit form change info
+    //submit form check driver
     $("body").on('submit', '.checkedDriver', (function (e) {
         var id = $(this).attr('id');
         var form = $(this);
         submitDriverCheck(e, id, form); 
     }));
+    $("#aPendingOrdersMerchants").one("click", getMerchantsUnchecked);
     $("body").on('click', '.btnInfoDriver', function () {
         var id = $(this).attr('id');
         console.log(id);
         var divInfo = "#divInfoDriver"+id;
+        $(divInfo).slideToggle();
+    });
+    //submit form check merchant
+    $("body").on('submit', '.checkedMerchant', (function (e) {
+        var id = $(this).attr('id');
+        var form = $(this);
+        submitMerchantCheck(e, id, form); 
+    }));
+    $("body").on('click', '.btnInfoMerchant', function () {
+        var id = $(this).attr('id');
+        console.log(id);
+        var divInfo = "#divInfoMerchant"+id;
         $(divInfo).slideToggle();
     })
 

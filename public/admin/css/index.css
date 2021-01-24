@@ -50,10 +50,6 @@
   margin: 0;
 }
 
-.divClassInfoDriver {
+.divClassInfoDriver, .divClassInfoMerchant {
   display: none;
-}
-
-.divClassInfoDriver col{
-  margin: 0;
 }

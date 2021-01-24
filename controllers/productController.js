@@ -170,9 +170,11 @@ exports.createProduct = (req, res, next) => {
                                             //error inserting
                                             res.status(500).json(response)
                                         } else {
+                                            let id = this.lastID;
                                             let response = {
                                                 message: "success",
                                                 newProduct: {
+                                                    idProduct: id,
                                                     name: name,
                                                     price: price,
                                                     quantity: quantity,

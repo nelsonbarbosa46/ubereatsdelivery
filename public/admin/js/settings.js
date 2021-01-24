@@ -89,6 +89,7 @@ function submitFormRegisterAdmin(e) {
         
     if (errFields.length === 0) {
         
+        var url = getUrlToSubmit();
         $.ajax({
             url: url+'/api/register/signupAdmin/',
             type: 'POST',

@@ -18,16 +18,14 @@ function continueScript() {
     //put email and name on sidenav (profile)
     $("#pageNameUser").text(nameUser);
     $("#pageEmailUser").text(emailUser);
-    //delete option "Eliminar conta" if user is SuperAdmin
     if (typeUser == 4) {
-        $("#liModalDeleteAccount").remove();
-        $("#modalDeleteAccount").remove();
         $("#begin div h2").append("Super Administrador");
     } else {
+        $("#createAdmin").remove();
+        $("#linkCreateAdmin").remove();
         $("#begin div h2").append("Administrador");
     }
-        //get values for the form to change info
-        $("#openFormChangeInfo").one("click", getValuesFormChangeInfo);
+    $("#openFormChangeInfo").one("click", getValuesFormChangeInfo);
     //verify if on change input on form change email/password is empty or not, if its empty disabled button
     //to submit, if not, button is enabled
     $(document).on('change', '#formChangeEP input', verifyInputsFormEP);
@@ -59,5 +57,32 @@ function continueScript() {
     $("#formRegisterAdmin").submit(function (e) {
        submitFormRegisterAdmin(e); 
     });
-    
+    //get drivers
+    getDriversUnchecked();
+    //submit form check driver
+    $("body").on('submit', '.checkedDriver', (function (e) {
+        var id = $(this).attr('id');
+        var form = $(this);
+        submitDriverCheck(e, id, form); 
+    }));
+    $("#aPendingOrdersMerchants").one("click", getMerchantsUnchecked);
+    $("body").on('click', '.btnInfoDriver', function () {
+        var id = $(this).attr('id');
+        console.log(id);
+        var divInfo = "#divInfoDriver"+id;
+        $(divInfo).slideToggle();
+    });
+    //submit form check merchant
+    $("body").on('submit', '.checkedMerchant', (function (e) {
+        var id = $(this).attr('id');
+        var form = $(this);
+        submitMerchantCheck(e, id, form); 
+    }));
+    $("body").on('click', '.btnInfoMerchant', function () {
+        var id = $(this).attr('id');
+        console.log(id);
+        var divInfo = "#divInfoMerchant"+id;
+        $(divInfo).slideToggle();
+    })
+
 }

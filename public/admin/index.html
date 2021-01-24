@@ -18,7 +18,13 @@
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="../js/getUrlToSub.js"></script>
     <script src="../js/generalFunc.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/getPendingOrders.js"></script>
+    <script src="js/index.js"></script>
     <script src="js/checkToken.js"></script>
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </head>
 
 <body>
@@ -65,7 +71,6 @@
             <li><a href="#modalChangeEmailPass" class="waves-effect modal-trigger">Alterar Email/Palavra passe</a></li>
             <li><a id="openFormChangeInfo" href="#modalChangeInfo" class="waves-effect modal-trigger">Alterar
                     Informações</a></li>
-            <li id="liModalDeleteAccount"><a href="#modalDeleteAccount" class="waves-effect modal-trigger">Eliminar Conta</a></li>
             <li>
                 <div class="divider"></div>
             </li>
@@ -166,20 +171,6 @@
             </div>
         </div>
         <!--/Modal Change Info-->
-
-
-        <!--Modal Delete Account-->
-        <div id="modalDeleteAccount" class="modal">
-            <div class="modal-content">
-                <h4>Eliminar Conta</h4>
-                <div class="row">
-                    <div class="col s12">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/Modal Delete Account-->
     </header>
 
     <main id="page-container">
@@ -193,13 +184,25 @@
                 <div class="row">
                     <div class="col s12">
                         <ul class="tabs" id="tabsOptions">
-                            <li class="tab col s3"><a class="active" href="#pendingOrders">Ver Pedidos Pendentes</a></li>
-                            <li class="tab col s3"><a href="#createAdmin">Criar Administrador</a></li>
+                            <li class="tab col s3"><a class="active" href="#pendingOrdersDrivers">Pedidos Condutores</a></li>
+                            <li class="tab col s3"><a id="aPendingOrdersMerchants" href="#pendingOrdersMerchants">Pedidos Empresas</a></li>
+                            <li class="tab col s3"><a href="#createAdmin" id="linkCreateAdmin">Criar Administrador</a></li>
                         </ul>
                     </div>
-                    <div id="pendingOrders" class="col s12">
+                    <div id="pendingOrdersDrivers" class="col s12">
                         <div class="mt-2 row">
-                            Pedidos Pendentes
+                            <h5>Pedidos Condutores Pendentes</h5>
+                            <div id="tablePendingDrivers">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div id="pendingOrdersMerchants" class="col s12">
+                        <div class="mt-2 row">
+                            <h5>Pedidos Empresas Pendentes</h5>
+                            <div id="tablePendingMerchants">
+                                
+                            </div>
                         </div>
                     </div>
                     <div id="createAdmin" class="col s12">
@@ -264,11 +267,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/index.js"></script>
     <script src="../js/logout.js"></script>
 </body>
 

@@ -46,16 +46,73 @@ function submitFormCreateProduct(e) {
             },
             success: function (data) {
                 M.toast({html: 'Criado com sucesso'});
+                showNewProduct(name, price, quantity, description, logo, data.newProduct.id);
             }
             , error: function (jqXHR, textStatus, err) {
                 console.log(err,textStatus);
                 M.toast({html: 'Erro ao Registar!'});
             }
         })
-        
+
     } else {
         toastErrForm(errFields);
     }
+}
+
+function showNewProduct(name, price, quantity, description, logo ,id) {
+    var html = '';
+
+    html += '<!--Card-->\
+    <div class="col s12 l4">\
+        <div class="card sticky-action small">\
+            <div class="card-image waves-effect waves-block waves-light">\ ';
+    if (logo) {
+        html += '<img class="activator" id="imgProduct'+listProducts.id+'" src="../'+listProducts.image+'">';
+    } else {
+        //dont has image
+        html += '<img class="activator" id="imgProduct'+listProducts.id+'" src="../img/produtosemimagem.svg">';
+    }
+    html += '</div>\
+            <div class="card-content">\
+                <span class="card-title activator grey-text text-darken-4" id="span1NameProduct'+listProducts.id+'">'+listProducts.name+'<i class="material-icons right">more_vert</i></span>\
+            </div>\
+            <div class="card-action">\
+                <a href="#modalProductChangeQuantity'+listProducts.id+'" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Quantidade">\
+                    <i class="material-icons round">\
+                        add\
+                    </i>\
+                </a>\
+                <a href="#modalProductChangeInfo'+listProducts.id+'" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Informações">\
+                    <i class="material-icons round">\
+                        edit\
+                    </i>\
+                </a>\
+                <a href="#modalProductChangeImage'+listProducts.id+'" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Imagem">\
+                    <i class="material-icons round">\
+                        wallpaper\
+                    </i>\
+                </a>\
+                <a href="#modalProductDelete'+listProducts.id+'" class="right tooltipped modal-trigger" data-position="bottom" data-tooltip="Eliminar Produto">\
+                    <i class="material-icons round iconDeleteProduct red-text waves-red waves-effect">\
+                        delete\
+                    </i>\
+                </a>\
+            </div>\
+            <div class="card-reveal">\
+                <span class="card-title grey-text text-darken-4" id="span2NameProduct'+listProducts.id+'">'+listProducts.name+'<i class="material-icons right">close</i></span>\
+                <p><b>Preço: </b><span id="spanPrice'+listProducts.id+'">'+listProducts.price+'€</span><br><b>Quantidade: </b>\
+                <span id="spanQuantity'+listProducts.id+'">'+listProducts.quantity+'</span><br>\ ';
+    if (listProducts.description) {
+        html += '<b>Descrição: </b><span id="spanDescription'+listProducts.id+'">'+listProducts.description+'</span>';
+    } else {
+        html += '<b>Descrição: </b><span id="spanDescription'+listProducts.id+'">Não existe</span>';
+    }
+    html += '   </p>\
+            </div>\
+        </div>\
+    </div>\
+    <!--/Card-->\
+    ';
 }
 
 function deleteProduct(id) {

@@ -64,7 +64,7 @@ function showNewProduct(name, price, quantity, description, logo ,id) {
     var html = '';
 
     html += '<!--Card-->\
-    <div class="col s12 l4">\
+    <div class="col s12 l4" id="cardProduct'+id+'">\
         <div class="card sticky-action small">\
             <div class="card-image waves-effect waves-block waves-light">\ ';
     if (logo) {
@@ -221,7 +221,7 @@ function showNewProduct(name, price, quantity, description, logo ,id) {
                 <div class="row">\
                     <div class="col s12">\
                         <p>Pretende mesmo eliminar o produto?</p>\
-                        <button id="formDeleteProduct" type="submit" class="btn waves-effect waves-red red">Eliminar Produto</button>\
+                        <button id="formDeleteProduct" type="submit" class="btn waves-effect waves-red red modal-close">Eliminar Produto</button>\
                         <a href="#!" class="modal-close waves-effect btn">Cancelar</a>\
                     </div>\
                 </div>\
@@ -234,17 +234,33 @@ function showNewProduct(name, price, quantity, description, logo ,id) {
     M.updateTextFields();
 }
 
-function deleteProduct(id) {
+function deleteProduct(e, id) {
+    e.preventDefault();
     var url = getUrlToSubmit();
-    
+    console.log(id);
     $.ajax({
-        url: url+'/api/product/deleteProduct/'+id,
+        url: url+'/api/product/deleteProduct/'+idUser+'/'+id,
         type: 'DELETE',
         cache: false,
         contentType: false,
         processData: false,
+        headers: {
+            "Authorization": 'Bearer ' + token
+        },
         success: function () {
-            console.log("Produto eliminado com sucesso");
+            let modalQuantity = "#modalProductChangeQuantity"+id;
+            let modalInfo = "#modalProductChangeInfo"+id;
+            let modalImage = "#modalProductChangeImage"+id;
+            let modalDelete = "#modalProductDelete"+id;
+            let card = "#cardProduct"+id;
+            $(modalQuantity).remove();
+            $(modalInfo).remove();
+            $(modalImage).remove();
+            $(modalDelete).remove();
+            $(card).remove();
+            M.toast({html: 'Eliminado com sucesso'});
+        },error: function () {
+            M.toast({html: 'Erro ao eliminar!'});
         }
     })
 }
@@ -286,7 +302,7 @@ function showCardAndModals(listProducts) {
     var html = '';
     
     html += '<!--Card-->\
-    <div class="col s12 l4">\
+    <div class="col s12 l4" id="cardProduct'+listProducts.id+'">\
         <div class="card sticky-action small">\
             <div class="card-image waves-effect waves-block waves-light">\ ';
     if (listProducts.image) {
@@ -444,7 +460,7 @@ function showCardAndModals(listProducts) {
                 <div class="row">\
                     <div class="col s12">\
                         <p>Pretende mesmo eliminar o produto?</p>\
-                        <button id="formDeleteProduct" type="submit" class="btn waves-effect waves-red red">Eliminar Produto</button>\
+                        <button id="formDeleteProduct" type="submit" class="btn waves-effect waves-red red modal-close">Eliminar Produto</button>\
                         <a href="#!" class="modal-close waves-effect btn">Cancelar</a>\
                     </div>\
                 </div>\

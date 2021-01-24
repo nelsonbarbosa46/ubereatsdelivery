@@ -41,3 +41,19 @@
 #newCredentialsDiv {
   display: none;
 }
+
+.divButtonPending {
+  margin-top: 5px;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.divClassInfoDriver {
+  display: none;
+}
+
+.divClassInfoDriver col{
+  margin: 0;
+}

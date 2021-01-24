@@ -29,6 +29,7 @@ if (token !== '' && token !== null) {
             }
         }, error: function () {
             delCookie("tokenSession");
-    }
+        }
 
-})
+    })
+}

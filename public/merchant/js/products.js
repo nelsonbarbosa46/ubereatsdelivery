@@ -46,7 +46,8 @@ function submitFormCreateProduct(e) {
             },
             success: function (data) {
                 M.toast({html: 'Criado com sucesso'});
-                showNewProduct(name, price, quantity, description, logo, data.newProduct.id);
+                showNewProduct(name, price, quantity, description, file, data.newProduct.idProduct);
+                $("body").css('overflow', '');
             }
             , error: function (jqXHR, textStatus, err) {
                 console.log(err,textStatus);
@@ -63,49 +64,50 @@ function showNewProduct(name, price, quantity, description, logo ,id) {
     var html = '';
 
     html += '<!--Card-->\
-    <div class="col s12 l4">\
+    <div class="col s12 l4" id="cardProduct'+id+'">\
         <div class="card sticky-action small">\
             <div class="card-image waves-effect waves-block waves-light">\ ';
     if (logo) {
-        html += '<img class="activator" id="imgProduct'+listProducts.id+'" src="../'+listProducts.image+'">';
+        var urlImageRemoved = logo.replace("public"+String.fromCharCode(92), "");
+        html += '<img class="activator" id="imgProduct'+id+'" src="../'+urlImageRemoved+'">';
     } else {
         //dont has image
-        html += '<img class="activator" id="imgProduct'+listProducts.id+'" src="../img/produtosemimagem.svg">';
+        html += '<img class="activator" id="imgProduct'+id+'" src="../img/produtosemimagem.svg">';
     }
     html += '</div>\
             <div class="card-content">\
-                <span class="card-title activator grey-text text-darken-4" id="span1NameProduct'+listProducts.id+'">'+listProducts.name+'<i class="material-icons right">more_vert</i></span>\
+                <span class="card-title activator grey-text text-darken-4" id="span1NameProduct'+id+'">'+name+'<i class="material-icons right">more_vert</i></span>\
             </div>\
             <div class="card-action">\
-                <a href="#modalProductChangeQuantity'+listProducts.id+'" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Quantidade">\
+                <a href="#modalProductChangeQuantity'+id+'" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Quantidade">\
                     <i class="material-icons round">\
                         add\
                     </i>\
                 </a>\
-                <a href="#modalProductChangeInfo'+listProducts.id+'" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Informações">\
+                <a href="#modalProductChangeInfo'+id+'" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Informações">\
                     <i class="material-icons round">\
                         edit\
                     </i>\
                 </a>\
-                <a href="#modalProductChangeImage'+listProducts.id+'" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Imagem">\
+                <a href="#modalProductChangeImage'+id+'" class="tooltipped modal-trigger" data-position="bottom" data-tooltip="Alterar Imagem">\
                     <i class="material-icons round">\
                         wallpaper\
                     </i>\
                 </a>\
-                <a href="#modalProductDelete'+listProducts.id+'" class="right tooltipped modal-trigger" data-position="bottom" data-tooltip="Eliminar Produto">\
+                <a href="#modalProductDelete'+id+'" class="right tooltipped modal-trigger" data-position="bottom" data-tooltip="Eliminar Produto">\
                     <i class="material-icons round iconDeleteProduct red-text waves-red waves-effect">\
                         delete\
                     </i>\
                 </a>\
             </div>\
             <div class="card-reveal">\
-                <span class="card-title grey-text text-darken-4" id="span2NameProduct'+listProducts.id+'">'+listProducts.name+'<i class="material-icons right">close</i></span>\
-                <p><b>Preço: </b><span id="spanPrice'+listProducts.id+'">'+listProducts.price+'€</span><br><b>Quantidade: </b>\
-                <span id="spanQuantity'+listProducts.id+'">'+listProducts.quantity+'</span><br>\ ';
-    if (listProducts.description) {
-        html += '<b>Descrição: </b><span id="spanDescription'+listProducts.id+'">'+listProducts.description+'</span>';
+                <span class="card-title grey-text text-darken-4" id="span2NameProduct'+id+'">'+name+'<i class="material-icons right">close</i></span>\
+                <p><b>Preço: </b><span id="spanPrice'+id+'">'+price+'€</span><br><b>Quantidade: </b>\
+                <span id="spanQuantity'+id+'">'+quantity+'</span><br>\ ';
+    if (description) {
+        html += '<b>Descrição: </b><span id="spanDescription'+id+'">'+description+'</span>';
     } else {
-        html += '<b>Descrição: </b><span id="spanDescription'+listProducts.id+'">Não existe</span>';
+        html += '<b>Descrição: </b><span id="spanDescription'+id+'">Não existe</span>';
     }
     html += '   </p>\
             </div>\
@@ -113,19 +115,152 @@ function showNewProduct(name, price, quantity, description, logo ,id) {
     </div>\
     <!--/Card-->\
     ';
+    //modal change quantity
+    html += '\
+        <div id="modalProductChangeQuantity'+id+'" class="modal">\
+            <div class="modal-content">\
+                <h4>Alterar Quantidade</h4>\
+                <form action="#" class="formProductChangeQuantity" id="'+id+'">\
+                    <div class="col s12">\
+                        <div class="input-field col s12">\
+                            <input id="formChangeProductQuantity'+id+'" data-field="Quantidade" name="quantity" value="'+quantity+'" type="number">\
+                            <label for="formChangeProductQuantity'+id+'"">Quantidade</label>\
+                            <span class="helper-text">Campo obrigatório</span>\
+                        </div>\
+                    </div>\
+                    <div class="col s12 mb-2">\
+                        <button type="submit" class="btn waves-effect waves-orange orange lighten-2">Alterar Quantidade</button>\
+                        <a href="#!" class="modal-close waves-effect btn">Cancelar</a>';
+    
+    html += '       </div>';
+    html += '   </form>\
+            </div>\
+        </div>';
+
+    //modal change info
+    html += ' \
+        <div id="modalProductChangeInfo'+id+'" class="modal">\
+        <div class="modal-content">\
+            <h4>Alterar Informações</h4>\
+            <form action="#" class="formProductChangeInfo" id="'+id+'">\
+                <div class="col s12">\
+                    <div class="row">\
+                        <div class="input-field col s12 l6">\
+                            <input id="formChangeProductName'+id+'" data-field="Nome" name="name" value="'+name+'" type="text">\
+                            <label for="formChangeProductName"'+id+'">Nome</label>\
+                            <span class="helper-text">Campo obrigatório</span>\
+                        </div>\
+                        <div class="input-field col s12 l6">\
+                            <input id="formChangeProductPrice'+id+'" data-field="Preço" name="price" value="'+price+'" type="number">\
+                            <label for="formChangeProductPrice'+id+'">Preço</label>\
+                            <span class="helper-text">Campo obrigatório. Apenas coloque o valor e use ponto. Ex. "4.4"</span>\
+                        </div>\
+                        <div class="input-field col s12">\
+                            <textarea id="formChangeProductDescription'+id+'" name="description" data-field="Description" class="materialize-textarea" data-length="120">';
+    if (description) {
+        html += description;
+    }
+    html +=                 '</textarea>\
+                            <label for="formChangeProductDescription'+id+'">Descrição</label>\
+                        </div>\
+                    </div>\
+                </div>\
+                <div class="col s12 mb-2">\
+                    <button type="submit" class="btn waves-effect waves-orange orange lighten-2">Alterar Informações</button>\
+                    <a href="#!" class="modal-close waves-effect btn">Cancelar</a>\
+                </div>\
+            </form>\
+        </div>\
+    </div>\
+    ';
+
+    //modal change image
+    html += ' \
+    <div id="modalProductChangeImage'+id+'" class="modal">\
+        <div class="modal-content">\
+            <h4>Alterar Imagem</h4>\
+            <form action="#" class="formProductChangeImage" id="'+id+'">\
+                <div class="row">\
+                    <div class="file-field input-field col s12 l6">\
+                        <div class="btn grey darken-3">\
+                            <span>Imagem</span>\
+                            <input type="file" id="formChangeProductImage'+id+'" data-field="Logótipo" name="file" accept="image/png, image/jpg, image/jpeg">\
+                        </div>\
+                        <div class="file-path-wrapper">\
+                            <input class="file-path" name="textFile" type="text">\
+                        </div>\
+                        <small>Só é aceite ficheiros tipo PNG, JPEG e JPG</small>\
+                    </div>\
+                    <div class="col s12 l6">\
+                        <div id="divImgChangeProduct'+id+'">';
+                    
+    if (logo) {
+        var urlImageRemoved = logo.replace("public"+String.fromCharCode(92), "");
+        html += '<p>Imagem Atual: </p><img width="100%" src="../'+urlImageRemoved+'">';
+    } else {
+        html += '<p>Não tem imagem no momento</p>';
+    }
+    html += '           </div>\
+                    </div>\
+                </div>\
+                <div class="col s12 mb-2">\
+                    <button type="submit" class="btn waves-effect waves-orange orange lighten-2">Alterar Imagem</button>\
+                    <a href="#!" class="modal-close waves-effect btn">Cancelar</a>\
+                </div>\
+            </form>\
+        </div>\
+    </div>\
+    ';
+
+    //modal delete
+    html += ' \
+    <div id="modalProductDelete'+id+'" class="modal">\
+        <div class="modal-content">\
+            <h4>Eliminar Produto</h4>\
+            <form action="#" class="formProductDelete" id="'+id+'">\
+                <div class="row">\
+                    <div class="col s12">\
+                        <p>Pretende mesmo eliminar o produto?</p>\
+                        <button id="formDeleteProduct" type="submit" class="btn waves-effect waves-red red modal-close">Eliminar Produto</button>\
+                        <a href="#!" class="modal-close waves-effect btn">Cancelar</a>\
+                    </div>\
+                </div>\
+            </form>\
+        </div>\
+    </div>';
+
+    $("#rowShowProducts").append(html);
+    $(".modal").modal();
+    M.updateTextFields();
 }
 
-function deleteProduct(id) {
+function deleteProduct(e, id) {
+    e.preventDefault();
     var url = getUrlToSubmit();
-    
+    console.log(id);
     $.ajax({
-        url: url+'/api/product/deleteProduct/'+id,
+        url: url+'/api/product/deleteProduct/'+idUser+'/'+id,
         type: 'DELETE',
         cache: false,
         contentType: false,
         processData: false,
+        headers: {
+            "Authorization": 'Bearer ' + token
+        },
         success: function () {
-            console.log("Produto eliminado com sucesso");
+            let modalQuantity = "#modalProductChangeQuantity"+id;
+            let modalInfo = "#modalProductChangeInfo"+id;
+            let modalImage = "#modalProductChangeImage"+id;
+            let modalDelete = "#modalProductDelete"+id;
+            let card = "#cardProduct"+id;
+            $(modalQuantity).remove();
+            $(modalInfo).remove();
+            $(modalImage).remove();
+            $(modalDelete).remove();
+            $(card).remove();
+            M.toast({html: 'Eliminado com sucesso'});
+        },error: function () {
+            M.toast({html: 'Erro ao eliminar!'});
         }
     })
 }
@@ -165,13 +300,14 @@ function getProductsToShow() {
 
 function showCardAndModals(listProducts) {
     var html = '';
-
+    
     html += '<!--Card-->\
-    <div class="col s12 l4">\
+    <div class="col s12 l4" id="cardProduct'+listProducts.id+'">\
         <div class="card sticky-action small">\
             <div class="card-image waves-effect waves-block waves-light">\ ';
     if (listProducts.image) {
-        html += '<img class="activator" id="imgProduct'+listProducts.id+'" src="../../'+listProducts.image+'">';
+        var urlImageRemoved = listProducts.image.replace("public"+String.fromCharCode(92), "");
+        html += '<img class="activator" id="imgProduct'+listProducts.id+'" src="../'+urlImageRemoved+'">';
     } else {
         //dont has image
         html += '<img class="activator" id="imgProduct'+listProducts.id+'" src="../img/produtosemimagem.svg">';
@@ -298,7 +434,8 @@ function showCardAndModals(listProducts) {
                         <div id="divImgChangeProduct'+listProducts.id+'">';
                     
     if (listProducts.image) {
-        html += '<p>Imagem Atual: </p><img width="100%" src="../../'+listProducts.image+'">';
+        var urlImageRemoved = listProducts.image.replace("public"+String.fromCharCode(92), "");
+        html += '<p>Imagem Atual: </p><img width="100%" src="../'+urlImageRemoved+'">';
     } else {
         html += '<p>Não tem imagem no momento</p>';
     }
@@ -323,7 +460,7 @@ function showCardAndModals(listProducts) {
                 <div class="row">\
                     <div class="col s12">\
                         <p>Pretende mesmo eliminar o produto?</p>\
-                        <button id="formDeleteProduct" type="submit" class="btn waves-effect waves-red red">Eliminar Produto</button>\
+                        <button id="formDeleteProduct" type="submit" class="btn waves-effect waves-red red modal-close">Eliminar Produto</button>\
                         <a href="#!" class="modal-close waves-effect btn">Cancelar</a>\
                     </div>\
                 </div>\
@@ -419,9 +556,10 @@ function submitFormChangeImageProduct(e, idProduct, form) {
                 if (data.newImage) {
                     inputFile.replaceWith( inputFile.val('').clone( true ) );
                     $(inputTextFile).val("");
-                    $("#imgProduct"+idProduct).attr('src', '../../'+data.newImage);
+                    var urlImageRemoved = data.newImage.replace("public"+String.fromCharCode(92), "");
+                    $("#imgProduct"+idProduct).attr('src', '../'+urlImageRemoved);
                     $("#divImgChangeProduct"+idProduct).empty();
-                    var appendNewImg = '<p>Imagem Atual: </p><img width="100%" src="../../'+data.newImage+'">';
+                    var appendNewImg = '<p>Imagem Atual: </p><img width="100%" src="../'+urlImageRemoved+'">';
                     $("#divImgChangeProduct"+idProduct).append(appendNewImg);
                 } else {
                     $("#imgProduct"+idProduct).attr('src', '../img/produtosemimagem.svg');

@@ -74,8 +74,6 @@
                     Informações</a></li>
             <li><a id="openFormChangeInfo" href="#modalChangeLogo" class="waves-effect modal-trigger">Alterar
                 Logótipo</a></li>
-            <li id="liModalDeleteAccount"><a href="#modalDeleteAccount" class="waves-effect modal-trigger">Eliminar
-                Conta</a></li>
             <li>
                 <div class="divider"></div>
             </li>
@@ -236,23 +234,15 @@
             </div>
         </div>
 
-        <!--Modal Delete Account-->
-        <div id="modalDeleteAccount" class="modal">
-            <div class="modal-content">
-                <h4>Eliminar Conta</h4>
-                <div class="row">
-                    
-                </div>
-            </div>
-        </div>
-        <!--/Modal Delete Account-->
-
     </header>
 
     <main id="page-container">
         <div id="content-wrap">
             <div class="container">
                 <h2>Dashboard - Empresa</h2>
+            </div>
+            <div class="container" id="errorCanWork">
+
             </div>
             <section class="container" id="sectionOrders">
                 <h3>Ver Encomendas</h3>
@@ -284,7 +274,7 @@
                             <span class="helper-text">Campo obrigatório</span>
                         </div>
                         <div class="input-field col s12 l6">
-                            <input id="formCreateProductPrice" data-field="Preço" name="price" type="number">
+                            <input id="formCreateProductPrice" data-field="Preço" name="price" type="text">
                             <label for="formCreateProductPrice">Preço</label>
                             <span class="helper-text">Campo obrigatório. Apenas coloque o valor e use ponto. Ex. "4.4"</span>
                         </div>

@@ -26,8 +26,8 @@ function getDriversUnchecked() {
                                 <div class="row m-0">\
                                     <div class="col s5">\
                                         <div class="input-field col s12 m-0">\
-                                            <input id="reasonCanWork'+data.listUsers[i].idDriver+'" name="reason" data-field="Razão" type="text" class="validate">\
-                                            <label for="reasonCanWork'+data.listUsers[i].idDriver+'">Razão</label>\
+                                            <input id="reasonCanWorkDriver'+data.listUsers[i].idDriver+'" name="reason" data-field="Razão" type="text" class="validate">\
+                                            <label for="reasonCanWorkDriver'+data.listUsers[i].idDriver+'">Razão</label>\
                                         </div>\
                                     </div>\
                                     <div class="col s3 mt-1">\
@@ -168,8 +168,8 @@ function getMerchantsUnchecked() {
                                 <div class="row m-0">\
                                     <div class="col s5">\
                                         <div class="input-field col s12 m-0">\
-                                            <input id="reasonCanWork'+data.listUsers[i].idMerchant+'" name="reason" data-field="Razão" type="text" class="validate">\
-                                            <label for="reasonCanWork'+data.listUsers[i].idMerchant+'">Razão</label>\
+                                            <input id="reasonCanWorkMerchant'+data.listUsers[i].idMerchant+'" name="reason" data-field="Razão" type="text" class="validate">\
+                                            <label for="reasonCanWorkMerchant'+data.listUsers[i].idMerchant+'">Razão</label>\
                                         </div>\
                                     </div>\
                                     <div class="col s3 mt-1">\

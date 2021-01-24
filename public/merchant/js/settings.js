@@ -70,14 +70,17 @@ function submitFormChangeLogo(e) {
     if (errFields.length === 0) {
         
         fd.append('logo', file);
-
+        var url = getUrlToSubmit();
         $.ajax({
-            url: 'http://localhost:3000/api/user/changeLogoMe/'+idUser,
+            url: url+'/api/user/changeLogoMe/'+idUser,
             type: 'PUT',
             cache: false,
             data: fd,
             contentType: false,
             processData: false,
+            headers: {
+                "Authorization": 'Bearer ' + token
+            },
             success: function () {
                 M.toast({html: 'Alterado com sucesso'})
 

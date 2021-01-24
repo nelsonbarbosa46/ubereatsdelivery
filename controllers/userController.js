@@ -1413,3 +1413,81 @@ exports.checkMerchant = (req, res, next) => {
 
     return;
 }
+
+exports.getLogoMe = (req, res, next) => {
+
+    var id = req.params.id;
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+    //check it typeUser is incorrect
+    if (decoded.typeUser != 2) {
+        let response = {
+            message: "failed",
+            typeError: "Token inválido",
+            request: {
+                type: 'GET',
+                description: 'Obter Imagem da Empresa'
+            }
+        }
+        //typeUser is incorrect
+        res.status(401).json(response)
+    //check if its empty
+    } else if (!id) { 
+        let response = {
+            message: "failed",
+            typeError: "Campo vazio",
+            request: {
+                type: 'GET',
+                description: 'Obter Imagem da Empresa'
+            }
+        }
+        //empty field
+        res.status(400).json(response)
+    } else {
+        var db = require("../sql").db();
+        var sql = `SELECT merchant.logo FROM merchant
+        INNER JOIN user ON merchant.idUser = user.id WHERE user.id = ?`;
+
+        db.get(sql, [id], 
+            function (err, row) {
+                if (err) {
+                    let response = {
+                        message: "failed",
+                        typeError: "Erro na BD",
+                        request: {
+                            type: 'GET',
+                            description: 'Obter Imagem da Empresa'
+                        }
+                    }
+                    //error getting logo
+                    res.status(500).json(response)
+                } else if (row){
+                    let response = {
+                        message: "success",
+                        image: row.logo,
+                        "request": {
+                            type: 'GET',
+                            description: 'Obter Informações da Empresa'
+                        }
+                    }
+                    //select successful
+                    res.status(200).json(response)
+                } else {
+                    let response = {
+                        message: "failed",
+                        typeError: "Não encontrou a empresa",
+                        request: {
+                            type: 'GET',
+                            description: 'Obter Imagem da Empresa'
+                        }
+                    }
+                    res.status(400).json(response)
+                }
+            }
+        )
+        db.close();
+    }
+
+
+    return;
+}

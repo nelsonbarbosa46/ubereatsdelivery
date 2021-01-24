@@ -77,4 +77,6 @@ router.put('/checkDriver/:id', userController.checkDriver);
 
 router.put('/checkMerchant/:id', userController.checkMerchant);
 
+router.get('/getLogoMe/:id', personValid, userController.getLogoMe);
+
 module.exports = router;

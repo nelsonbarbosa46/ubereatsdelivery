@@ -31,7 +31,11 @@ function ajaxGetImage() {
             "Authorization": 'Bearer ' + token
         }, 
         success: function (data) {
-            $()
+            console.log(data.image);
+            var urlImage = data.image;
+            var urlImageRemoved = urlImage.replace("public"+String.fromCharCode(92), "");
+            console.log(urlImageRemoved);
+            $("#userIcon").attr("src", "../"+urlImageRemoved);
         }
     });
 }
@@ -42,6 +46,7 @@ if (token !== '' && token !== null) {
         idUser = data.id;
         nameUser = getCookie("name");
         emailUser = getCookie("email");
+        ajaxGetImage();
         //create variable to use when show products
         productsShowCount = 0;
         continueScript();

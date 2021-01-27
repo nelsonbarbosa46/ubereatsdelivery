@@ -30,11 +30,12 @@ Na base de dados, cada tipo é representado por um número:
 [Link - Documentação API Postman](https://documenter.getpostman.com/view/12996570/TVzViwHz)
 
 ## Especificações da API
-|RestFull URL|HTTP Action|Noun|Business Operation|
-|-|-|-|-|
-| /api/login | POST | User | Login |
-| /api/register/signupClientDriver | POST | User | CreateClientDriver |
-| /api/register/signupAdmin | POST | User | CreateAdmin |
+|RestFull URL                      |HTTP Action|Noun     |Business Operation  |
+|----------------------------------|-----------|---------|--------------------|
+| /api/login                       | POST      | User    | Login              |
+| /api/register/signupClientDriver | POST      | User    | CreateClientDriver |
+| /api/register/signupAdmin        | POST      | User    | CreateAdmin        |
+
 | /api/register/signupMerchant | POST | User | CreateMerchant |
 | /api/check/checkTokenInitialPage | GET | User | CheckTokenInitialPage |
 | /api/check/checkToken/:typeUser | GET | User | CheckToken |

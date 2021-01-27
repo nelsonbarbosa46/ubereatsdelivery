@@ -22,3 +22,16 @@
 #formDriver {
     display: none;
 }
+
+.divErrorCanWork {
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#sectionOrders {
+    display: none;
+}
+
+.cardCategoriesRestaurant {
+    cursor: pointer;
+}

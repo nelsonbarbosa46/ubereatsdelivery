@@ -36,7 +36,6 @@ Na base de dados, cada tipo é representado por um número:
 | /api/login                       | POST      | User    | Login              |
 | /api/register/signupClientDriver | POST      | User    | CreateClientDriver |
 | /api/register/signupAdmin        | POST      | User    | CreateAdmin        |
-
 | /api/register/signupMerchant | POST | User | CreateMerchant |
 | /api/check/checkTokenInitialPage | GET | User | CheckTokenInitialPage |
 | /api/check/checkToken/:typeUser | GET | User | CheckToken |

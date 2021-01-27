@@ -50,6 +50,10 @@ function continueScript() {
             submitFormChangeInfo(e);
         });
         //get values for the form to change info
-        $("#openFormDriver").one("click", getDriverInfo);
+        //$("#openFormDriver").one("click", getDriverInfo);
+        //show section orders
+        $(".openSectionOrder").click(toogleSectionOrders);
+        //show section initial
+        $(".openSectionInitial").click(toogleSectionInitial);
     });
 }

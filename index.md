@@ -30,6 +30,7 @@ Na base de dados, cada tipo é representado por um número:
 [Link - Documentação API Postman](https://documenter.getpostman.com/view/12996570/TVzViwHz)
 
 ## Especificações da API
+
 |RestFull URL                      |HTTP Action|Noun     |Business Operation  |
 |----------------------------------|-----------|---------|--------------------|
 | /api/login                       | POST      | User    | Login              |

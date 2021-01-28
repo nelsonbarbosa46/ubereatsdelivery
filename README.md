@@ -8,3 +8,5 @@ Neste projeto existirão 5 tipos de utilizadores:
  - Empresas
  - Administradores
  - Super Administrador
+
+-hugonelson

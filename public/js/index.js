@@ -268,6 +268,8 @@ $(document).ready(function(){
                         let token = data.login.token;
                         let url = data.login.url;
                         setCookie("tokenSession", token, 1);
+                        setCookie("name", name, 1);
+                        setCookie("email", email, 1);
                         var urlRedirect = urlOrigin + url;
                         //redirect
                         window.location.replace(urlRedirect + "index.html");

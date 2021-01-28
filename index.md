@@ -10,9 +10,9 @@ Neste projeto existirão 5 tipos de utilizadores:
  
 ## Tecnologias Usadas
 
-- **Base de Dados**: SqLite
-- **Back-end**: NodeJs
-- **Front-end**: HTML, CSS, JS
+- **Base de Dados**: SqLite;
+- **Back-end**: NodeJs;
+- **Front-end**: HTML, JS; jQuery, Materialize, CSS.
 
 ## Tipos de utilizador
 
